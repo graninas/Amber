@@ -1,7 +1,10 @@
 #include "shadowsview.h"
 #include "ui_shadowsview.h"
 
+#include "amber.h"
 #include "shadows.h"
+
+#include "common.h"
 
 ShadowsView::ShadowsView(QWidget *parent) :
     QMainWindow(parent),
@@ -17,7 +20,16 @@ ShadowsView::~ShadowsView()
 
 void ShadowsView::goNorth()
 {
-    shadows::goNorth(m_amber);
+    auto res = amber::changeAmber([](const amber::Amber& amber)
+    {
+        //auto action1Res = anyway(shadows::goNorth, wrap(m_amber));
+        //auto action2Res = anyway(shadows::tickDay, action1Res);
+        //return action2Res;
+        return amber;
+    }, m_amber);
+
+    // todo: res
+
     updateUI();
 }
 

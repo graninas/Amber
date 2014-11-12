@@ -2,11 +2,19 @@
 #define SHADOWS_H
 
 #include "amber.h"
+#include "common.h"
 
 namespace shadows
 {
 
-void goNorth(const amber::Amber& amber);
+using namespace amber;
+
+const AmberTask goNorth = [](const amber::Amber& amber)
+{
+    return amber;
+};
+
+
 
 }
 

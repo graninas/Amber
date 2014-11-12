@@ -11,14 +11,18 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = AmberUI
 TEMPLATE = app
 
+CONFIG += c++11
 
 SOURCES += main.cpp\
         shadowsview.cpp \
-    shadows.cpp
+    shadows.cpp \
+    amber.cpp
 
 HEADERS  += shadowsview.h \
     amber.h \
-    shadows.h
+    shadows.h \
+    magic.h \
+    common.h
 
 FORMS    += shadowsview.ui
 

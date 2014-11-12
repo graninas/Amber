@@ -9,6 +9,8 @@ QT       -= gui
 TARGET = Shadows
 TEMPLATE = lib
 
+CONFIG += c++11
+
 DEFINES += SHADOWS_LIBRARY
 
 SOURCES += shadows.cpp
