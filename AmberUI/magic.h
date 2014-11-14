@@ -12,25 +12,20 @@ using namespace amber;
 
 struct Artifact
 {
+    Artifact(const Amber& a, int r)
+    {
+        amber = a;
+        result = r;
+    }
+
     Amber amber;
     int result;
 };
 
-Artifact wrap(const Amber& amber)
-{
-    Artifact artifact { amber, 0 };
-    return artifact;
-}
-
-Artifact eval(const AmberTask& task, const Artifact& artifact)
-{
-    auto newAmber = task(artifact.amber);
-}
-
-Artifact anyway(const AmberTask& task, const Artifact& artifact)
-{
-    artifactResult = eval(amberTask, artifact);
-}
+Artifact wrap(const Amber& amber);
+Artifact unwrap(const Amber& amber);
+Artifact eval(const AmberTask& task, const Artifact& artifact);
+Artifact anyway(const AmberTask& task, const Artifact& artifact);
 
 
 }

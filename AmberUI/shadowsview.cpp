@@ -3,6 +3,7 @@
 
 #include "amber.h"
 #include "shadows.h"
+#include "magic.h"
 
 #include "common.h"
 
@@ -20,15 +21,18 @@ ShadowsView::~ShadowsView()
 
 void ShadowsView::goNorth()
 {
-    auto res = amber::changeAmber([](const amber::Amber& amber)
-    {
-        //auto action1Res = anyway(shadows::goNorth, wrap(m_amber));
-        //auto action2Res = anyway(shadows::tickDay, action1Res);
-        //return action2Res;
-        return amber;
-    }, m_amber);
 
-    // todo: res
+    amber::AmberTask task = [](const amber::Amber& amber) -> amber::Amber
+    {
+        auto action1Res = magic::anyway(shadows::goNorth, magic::wrap(amber));
+        auto action2Res = magic::anyway(shadows::tickDay, action1Res);
+        return action2Res.amber;
+    };
+
+   auto newAmber = amber::changeAmber(task, m_amber);
+
+   m_amber = newAmber;
+
 
     updateUI();
 }

@@ -16,7 +16,8 @@ CONFIG += c++11
 SOURCES += main.cpp\
         shadowsview.cpp \
     shadows.cpp \
-    amber.cpp
+    amber.cpp \
+    magic.cpp
 
 HEADERS  += shadowsview.h \
     amber.h \

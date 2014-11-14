@@ -7,7 +7,7 @@ namespace amber
 {
     typedef std::vector<int> Amber;
 
-    typedef std::function<Amber(const Amber&)> AmberTask;
+    typedef std::function<Amber (const Amber&)> AmberTask;
 
 
     Amber changeAmber(const AmberTask& task, const Amber& amber);

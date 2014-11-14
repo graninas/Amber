@@ -9,10 +9,18 @@ namespace shadows
 
 using namespace amber;
 
-const AmberTask goNorth = [](const amber::Amber& amber)
+
+const AmberTask goNorth = [](const amber::Amber& amber) -> amber::Amber
 {
     return amber;
 };
+
+const AmberTask tickDay = [](const amber::Amber& amber) -> amber::Amber
+{
+    return amber;
+};
+
+
 
 
 
