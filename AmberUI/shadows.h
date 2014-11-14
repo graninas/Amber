@@ -17,7 +17,9 @@ const AmberTask goNorth = [](const amber::Amber& amber) -> amber::Amber
 
 const AmberTask tickDay = [](const amber::Amber& amber) -> amber::Amber
 {
-    return amber;
+    amber::Amber newAmber = amber;
+    newAmber.hoursElapsed++;
+    return newAmber;
 };
 
 

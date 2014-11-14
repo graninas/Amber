@@ -5,12 +5,16 @@
 
 namespace amber
 {
-    typedef std::vector<int> Amber;
 
-    typedef std::function<Amber (const Amber&)> AmberTask;
+struct Amber
+{
+    int hoursElapsed;
+};
 
+typedef std::function<Amber (const Amber&)> AmberTask;
 
-    Amber changeAmber(const AmberTask& task, const Amber& amber);
+void changeAmber(const AmberTask& task, Amber& amber);
+
 }
 
 #endif // AMBER_H

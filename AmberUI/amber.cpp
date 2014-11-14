@@ -2,9 +2,11 @@
 
 namespace amber
 {
-    Amber changeAmber(const AmberTask &task, const Amber& amber)
-    {
-        // todo
-        return amber;
-    }
+
+void changeAmber(const AmberTask &task, Amber& amber)
+{
+    Amber newAmber = task(amber);
+    amber = newAmber;
+}
+
 }

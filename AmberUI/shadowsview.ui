@@ -159,6 +159,13 @@
           </property>
          </widget>
         </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Земля</string>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="2">
          <widget class="QToolButton" name="toolButton_2">
           <property name="text">
@@ -189,12 +196,15 @@
           </property>
          </spacer>
         </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_3">
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_4">
           <property name="text">
-           <string>Земля</string>
+           <string>Вода</string>
           </property>
          </widget>
+        </item>
+        <item row="3" column="3">
+         <widget class="QDoubleSpinBox" name="doubleSpinBox_4"/>
         </item>
         <item row="0" column="1">
          <widget class="QToolButton" name="toolButton">
@@ -213,16 +223,6 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>Вода</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="3">
-         <widget class="QDoubleSpinBox" name="doubleSpinBox_4"/>
-        </item>
         <item row="1" column="1">
          <widget class="QToolButton" name="toolButton_11">
           <property name="text">
@@ -231,6 +231,23 @@
           <property name="icon">
            <iconset resource="Icons.qrc">
             <normaloff>:/icons/icons/plus-circle.png</normaloff>:/icons/icons/plus-circle.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QToolButton" name="toolButton_6">
+          <property name="text">
+           <string>-</string>
+          </property>
+          <property name="icon">
+           <iconset resource="Icons.qrc">
+            <normaloff>:/icons/icons/minus-circle.png</normaloff>:/icons/icons/minus-circle.png</iconset>
           </property>
           <property name="iconSize">
            <size>
@@ -274,25 +291,8 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="2">
-         <widget class="QToolButton" name="toolButton_6">
-          <property name="text">
-           <string>-</string>
-          </property>
-          <property name="icon">
-           <iconset resource="Icons.qrc">
-            <normaloff>:/icons/icons/minus-circle.png</normaloff>:/icons/icons/minus-circle.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>32</width>
-            <height>32</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QToolButton" name="toolButton_9">
+        <item row="3" column="1">
+         <widget class="QToolButton" name="toolButton_10">
           <property name="text">
            <string>+</string>
           </property>
@@ -308,8 +308,8 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
-         <widget class="QToolButton" name="toolButton_10">
+        <item row="2" column="1">
+         <widget class="QToolButton" name="toolButton_9">
           <property name="text">
            <string>+</string>
           </property>
@@ -551,159 +551,111 @@
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0">
-        <item row="2" column="2">
-         <widget class="QPushButton" name="pushButton_3">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>180</width>
-            <height>0</height>
-           </size>
-          </property>
+        <item row="0" column="0">
+         <widget class="QToolButton" name="toolButton_18">
           <property name="text">
-           <string>Юг</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QPushButton" name="pushButton">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>180</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Север</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QPushButton" name="pushButton_4">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>180</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Запад</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="3">
-         <widget class="QPushButton" name="pushButton_2">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>180</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Восток</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="3">
-         <widget class="QPushButton" name="pushButton_5">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>180</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Юго-Восток</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QPushButton" name="pushButton_8">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>180</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Юго-Запад</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="3">
-         <widget class="QPushButton" name="pushButton_6">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>180</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Северо-Восток</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QPushButton" name="pushButton_7">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>180</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Северо-Запад</string>
+           <string>...</string>
           </property>
          </widget>
         </item>
         <item row="1" column="0">
+         <widget class="QToolButton" name="toolButton_19">
+          <property name="text">
+           <string>З</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QToolButton" name="toolButton_20">
+          <property name="text">
+           <string>Ю</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QToolButton" name="toolButton_21">
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QToolButton" name="toolButton_22">
+          <property name="text">
+           <string>В</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QToolButton" name="toolButton_23">
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QToolButton" name="toolButton_24">
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QToolButton" name="toolButton_5">
+          <property name="text">
+           <string>С</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_8">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <layout class="QFormLayout" name="formLayout">
+        <property name="fieldGrowthPolicy">
+         <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_9">
+          <property name="text">
+           <string>Дата</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="l_Date">
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_11">
+          <property name="text">
+           <string>Время</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLabel" name="l_Time">
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
          <spacer name="horizontalSpacer">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -716,7 +668,7 @@
           </property>
          </spacer>
         </item>
-        <item row="1" column="4">
+        <item row="2" column="1">
          <spacer name="horizontalSpacer_3">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -759,5 +711,25 @@
  <resources>
   <include location="Icons.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>toolButton_5</sender>
+   <signal>clicked()</signal>
+   <receiver>ShadowsView</receiver>
+   <slot>goNorth()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>68</x>
+     <y>462</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>70</x>
+     <y>502</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>goNorth()</slot>
+ </slots>
 </ui>

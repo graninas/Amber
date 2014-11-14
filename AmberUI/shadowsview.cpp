@@ -6,12 +6,15 @@
 #include "magic.h"
 
 #include "common.h"
+#include "assets.h"
 
 ShadowsView::ShadowsView(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ShadowsView)
 {
+    m_amber = amber::defaultAmber();
     ui->setupUi(this);
+    updateUI();
 }
 
 ShadowsView::~ShadowsView()
@@ -29,15 +32,11 @@ void ShadowsView::goNorth()
         return action2Res.amber;
     };
 
-   auto newAmber = amber::changeAmber(task, m_amber);
-
-   m_amber = newAmber;
-
-
+    amber::changeAmber(task, m_amber);
     updateUI();
 }
 
 void ShadowsView::updateUI()
 {
-    //todo
+    ui->l_Time->setText(QString::number(m_amber.hoursElapsed));
 }
