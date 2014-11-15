@@ -44,6 +44,8 @@ enum DirectionType
 typedef std::map<Element::ElementType, int> ShadowStructure;
 typedef std::function<ShadowStructure(ShadowStructure, Direction::DirectionType)> ShadowVariator;
 
+void safeStructureChange(ShadowStructure& structure, Element::ElementType elem, int diff);
+
 namespace element
 {
 ShadowStructure::value_type AmberDistance(int distance);
@@ -54,6 +56,7 @@ ShadowStructure::value_type Ground(int ground);
 ShadowStructure::value_type Water(int water);
 ShadowStructure::value_type Flora(int flora);
 ShadowStructure::value_type Fauna(int fauna);
+
 }
 }
 

@@ -3,6 +3,12 @@
 namespace amber
 {
 
+void safeStructureChange(ShadowStructure& structure, Element::ElementType elem, int diff)
+{
+    structure[elem] += diff;
+}
+
+
 namespace element
 {
 
