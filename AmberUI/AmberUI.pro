@@ -27,7 +27,10 @@ HEADERS  += shadowsview.h \
     magic.h \
     common.h \
     assets.h \
-    shadowstructure.h
+    shadowstructure.h \
+    knownshadows.h \
+    knownareas.h \
+    amberpolearea.h
 
 FORMS    += shadowsview.ui
 

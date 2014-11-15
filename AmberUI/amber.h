@@ -7,15 +7,11 @@
 namespace amber
 {
 
-typedef std::map<ShadowStructure, ShadowVariator> AmberStructure;
-typedef std::map<ShadowStructure, std::string> KnownShadows;
-
 struct Amber
 {
     int hoursElapsed;
 
-    AmberStructure amberStructure;
-    KnownShadows shadows;
+    Areas amberAreas;
 
     // This is an obsolete part.
     Pole::PoleType direction;

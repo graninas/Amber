@@ -33,6 +33,7 @@ ShadowsView::~ShadowsView()
 
 void ShadowsView::goNorth()
 {
+    // TODO: do something like frp.
     amber::AmberTask task = [](const amber::Amber& amber) -> amber::Amber
     {
         auto action1Res = magic::anyway(shadows::goNorth, magic::wrap(amber));
