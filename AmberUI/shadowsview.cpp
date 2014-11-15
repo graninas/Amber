@@ -32,7 +32,6 @@ ShadowsView::~ShadowsView()
 
 void ShadowsView::goNorth()
 {
-
     amber::AmberTask task = [](const amber::Amber& amber) -> amber::Amber
     {
         auto action1Res = magic::anyway(shadows::goNorth, magic::wrap(amber));
@@ -46,12 +45,12 @@ void ShadowsView::goNorth()
 
 void ShadowsView::directionAmber()
 {
-    m_amber.direction = amber::PoleAmber;
+    m_amber.direction = amber::Pole::PoleAmber;
 }
 
 void ShadowsView::directionChaos()
 {
-    m_amber.direction = amber::PoleChaos;
+    m_amber.direction = amber::Pole::PoleChaos;
 }
 
 void ShadowsView::updateUI()

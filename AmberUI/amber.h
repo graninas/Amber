@@ -6,22 +6,43 @@
 namespace amber
 {
 
-enum Pole
+namespace Pole
+{
+enum PoleType
 {
     PoleAmber,
     PoleChaos
 };
+}
 
-typedef std::map<Pole, int> WorldMap;
+namespace Element
+{
+enum ElementType
+{
+    Air,
+    Sky,
+    Water,
+    Ground
+};
+}
+
+typedef std::map<Element::ElementType, int> ShadowStructure;
+typedef std::function<ShadowStructure(ShadowStructure, Pole::PoleType)> ShadowChanger;
+
+typedef std::map<ShadowStructure, ShadowChanger> AmberStructure;
+typedef std::map<ShadowStructure, std::string> KnownShadows;
 
 struct Amber
 {
     int hoursElapsed;
 
-    Pole direction;
+    AmberStructure amberStructure;
+    KnownShadows shadows;
 
+    // This is an obsolete part.
+    Pole::PoleType direction;
     int worldPolePosition;
-    WorldMap worldMap;
+
 };
 
 typedef std::function<Amber (const Amber&)> AmberTask;

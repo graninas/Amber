@@ -16,6 +16,7 @@ Amber wrap(const Artifact& artifact)
 
 Artifact eval(const AmberTask& task, const Artifact& artifact)
 {
+    // This is not safe code.
     return Artifact(task(artifact.amber), artifact.result);
 }
 

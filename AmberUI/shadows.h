@@ -12,10 +12,7 @@ using namespace amber;
 
 const AmberTask goNorth = [](const amber::Amber& amber) -> amber::Amber
 {
-    int northPoleStep = amber.worldMap.at(amber.direction);
-    amber::Amber newAmber = amber;
-    newAmber.worldPolePosition += northPoleStep;
-    return newAmber;
+
 };
 
 const AmberTask tickDay = [](const amber::Amber& amber) -> amber::Amber

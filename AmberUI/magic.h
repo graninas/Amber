@@ -20,6 +20,7 @@ struct Artifact
 
     Amber amber;
     int result;
+    std::vector<std::string> systemLog;
 };
 
 Artifact wrap(const Amber& amber);
