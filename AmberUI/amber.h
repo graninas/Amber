@@ -2,34 +2,12 @@
 #define AMBER_H
 
 #include "common.h"
+#include "shadowstructure.h"
 
 namespace amber
 {
 
-namespace Pole
-{
-enum PoleType
-{
-    PoleAmber,
-    PoleChaos
-};
-}
-
-namespace Element
-{
-enum ElementType
-{
-    Air,
-    Sky,
-    Water,
-    Ground
-};
-}
-
-typedef std::map<Element::ElementType, int> ShadowStructure;
-typedef std::function<ShadowStructure(ShadowStructure, Pole::PoleType)> ShadowChanger;
-
-typedef std::map<ShadowStructure, ShadowChanger> AmberStructure;
+typedef std::map<ShadowStructure, ShadowVariator> AmberStructure;
 typedef std::map<ShadowStructure, std::string> KnownShadows;
 
 struct Amber

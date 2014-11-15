@@ -18,14 +18,16 @@ SOURCES += main.cpp\
     shadows.cpp \
     amber.cpp \
     magic.cpp \
-    assets.cpp
+    assets.cpp \
+    shadowstructure.cpp
 
 HEADERS  += shadowsview.h \
     amber.h \
     shadows.h \
     magic.h \
     common.h \
-    assets.h
+    assets.h \
+    shadowstructure.h
 
 FORMS    += shadowsview.ui
 

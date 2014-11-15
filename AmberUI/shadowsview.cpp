@@ -2,6 +2,7 @@
 #include "ui_shadowsview.h"
 
 #include "amber.h"
+#include "shadowstructure.h"
 #include "shadows.h"
 #include "magic.h"
 
@@ -45,12 +46,12 @@ void ShadowsView::goNorth()
 
 void ShadowsView::directionAmber()
 {
-    m_amber.direction = amber::Pole::PoleAmber;
+    m_amber.direction = amber::Pole::Amber;
 }
 
 void ShadowsView::directionChaos()
 {
-    m_amber.direction = amber::Pole::PoleChaos;
+    m_amber.direction = amber::Pole::Chaos;
 }
 
 void ShadowsView::updateUI()

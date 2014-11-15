@@ -12,7 +12,7 @@ struct ShadowDescriptor
 {
     std::string shadowName;
     ShadowStructure shadowStructure;
-    ShadowChanger shadowChanger;
+    ShadowVariator shadowVariator;
 };
 
 typedef std::vector<ShadowDescriptor> KnownShadowDescriptors;
@@ -22,10 +22,19 @@ ShadowDescriptor amberShadow()
     ShadowDescriptor descritptor;
     descritptor.shadowName = "Amber";
     descritptor.shadowStructure.insert({
-                                           ShadowStructure::value_type(Element::Air, 50)
+                                           element::AmberDistance(0)
+                                         , element::ChaosDistance(100)
+                                         , element::Air(50)
+                                         , element::Ground(50)
+                                         , element::Sky(100)
+                                         , element::Flora(100)
+                                         , element::Fauna(100)
                                        });
-    // TODO
-    // descritptor.shadowChanger
+    descritptor.shadowVariator = [](const ShadowStructure& structure, Direction::DirectionType /*direction*/)
+    {
+        return structure;
+    };
+
     return descritptor;
 }
 
