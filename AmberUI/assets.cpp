@@ -6,7 +6,6 @@
 namespace amber
 {
 
-
 Areas areas()
 {
     return {
@@ -18,8 +17,11 @@ Amber defaultAmber()
 {
     Amber amber;
     amber.hoursElapsed = 0;
-//    amber.direction = PoleAmber;
-//    amber.worldPolePosition = 50;
+    amber.areas = areas();
+    amber.currentArea = AmberPoleArea;
+    amber.currentShadow = AmberShadow;
+    amber.currentWorld = amberShadowStructure();
+
     return amber;
 }
 

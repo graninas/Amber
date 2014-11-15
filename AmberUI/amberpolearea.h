@@ -84,34 +84,13 @@ ShadowVariator bergmaVariator()
     return variator;
 }
 
-Shadows::value_type amberShadow()
-{
-    return Shadows::value_type { AmberShadow, amberVariator() };
-}
-
-Shadows::value_type trueAmber()
-{
-    return Shadows::value_type { TrueAmber, amberVariator() };
-}
-
-Shadows::value_type bergmaShadow()
-{
-    return Shadows::value_type { BergmaShadow, bergmaVariator() };
-}
-
-Shadows::value_type trueBergma()
-{
-    return Shadows::value_type { TrueBergma, bergmaVariator() };
-}
-
-
 Shadows amberPoleShadows()
 {
     return {
-        amberShadow()
-      , bergmaShadow()
-      , trueAmber()
-      , trueBergma()
+        { AmberShadow,  Shadow { amberVariator(),  amberShadowStructure()} }
+      , { TrueAmber,    Shadow { amberVariator(),  trueAmberStructure()  } }
+      , { BergmaShadow, Shadow { bergmaVariator(), bergmaShadowStructure() } }
+      , { TrueBergma,   Shadow { bergmaVariator(), trueBergmaStructure() } }
     };
 }
 

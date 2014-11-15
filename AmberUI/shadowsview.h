@@ -2,6 +2,7 @@
 #define SHADOWSVIEW_H
 
 #include <QMainWindow>
+#include <QStringListModel>
 
 #include "amber.h"
 
@@ -20,15 +21,15 @@ public:
 public slots:
 
     void goNorth();
-    void directionAmber();
-    void directionChaos();
 
 private:
     Ui::ShadowsView *ui;
 
     amber::Amber m_amber;
 
+    void setupWorldPlacesModel(const amber::Amber& amber);
     void updateUI();
+
 };
 
 #endif // SHADOWSVIEW_H

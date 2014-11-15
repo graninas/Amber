@@ -2,8 +2,11 @@
 #define COMMON_H
 
 #include <vector>
-#include <functional>
 #include <map>
+#include <list>
 #include <string>
+
+#include <functional>
+#include <algorithm>
 
 #endif // COMMON_H

@@ -11,12 +11,11 @@ struct Amber
 {
     int hoursElapsed;
 
-    Areas amberAreas;
+    Areas areas;
 
-    // This is an obsolete part.
-    Pole::PoleType direction;
-    int worldPolePosition;
-
+    AreaName currentArea;
+    ShadowName currentShadow;
+    ShadowStructure currentWorld;
 };
 
 typedef std::function<Amber (const Amber&)> AmberTask;

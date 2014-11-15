@@ -30,7 +30,8 @@ HEADERS  += shadowsview.h \
     shadowstructure.h \
     knownshadows.h \
     knownareas.h \
-    amberpolearea.h
+    amberpolearea.h \
+    naming.h
 
 FORMS    += shadowsview.ui
 

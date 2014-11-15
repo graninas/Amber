@@ -48,6 +48,7 @@ typedef std::string AreaName;
 typedef std::map<Element::ElementType, int> ShadowStructure;
 typedef std::function<ShadowStructure(ShadowStructure, Direction::DirectionType)> ShadowVariator;
 
+// obsolete.
 struct ShadowPath
 {
     AreaName targetArea;
@@ -56,7 +57,13 @@ struct ShadowPath
 
 typedef std::map<ShadowStructure, ShadowPath> ShadowPaths;
 
-typedef std::map<ShadowName, ShadowVariator> Shadows;
+struct Shadow
+{
+    ShadowVariator variator;
+    ShadowStructure structure;
+};
+
+typedef std::map<ShadowName, Shadow> Shadows;
 
 struct Area
 {
