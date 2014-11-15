@@ -3,5 +3,6 @@
 
 #include <vector>
 #include <functional>
+#include <map>
 
 #endif // COMMON_H

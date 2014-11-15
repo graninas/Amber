@@ -38,6 +38,31 @@
     </item>
     <item>
      <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>70</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>70</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Амбер</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="2">
        <widget class="QLabel" name="label_6">
         <property name="sizePolicy">
@@ -64,7 +89,10 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QSlider" name="horizontalSlider">
+       <widget class="QSlider" name="hs_polePosition">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="value">
          <number>50</number>
         </property>
@@ -79,28 +107,13 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_5">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>70</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>70</width>
-          <height>16777215</height>
-         </size>
-        </property>
+      <item row="1" column="1">
+       <widget class="QLabel" name="l_polePosition">
         <property name="text">
-         <string>Амбер</string>
+         <string>0</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -610,6 +623,27 @@
        </layout>
       </item>
       <item>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QRadioButton" name="rb_toChaos">
+          <property name="text">
+           <string>В Амбер</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="rb_toAmber">
+          <property name="text">
+           <string>В Хаос</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
        <spacer name="horizontalSpacer_8">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -635,7 +669,7 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLabel" name="l_Date">
+         <widget class="QLabel" name="l_date">
           <property name="text">
            <string>...</string>
           </property>
@@ -649,7 +683,7 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLabel" name="l_Time">
+         <widget class="QLabel" name="l_time">
           <property name="text">
            <string>...</string>
           </property>
@@ -728,8 +762,42 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>rb_toChaos</sender>
+   <signal>clicked()</signal>
+   <receiver>ShadowsView</receiver>
+   <slot>directionAmber()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>224</x>
+     <y>476</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>335</x>
+     <y>479</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rb_toAmber</sender>
+   <signal>clicked()</signal>
+   <receiver>ShadowsView</receiver>
+   <slot>directionChaos()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>227</x>
+     <y>533</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>316</x>
+     <y>531</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>goNorth()</slot>
+  <slot>directionAmber()</slot>
+  <slot>directionChaos()</slot>
  </slots>
 </ui>

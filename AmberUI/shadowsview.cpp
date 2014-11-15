@@ -8,6 +8,14 @@
 #include "common.h"
 #include "assets.h"
 
+namespace
+{
+int worldPolePositionToSliderValue(int polePos)
+{
+    return polePos;
+}
+}
+
 ShadowsView::ShadowsView(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ShadowsView)
@@ -36,7 +44,19 @@ void ShadowsView::goNorth()
     updateUI();
 }
 
+void ShadowsView::directionAmber()
+{
+    m_amber.direction = amber::PoleAmber;
+}
+
+void ShadowsView::directionChaos()
+{
+    m_amber.direction = amber::PoleChaos;
+}
+
 void ShadowsView::updateUI()
 {
-    ui->l_Time->setText(QString::number(m_amber.hoursElapsed));
+    ui->l_time->setText(QString::number(m_amber.hoursElapsed));
+    ui->l_polePosition->setText(QString::number(m_amber.worldPolePosition));
+    ui->hs_polePosition->setValue(worldPolePositionToSliderValue(m_amber.worldPolePosition));
 }

@@ -20,6 +20,8 @@ public:
 public slots:
 
     void goNorth();
+    void directionAmber();
+    void directionChaos();
 
 private:
     Ui::ShadowsView *ui;
