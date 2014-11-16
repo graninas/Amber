@@ -6,17 +6,27 @@
 namespace amber
 {
 
-magic::Result<ShadowStructure> safeElementChange(ShadowStructure& structure, Element::ElementType elem, int diff);
+typedef magic::Value<ShadowStructure> SafeShadowStructure;
+typedef std::function<SafeShadowStructure(ShadowStructure)> SafeShadowStructureAction;
+
+SafeShadowStructure safeWrap(const ShadowStructure& data);
+SafeShadowStructure safeBind(const SafeShadowStructure value, const SafeShadowStructureAction& action);
+
+// Presentation tip: monadic functions.
+SafeShadowStructure safeElementChange(const ShadowStructure& structure, Element::ElementType elem, int diff);
+
+typedef ShadowStructure ElementModifiers;
+SafeShadowStructureAction safeChangeElements(const ElementModifiers& modifiers);
 
 // This boilerplace can be replaced by macro.
-magic::Result<ShadowStructure> safeAirChange(ShadowStructure& structure, int diff);
-magic::Result<ShadowStructure> safeSkyChange(ShadowStructure& structure, int diff);
-magic::Result<ShadowStructure> safeWaterChange(ShadowStructure& structure, int diff);
-magic::Result<ShadowStructure> safeGroundChange(ShadowStructure& structure, int diff);
-magic::Result<ShadowStructure> safeAmberDistanceChange(ShadowStructure& structure, int diff);
-magic::Result<ShadowStructure> safeChaosDistanceChange(ShadowStructure& structure, int diff);
-magic::Result<ShadowStructure> safeFloreChange(ShadowStructure& structure, int diff);
-magic::Result<ShadowStructure> safeFaunaChange(ShadowStructure& structure, int diff);
+SafeShadowStructure safeAirChange(const ShadowStructure& structure, int diff);
+SafeShadowStructure safeSkyChange(const ShadowStructure& structure, int diff);
+SafeShadowStructure safeWaterChange(const ShadowStructure& structure, int diff);
+SafeShadowStructure safeGroundChange(const ShadowStructure& structure, int diff);
+SafeShadowStructure safeAmberDistanceChange(const ShadowStructure& structure, int diff);
+SafeShadowStructure safeChaosDistanceChange(const ShadowStructure& structure, int diff);
+SafeShadowStructure safeFloreChange(const ShadowStructure& structure, int diff);
+SafeShadowStructure safeFaunaChange(const ShadowStructure& structure, int diff);
 
 namespace element
 {

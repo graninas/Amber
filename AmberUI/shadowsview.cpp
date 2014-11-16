@@ -61,7 +61,7 @@ void ShadowsView::test()
 
     amber::ShadowStructure s1 = amber::amberShadowStructure();
 
-    magic::Result<amber::ShadowStructure> res = amber::safeElementChange(s1, amber::Element::Air, 100);
+    magic::Value<amber::ShadowStructure> res = amber::safeElementChange(s1, amber::Element::Air, 100);
     //Q_ASSERT(magic::resultData(res) == s1.at(amber::Element::Air) + 1);
 
     //Q_ASSERT(northMoved.currentShadowStructure != m_amber.currentShadowStructure);

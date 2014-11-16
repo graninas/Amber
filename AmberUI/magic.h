@@ -9,9 +9,9 @@ namespace magic
 
 using namespace amber;
 
-namespace ResultValue
+namespace Result
 {
-enum ResultValueType
+enum ResultType
 {
     Success,
     Fail
@@ -29,45 +29,45 @@ enum ResultValueType
 // http://stackoverflow.com/questions/8130602/using-extern-template-c0x
 // http://stackoverflow.com/questions/3575901/can-lambda-functions-be-templated
 
-template <class D> struct Result
+template <class D> struct Value
 {
     D data;
-    ResultValue::ResultValueType result;
+    Result::ResultType result;
 };
 
-template <class D> Result<D> successResult(const D& data)
+template <class D> Value<D> success(const D& data)
 {
     // Presentation tip.
     // Can't use initialisaion lists with template struct.
-    Result<D> res;
-    res.data = data;
-    res.result = ResultValue::Success;
-    return res;
+    Value<D> value;
+    value.data = data;
+    value.result = Result::Success;
+    return value;
 }
 
-template <class D> Result<D> failResult(const D& data)
+template <class D> Value<D> fail(const D& data)
 {
     // Presentation tip.
     // Can't use initialisaion lists with template struct.
-    Result<D> res;
-    res.data = data;
-    res.result = ResultValue::Fail;
-    return res;
+    Value<D> value;
+    value.data = data;
+    value.result = Result::Fail;
+    return value;
 }
 
-template <class D> bool isSuccess(const Result<D>& result)
+template <class D> bool isSuccess(const Value<D>& value)
 {
-    return result.result == ResultValue::Success;
+    return value.result == Result::Success;
 }
 
-template <class D> bool isFail(const Result<D>& result)
+template <class D> bool isFail(const Value<D>& value)
 {
-    return result.result == ResultValue::Fail;
+    return value.result == Result::Fail;
 }
 
-template <class D> D resultData(const Result<D>& result)
+template <class D> D valueData(const Value<D>& value)
 {
-    return result.data;
+    return value.data;
 }
 
 // Presentation tip

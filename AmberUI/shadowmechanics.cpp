@@ -3,55 +3,85 @@
 namespace amber
 {
 
-magic::Result<ShadowStructure> safeElementChange(ShadowStructure& structure, Element::ElementType elem, int diff)
+SafeShadowStructure safeWrap(const ShadowStructure& data)
+{
+    return magic::success(data);
+}
+
+SafeShadowStructure safeBind(const SafeShadowStructure value, const SafeShadowStructureAction& action)
+{
+    if (value.result == magic::Result::Success)
+        return action(value.data);
+    return value;
+}
+
+SafeShadowStructure safeElementChange(const ShadowStructure& structure, Element::ElementType elem, int diff)
 {
     ShadowStructure newStructure = structure;
     ShadowStructure::iterator it = newStructure.find(elem);
 
     if (it == newStructure.end())
-        return magic::failResult(structure);
+        return magic::fail(structure);
 
     it->second += diff;
-    return magic::successResult(newStructure);
+    return magic::success(newStructure);
+}
+
+SafeShadowStructureAction safeChangeElements(const ElementModifiers& modifiers)
+{
+    SafeShadowStructureAction action = [&modifiers](const ShadowStructure& income)
+    {
+        SafeShadowStructure value = safeWrap(income);
+        std::for_each(modifiers.begin(), modifiers.end(), [&value](const ElementModifiers::value_type& modifier)
+        {
+            value = safeBind(value, [&modifier](const ShadowStructure& structure)
+            {
+                return safeElementChange(structure, modifier.first, modifier.second);
+            });
+        });
+        return value;
+    };
+
+    return action;
 }
 
 // This boilerplace can be replaced by macro.
-magic::Result<ShadowStructure> safeAirChange(ShadowStructure& structure, int diff)
+SafeShadowStructure safeAirChange(const ShadowStructure& structure, int diff)
 {
     return safeElementChange(structure, Element::Air, diff);
 }
 
-magic::Result<ShadowStructure> safeSkyChange(ShadowStructure& structure, int diff)
+SafeShadowStructure safeSkyChange(const ShadowStructure& structure, int diff)
 {
     return safeElementChange(structure, Element::Sky, diff);
 }
 
-magic::Result<ShadowStructure> safeWaterChange(ShadowStructure& structure, int diff)
+SafeShadowStructure safeWaterChange(const ShadowStructure& structure, int diff)
 {
     return safeElementChange(structure, Element::Water, diff);
 }
 
-magic::Result<ShadowStructure> safeGroundChange(ShadowStructure& structure, int diff)
+SafeShadowStructure safeGroundChange(const ShadowStructure& structure, int diff)
 {
     return safeElementChange(structure, Element::Ground, diff);
 }
 
-magic::Result<ShadowStructure> safeAmberDistanceChange(ShadowStructure& structure, int diff)
+SafeShadowStructure safeAmberDistanceChange(const ShadowStructure& structure, int diff)
 {
     return safeElementChange(structure, Element::AmberDistance, diff);
 }
 
-magic::Result<ShadowStructure> safeChaosDistanceChange(ShadowStructure& structure, int diff)
+SafeShadowStructure safeChaosDistanceChange(const ShadowStructure& structure, int diff)
 {
     return safeElementChange(structure, Element::ChaosDistance, diff);
 }
 
-magic::Result<ShadowStructure> safeFloreChange(ShadowStructure& structure, int diff)
+SafeShadowStructure safeFloreChange(const ShadowStructure& structure, int diff)
 {
     return safeElementChange(structure, Element::Flora, diff);
 }
 
-magic::Result<ShadowStructure> safeFaunaChange(ShadowStructure& structure, int diff)
+SafeShadowStructure safeFaunaChange(const ShadowStructure& structure, int diff)
 {
     return safeElementChange(structure, Element::Fauna, diff);
 }
