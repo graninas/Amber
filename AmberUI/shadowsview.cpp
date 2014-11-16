@@ -40,16 +40,22 @@ ShadowsView::~ShadowsView()
 
 void ShadowsView::goNorth()
 {
-    // TODO: do something like frp.
-    amber::AmberTask task = [](const amber::Amber& amber) -> amber::Amber
-    {
-        auto action1Res = magic::anyway(shadows::goNorth, magic::wrap(amber));
-        auto action2Res = magic::anyway(shadows::tickDay, action1Res);
-        return action2Res.amber;
-    };
+    evalAmberTask(shadows::goNorth);
+}
 
-    amber::changeAmber(task, m_amber);
-    updateUI();
+void ShadowsView::goSouth()
+{
+    evalAmberTask(shadows::goSouth);
+}
+
+void ShadowsView::goWest()
+{
+    evalAmberTask(shadows::goWest);
+}
+
+void ShadowsView::goEast()
+{
+    evalAmberTask(shadows::goEast);
 }
 
 void ShadowsView::test()
@@ -62,22 +68,20 @@ void ShadowsView::test()
     amber::SafeShadowStructure ss2 = amber::safeElementChange(s1, amber::Element::Air, 100);
     Q_ASSERT(ss2.result == magic::Result::Success);
     Q_ASSERT(ss2.data != s1);
+}
 
+void ShadowsView::evalAmberTask(const amber::AmberTask& task)
+{
+    // TODO: do something like frp.
+    amber::AmberTask resultTask = [&task](const amber::Amber& amber) -> amber::Amber
+    {
+        auto action1Res = magic::anyway(task, magic::wrap(amber));
+        auto action2Res = magic::anyway(shadows::tickDay, action1Res);
+        return action2Res.amber;
+    };
 
-
-//    amber::Amber northMoved = shadows::updateCurrentShadow(m_amber, amber::Direction::North);
-//    amber::Amber southMoved = shadows::updateCurrentShadow(m_amber, amber::Direction::South);
-//    amber::Amber westMoved = shadows::updateCurrentShadow(m_amber, amber::Direction::West);
-//    amber::Amber eastMoved = shadows::updateCurrentShadow(m_amber, amber::Direction::East);
-
-//
-
-//    magic::Value<amber::ShadowStructure> res = amber::safeElementChange(s1, amber::Element::Air, 100);
-    //Q_ASSERT(magic::resultData(res) == s1.at(amber::Element::Air) + 1);
-
-    //Q_ASSERT(northMoved.currentShadowStructure != m_amber.currentShadowStructure);
-    //amber::ShadowStructure s1 = amber::amberShadowStructure();
-    //amber::ShadowVariator v1 = amber::amberVariator();
+    amber::changeAmber(resultTask, m_amber);
+    updateUI();
 }
 
 void ShadowsView::setupWorldPlacesModel(const amber::Amber& amber)

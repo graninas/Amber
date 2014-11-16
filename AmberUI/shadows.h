@@ -18,6 +18,21 @@ const AmberTask goNorth = [](const Amber& amber) -> Amber
     return goDirection(amber, Direction::North);
 };
 
+const AmberTask goSouth = [](const Amber& amber) -> Amber
+{
+    return goDirection(amber, Direction::South);
+};
+
+const AmberTask goWest = [](const Amber& amber) -> Amber
+{
+    return goDirection(amber, Direction::West);
+};
+
+const AmberTask goEast = [](const Amber& amber) -> Amber
+{
+    return goDirection(amber, Direction::East);
+};
+
 const AmberTask tickDay = [](const Amber& amber) -> Amber
 {
     Amber newAmber = amber;

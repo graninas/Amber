@@ -21,6 +21,9 @@ public:
 public slots:
 
     void goNorth();
+    void goSouth();
+    void goWest();
+    void goEast();
 
     void test(); // temporary
 
@@ -28,6 +31,8 @@ private:
     Ui::ShadowsView *ui;
 
     amber::Amber m_amber;
+
+    void evalAmberTask(const amber::AmberTask& task);
 
     void setupWorldPlacesModel(const amber::Amber& amber);
     void updateUI();
