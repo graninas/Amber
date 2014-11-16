@@ -72,20 +72,6 @@ struct Area
 
 typedef std::map<AreaName, Area> Areas;
 
-void safeStructureChange(ShadowStructure& structure, Element::ElementType elem, int diff);
-
-namespace element
-{
-ShadowStructure::value_type AmberDistance(int distance);
-ShadowStructure::value_type ChaosDistance(int distance);
-ShadowStructure::value_type Air(int air);
-ShadowStructure::value_type Sky(int sky);
-ShadowStructure::value_type Ground(int ground);
-ShadowStructure::value_type Water(int water);
-ShadowStructure::value_type Flora(int flora);
-ShadowStructure::value_type Fauna(int fauna);
-
-}
 }
 
 #endif // SHADOWSTRUCTURE_H

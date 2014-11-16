@@ -22,6 +22,8 @@ public slots:
 
     void goNorth();
 
+    void test(); // temporary
+
 private:
     Ui::ShadowsView *ui;
 

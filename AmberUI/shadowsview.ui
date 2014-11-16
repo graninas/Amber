@@ -712,6 +712,13 @@
        </layout>
       </item>
       <item>
+       <widget class="QPushButton" name="pushButton">
+        <property name="text">
+         <string>Test</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="horizontalSpacer_8">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -1021,10 +1028,27 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>ShadowsView</receiver>
+   <slot>test()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>318</x>
+     <y>672</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>319</x>
+     <y>703</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>goNorth()</slot>
   <slot>directionAmber()</slot>
   <slot>directionChaos()</slot>
+  <slot>test()</slot>
  </slots>
 </ui>

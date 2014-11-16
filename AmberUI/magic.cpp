@@ -3,13 +3,39 @@
 namespace magic
 {
 
+template <class D> Result<D> successResult(const D& data)
+{
+    return Result { data, ResultValue::Success };
+}
+
+template <class D> Result<D> failResult(const D& data)
+{
+    return Result { data, ResultValue::Fail };
+}
+
+template <class D> bool isSuccess(const Result<D>& result)
+{
+    return result.result == ResultValue::Success;
+}
+
+template <class D> bool isFail(const Result<D>& result)
+{
+    return result.result == ResultValue::Fail;
+}
+
+template <class D> D resultData(const Result<D>& result)
+{
+    return result.data;
+}
+
+
 Artifact wrap(const Amber& amber)
 {
     Artifact artifact { amber, 0 };
     return artifact;
 }
 
-Amber wrap(const Artifact& artifact)
+Amber unwrap(const Artifact& artifact)
 {
     return artifact.amber;
 }

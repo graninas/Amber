@@ -6,6 +6,8 @@
 #include "shadows.h"
 #include "magic.h"
 
+#include "amberpolearea.h"
+
 #include "common.h"
 #include "assets.h"
 #include "naming.h"
@@ -47,6 +49,22 @@ void ShadowsView::goNorth()
 
     amber::changeAmber(task, m_amber);
     updateUI();
+}
+
+void ShadowsView::test()
+{
+    amber::Amber northMoved = shadows::updateCurrentShadow(m_amber, amber::Direction::North);
+    amber::Amber southMoved = shadows::updateCurrentShadow(m_amber, amber::Direction::South);
+    amber::Amber westMoved = shadows::updateCurrentShadow(m_amber, amber::Direction::West);
+    amber::Amber eastMoved = shadows::updateCurrentShadow(m_amber, amber::Direction::East);
+
+    amber::ShadowStructure s1 = amber::amberShadowStructure();
+
+    Q_ASSERT(amber::safeStructureChange(s1, amber::Element::Air, 100).at == s1.at(amber::Element::Air) + 1);
+
+    //Q_ASSERT(northMoved.currentShadowStructure != m_amber.currentShadowStructure);
+    //amber::ShadowStructure s1 = amber::amberShadowStructure();
+    //amber::ShadowVariator v1 = amber::amberVariator();
 }
 
 void ShadowsView::setupWorldPlacesModel(const amber::Amber& amber)

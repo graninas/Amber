@@ -9,6 +9,8 @@ namespace shadows
 
 using namespace amber;
 
+Amber updateCurrentShadow(const Amber& amber, Direction::DirectionType dir);
+Amber updateCurrentPosition(const Amber& amber);
 Amber goDirection(const Amber& amber, Direction::DirectionType dir);
 
 const AmberTask goNorth = [](const Amber& amber) -> Amber

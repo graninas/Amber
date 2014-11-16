@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     amber.cpp \
     magic.cpp \
     assets.cpp \
-    shadowstructure.cpp
+    shadowstructure.cpp \
+    shadowmechanics.cpp
 
 HEADERS  += shadowsview.h \
     amber.h \
@@ -30,7 +31,8 @@ HEADERS  += shadowsview.h \
     shadowstructure.h \
     knownareas.h \
     amberpolearea.h \
-    naming.h
+    naming.h \
+    shadowmechanics.h
 
 FORMS    += shadowsview.ui
 

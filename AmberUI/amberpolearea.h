@@ -72,27 +72,38 @@ ShadowVariator amberVariator()
         int waterGroundNSChange = 2;
         int waterGroundWEChange = 1;
 
+
+
         // N.B.! This can be wrapped into a small 'Changing DSL'.
         // Invent a pairs of dependant elements, for example water-ground, sky-air, amber-chaos.
         // Show it in presentation.
-        ShadowStructure newStructure = structure;
         switch (direction)
         {
         case Direction::North:
+
+
             safeStructureChange(newStructure, Element::Water,         -waterGroundNSChange);
             safeStructureChange(newStructure, Element::Ground,         waterGroundNSChange);
+            break;
         case Direction::South:
             safeStructureChange(newStructure, Element::Water,          waterGroundNSChange);
             safeStructureChange(newStructure, Element::Ground,        -waterGroundNSChange);
+            break;
         case Direction::East:
             safeStructureChange(newStructure, Element::Water,         -waterGroundWEChange);
             safeStructureChange(newStructure, Element::Ground,         waterGroundWEChange);
+            break;
         case Direction::West:
             safeStructureChange(newStructure, Element::Water,          waterGroundWEChange);
             safeStructureChange(newStructure, Element::Ground,        -waterGroundWEChange);
+            break;
         };
 
-        return newStructure;
+        magic::Result<ShadowStructue> result = magic::runSafe(changeAction, structure);
+        if (magic::isSuccess(result))
+            return magic::resultData(result);
+        else // TODO - fail tolerance, error reporting
+            return structure;
     };
     return variator;
 }
