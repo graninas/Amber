@@ -11,49 +11,49 @@ magic::Result<ShadowStructure> safeElementChange(ShadowStructure& structure, Ele
     if (it == newStructure.end())
         return magic::failResult(structure);
 
-    *it += diff;
+    it->second += diff;
     return magic::successResult(newStructure);
 }
 
 // This boilerplace can be replaced by macro.
 magic::Result<ShadowStructure> safeAirChange(ShadowStructure& structure, int diff)
 {
-    return safeStructureChange(structure, Element::Air, diff);
+    return safeElementChange(structure, Element::Air, diff);
 }
 
 magic::Result<ShadowStructure> safeSkyChange(ShadowStructure& structure, int diff)
 {
-    return safeStructureChange(structure, Element::Sky, diff);
+    return safeElementChange(structure, Element::Sky, diff);
 }
 
 magic::Result<ShadowStructure> safeWaterChange(ShadowStructure& structure, int diff)
 {
-    return safeStructureChange(structure, Element::Water, diff);
+    return safeElementChange(structure, Element::Water, diff);
 }
 
 magic::Result<ShadowStructure> safeGroundChange(ShadowStructure& structure, int diff)
 {
-    return safeStructureChange(structure, Element::Ground, diff);
+    return safeElementChange(structure, Element::Ground, diff);
 }
 
 magic::Result<ShadowStructure> safeAmberDistanceChange(ShadowStructure& structure, int diff)
 {
-    return safeStructureChange(structure, Element::AmberDistance, diff);
+    return safeElementChange(structure, Element::AmberDistance, diff);
 }
 
 magic::Result<ShadowStructure> safeChaosDistanceChange(ShadowStructure& structure, int diff)
 {
-    return safeStructureChange(structure, Element::ChaosDistance, diff);
+    return safeElementChange(structure, Element::ChaosDistance, diff);
 }
 
 magic::Result<ShadowStructure> safeFloreChange(ShadowStructure& structure, int diff)
 {
-    return safeStructureChange(structure, Element::Flore, diff);
+    return safeElementChange(structure, Element::Flora, diff);
 }
 
 magic::Result<ShadowStructure> safeFaunaChange(ShadowStructure& structure, int diff)
 {
-    return safeStructureChange(structure, Element::Fauna, diff);
+    return safeElementChange(structure, Element::Fauna, diff);
 }
 
 namespace element

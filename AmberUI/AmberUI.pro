@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     magic.cpp \
     assets.cpp \
     shadowstructure.cpp \
-    shadowmechanics.cpp
+    shadowmechanics.cpp \
+    amberpolearea.cpp
 
 HEADERS  += shadowsview.h \
     amber.h \

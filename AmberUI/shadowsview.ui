@@ -348,7 +348,7 @@
       <item>
        <layout class="QGridLayout" name="gridLayout_5" columnminimumwidth="120,50,0,0,60">
         <item row="0" column="0">
-         <widget class="QLabel" name="l_floreName">
+         <widget class="QLabel" name="l_floraName">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -367,7 +367,7 @@
          </widget>
         </item>
         <item row="0" column="4">
-         <widget class="QSpinBox" name="sb_floreTarget"/>
+         <widget class="QSpinBox" name="sb_floraTarget"/>
         </item>
         <item row="2" column="3">
          <widget class="QToolButton" name="toolButton_14">
@@ -397,7 +397,7 @@
          <widget class="QSpinBox" name="sb_faunaTarget"/>
         </item>
         <item row="0" column="3">
-         <widget class="QToolButton" name="tb_floredown">
+         <widget class="QToolButton" name="tb_floradown">
           <property name="text">
            <string>-</string>
           </property>
@@ -525,7 +525,7 @@
          </widget>
         </item>
         <item row="0" column="2">
-         <widget class="QToolButton" name="tb_floreUp">
+         <widget class="QToolButton" name="tb_floraUp">
           <property name="text">
            <string>+</string>
           </property>
@@ -587,7 +587,7 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLabel" name="l_flore">
+         <widget class="QLabel" name="l_flora">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -965,9 +965,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>tb_floredown</sender>
+   <sender>tb_floradown</sender>
    <signal>clicked()</signal>
-   <receiver>sb_floreTarget</receiver>
+   <receiver>sb_floraTarget</receiver>
    <slot>stepDown()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -981,9 +981,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>tb_floreUp</sender>
+   <sender>tb_floraUp</sender>
    <signal>clicked()</signal>
-   <receiver>sb_floreTarget</receiver>
+   <receiver>sb_floraTarget</receiver>
    <slot>stepUp()</slot>
    <hints>
     <hint type="sourcelabel">

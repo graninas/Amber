@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "amberpolearea.h"
+#include "knownareas.h"
 
 namespace amber
 {

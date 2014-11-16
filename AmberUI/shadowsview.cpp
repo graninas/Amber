@@ -5,6 +5,7 @@
 #include "shadowstructure.h"
 #include "shadows.h"
 #include "magic.h"
+#include "shadowmechanics.h"
 
 #include "amberpolearea.h"
 
@@ -60,7 +61,8 @@ void ShadowsView::test()
 
     amber::ShadowStructure s1 = amber::amberShadowStructure();
 
-    Q_ASSERT(amber::safeStructureChange(s1, amber::Element::Air, 100).at == s1.at(amber::Element::Air) + 1);
+    magic::Result<amber::ShadowStructure> res = amber::safeElementChange(s1, amber::Element::Air, 100);
+    //Q_ASSERT(magic::resultData(res) == s1.at(amber::Element::Air) + 1);
 
     //Q_ASSERT(northMoved.currentShadowStructure != m_amber.currentShadowStructure);
     //amber::ShadowStructure s1 = amber::amberShadowStructure();
@@ -152,6 +154,6 @@ void ShadowsView::updateUI()
     ui->l_sky->setText(QString::number(m_amber.currentShadowStructure.at(amber::Element::Sky)));
     ui->l_amberDistance->setText(QString::number(m_amber.currentShadowStructure.at(amber::Element::AmberDistance)));
     ui->l_chaosDistance->setText(QString::number(m_amber.currentShadowStructure.at(amber::Element::ChaosDistance)));
-    ui->l_flore->setText(QString::number(m_amber.currentShadowStructure.at(amber::Element::Flora)));
+    ui->l_flora->setText(QString::number(m_amber.currentShadowStructure.at(amber::Element::Flora)));
     ui->l_fauna->setText(QString::number(m_amber.currentShadowStructure.at(amber::Element::Fauna)));
 }
