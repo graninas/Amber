@@ -28,7 +28,6 @@ HEADERS  += shadowsview.h \
     common.h \
     assets.h \
     shadowstructure.h \
-    knownshadows.h \
     knownareas.h \
     amberpolearea.h \
     naming.h

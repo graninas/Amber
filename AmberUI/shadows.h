@@ -9,15 +9,16 @@ namespace shadows
 
 using namespace amber;
 
+Amber goDirection(const Amber& amber, Direction::DirectionType dir);
 
-const AmberTask goNorth = [](const amber::Amber& amber) -> amber::Amber
+const AmberTask goNorth = [](const Amber& amber) -> Amber
 {
-
+    return goDirection(amber, Direction::North);
 };
 
-const AmberTask tickDay = [](const amber::Amber& amber) -> amber::Amber
+const AmberTask tickDay = [](const Amber& amber) -> Amber
 {
-    amber::Amber newAmber = amber;
+    Amber newAmber = amber;
     newAmber.hoursElapsed++;
     return newAmber;
 };

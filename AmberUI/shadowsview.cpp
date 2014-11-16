@@ -122,8 +122,18 @@ void ShadowsView::setupWorldPlacesModel(const amber::Amber& amber)
     ui->pte_worldPlaces->setPlainText(model);
 }
 
-
 void ShadowsView::updateUI()
 {
     ui->l_time->setText(QString::number(m_amber.hoursElapsed));
+    ui->l_area->setText(QString::fromStdString(naming::AreaName(m_amber.position.area)));
+    ui->l_shadow->setText(QString::fromStdString(naming::ShadowName(m_amber.position.shadow)));
+
+    ui->l_air->setText(QString::number(m_amber.currentShadowStructure.at(amber::Element::Air)));
+    ui->l_water->setText(QString::number(m_amber.currentShadowStructure.at(amber::Element::Water)));
+    ui->l_ground->setText(QString::number(m_amber.currentShadowStructure.at(amber::Element::Ground)));
+    ui->l_sky->setText(QString::number(m_amber.currentShadowStructure.at(amber::Element::Sky)));
+    ui->l_amberDistance->setText(QString::number(m_amber.currentShadowStructure.at(amber::Element::AmberDistance)));
+    ui->l_chaosDistance->setText(QString::number(m_amber.currentShadowStructure.at(amber::Element::ChaosDistance)));
+    ui->l_flore->setText(QString::number(m_amber.currentShadowStructure.at(amber::Element::Flora)));
+    ui->l_fauna->setText(QString::number(m_amber.currentShadowStructure.at(amber::Element::Fauna)));
 }

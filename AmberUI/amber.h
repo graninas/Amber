@@ -13,9 +13,8 @@ struct Amber
 
     Areas areas;
 
-    AreaName currentArea;
-    ShadowName currentShadow;
-    ShadowStructure currentWorld;
+    WorldPosition position;
+    ShadowStructure currentShadowStructure;
 };
 
 typedef std::function<Amber (const Amber&)> AmberTask;

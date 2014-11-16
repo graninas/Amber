@@ -67,7 +67,7 @@
       <item>
        <layout class="QGridLayout" name="gridLayout" columnminimumwidth="120,50,0,0,60">
         <item row="1" column="2">
-         <widget class="QToolButton" name="toolButton_11">
+         <widget class="QToolButton" name="tb_skyUp">
           <property name="text">
            <string>+</string>
           </property>
@@ -84,7 +84,7 @@
          </widget>
         </item>
         <item row="2" column="2">
-         <widget class="QToolButton" name="toolButton_9">
+         <widget class="QToolButton" name="tb_groundUp">
           <property name="text">
            <string>+</string>
           </property>
@@ -101,7 +101,7 @@
          </widget>
         </item>
         <item row="3" column="2">
-         <widget class="QToolButton" name="toolButton_10">
+         <widget class="QToolButton" name="tb_waterUp">
           <property name="text">
            <string>+</string>
           </property>
@@ -118,7 +118,7 @@
          </widget>
         </item>
         <item row="1" column="3">
-         <widget class="QToolButton" name="toolButton_7">
+         <widget class="QToolButton" name="tb_skyDown">
           <property name="text">
            <string>-</string>
           </property>
@@ -199,7 +199,7 @@
          </widget>
         </item>
         <item row="0" column="2">
-         <widget class="QToolButton" name="toolButton">
+         <widget class="QToolButton" name="tb_airUp">
           <property name="text">
            <string>+</string>
           </property>
@@ -216,7 +216,7 @@
          </widget>
         </item>
         <item row="3" column="3">
-         <widget class="QToolButton" name="toolButton_6">
+         <widget class="QToolButton" name="tb_waterDown">
           <property name="text">
            <string>-</string>
           </property>
@@ -233,7 +233,7 @@
          </widget>
         </item>
         <item row="2" column="3">
-         <widget class="QToolButton" name="toolButton_12">
+         <widget class="QToolButton" name="tb_groundDown">
           <property name="text">
            <string>-</string>
           </property>
@@ -292,7 +292,7 @@
          <widget class="QSpinBox" name="sb_skyTarget"/>
         </item>
         <item row="0" column="3">
-         <widget class="QToolButton" name="toolButton_2">
+         <widget class="QToolButton" name="tb_airDown">
           <property name="text">
            <string>-</string>
           </property>
@@ -397,7 +397,7 @@
          <widget class="QSpinBox" name="sb_faunaTarget"/>
         </item>
         <item row="0" column="3">
-         <widget class="QToolButton" name="toolButton_3">
+         <widget class="QToolButton" name="tb_floredown">
           <property name="text">
            <string>-</string>
           </property>
@@ -484,7 +484,7 @@
          </widget>
         </item>
         <item row="1" column="3">
-         <widget class="QToolButton" name="toolButton_8">
+         <widget class="QToolButton" name="tb_faunaDown">
           <property name="text">
            <string>-</string>
           </property>
@@ -508,7 +508,7 @@
          </widget>
         </item>
         <item row="1" column="2">
-         <widget class="QToolButton" name="toolButton_13">
+         <widget class="QToolButton" name="tb_faunaUp">
           <property name="text">
            <string>+</string>
           </property>
@@ -525,7 +525,7 @@
          </widget>
         </item>
         <item row="0" column="2">
-         <widget class="QToolButton" name="toolButton_4">
+         <widget class="QToolButton" name="tb_floreUp">
           <property name="text">
            <string>+</string>
           </property>
@@ -630,7 +630,7 @@
          <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
         </property>
         <item row="0" column="0">
-         <widget class="QLabel" name="label_17">
+         <widget class="QLabel" name="l_areaName">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -649,7 +649,7 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLabel" name="label_18">
+         <widget class="QLabel" name="l_area">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -668,14 +668,14 @@
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QLabel" name="label_19">
+         <widget class="QLabel" name="l_shadowName">
           <property name="text">
            <string>Тень</string>
           </property>
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLabel" name="label_20">
+         <widget class="QLabel" name="l_shadow">
           <property name="text">
            <string>...</string>
           </property>
@@ -820,8 +820,8 @@
    <slot>goNorth()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>81</x>
-     <y>647</y>
+     <x>962</x>
+     <y>641</y>
     </hint>
     <hint type="destinationlabel">
      <x>70</x>
@@ -830,194 +830,194 @@
    </hints>
   </connection>
   <connection>
-   <sender>toolButton_2</sender>
+   <sender>tb_airDown</sender>
    <signal>clicked()</signal>
    <receiver>sb_airTarget</receiver>
    <slot>stepDown()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>211</x>
-     <y>394</y>
+     <x>283</x>
+     <y>425</y>
     </hint>
     <hint type="destinationlabel">
-     <x>263</x>
-     <y>395</y>
+     <x>351</x>
+     <y>421</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>toolButton</sender>
+   <sender>tb_airUp</sender>
    <signal>clicked()</signal>
    <receiver>sb_airTarget</receiver>
    <slot>stepUp()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>174</x>
-     <y>384</y>
+     <x>237</x>
+     <y>425</y>
     </hint>
     <hint type="destinationlabel">
-     <x>270</x>
-     <y>395</y>
+     <x>351</x>
+     <y>421</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>toolButton_7</sender>
+   <sender>tb_skyDown</sender>
    <signal>clicked()</signal>
    <receiver>sb_skyTarget</receiver>
    <slot>stepDown()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>216</x>
-     <y>438</y>
+     <x>283</x>
+     <y>473</y>
     </hint>
     <hint type="destinationlabel">
-     <x>263</x>
-     <y>446</y>
+     <x>351</x>
+     <y>469</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>toolButton_11</sender>
+   <sender>tb_skyUp</sender>
    <signal>clicked()</signal>
    <receiver>sb_skyTarget</receiver>
    <slot>stepUp()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>174</x>
-     <y>444</y>
+     <x>237</x>
+     <y>473</y>
     </hint>
     <hint type="destinationlabel">
-     <x>281</x>
-     <y>440</y>
+     <x>351</x>
+     <y>469</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>toolButton_12</sender>
+   <sender>tb_groundDown</sender>
    <signal>clicked()</signal>
    <receiver>sb_groundTarget</receiver>
    <slot>stepDown()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>221</x>
-     <y>490</y>
+     <x>283</x>
+     <y>521</y>
     </hint>
     <hint type="destinationlabel">
-     <x>258</x>
-     <y>490</y>
+     <x>351</x>
+     <y>517</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>toolButton_9</sender>
+   <sender>tb_groundUp</sender>
    <signal>clicked()</signal>
    <receiver>sb_groundTarget</receiver>
    <slot>stepUp()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>176</x>
-     <y>493</y>
+     <x>237</x>
+     <y>521</y>
     </hint>
     <hint type="destinationlabel">
-     <x>252</x>
-     <y>486</y>
+     <x>351</x>
+     <y>517</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>toolButton_6</sender>
+   <sender>tb_waterDown</sender>
    <signal>clicked()</signal>
    <receiver>sb_waterTarget</receiver>
    <slot>stepDown()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>206</x>
-     <y>533</y>
+     <x>283</x>
+     <y>569</y>
     </hint>
     <hint type="destinationlabel">
-     <x>269</x>
-     <y>545</y>
+     <x>351</x>
+     <y>565</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>toolButton_10</sender>
+   <sender>tb_waterUp</sender>
    <signal>clicked()</signal>
    <receiver>sb_waterTarget</receiver>
    <slot>stepUp()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>181</x>
-     <y>542</y>
+     <x>237</x>
+     <y>569</y>
     </hint>
     <hint type="destinationlabel">
-     <x>257</x>
-     <y>544</y>
+     <x>351</x>
+     <y>565</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>toolButton_3</sender>
+   <sender>tb_floredown</sender>
    <signal>clicked()</signal>
    <receiver>sb_floreTarget</receiver>
    <slot>stepDown()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>475</x>
-     <y>398</y>
+     <x>941</x>
+     <y>425</y>
     </hint>
     <hint type="destinationlabel">
-     <x>533</x>
-     <y>395</y>
+     <x>1009</x>
+     <y>421</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>toolButton_4</sender>
+   <sender>tb_floreUp</sender>
    <signal>clicked()</signal>
    <receiver>sb_floreTarget</receiver>
    <slot>stepUp()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>416</x>
-     <y>392</y>
+     <x>895</x>
+     <y>425</y>
     </hint>
     <hint type="destinationlabel">
-     <x>504</x>
-     <y>395</y>
+     <x>1009</x>
+     <y>421</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>toolButton_8</sender>
+   <sender>tb_faunaUp</sender>
+   <signal>clicked()</signal>
+   <receiver>sb_faunaTarget</receiver>
+   <slot>stepUp()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>885</x>
+     <y>449</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>960</x>
+     <y>459</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tb_faunaDown</sender>
    <signal>clicked()</signal>
    <receiver>sb_faunaTarget</receiver>
    <slot>stepDown()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>474</x>
-     <y>440</y>
+     <x>923</x>
+     <y>463</y>
     </hint>
     <hint type="destinationlabel">
-     <x>513</x>
-     <y>440</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>toolButton_13</sender>
-   <signal>clicked()</signal>
-   <receiver>sb_faunaTarget</receiver>
-   <slot>stepDown()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>431</x>
-     <y>439</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>518</x>
-     <y>436</y>
+     <x>968</x>
+     <y>454</y>
     </hint>
    </hints>
   </connection>

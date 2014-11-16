@@ -4,11 +4,66 @@
 #include "amber.h"
 #include "common.h"
 
-#include "knownshadows.h"
 #include "knownareas.h"
 
 namespace amber
 {
+
+ShadowStructure amberShadowStructure()
+{
+    return {
+        element::AmberDistance(1)
+      , element::ChaosDistance(99)
+      , element::Air(50)
+      , element::Ground(50)
+      , element::Sky(100)
+      , element::Water(30)
+      , element::Flora(100)
+      , element::Fauna(100)
+  };
+}
+
+ShadowStructure trueAmberStructure()
+{
+    return {
+        element::AmberDistance(0)
+      , element::ChaosDistance(100)
+      , element::Air(60)
+      , element::Ground(80)
+      , element::Sky(80)
+      , element::Water(20)
+      , element::Flora(100)
+      , element::Fauna(100)
+  };
+}
+
+ShadowStructure bergmaShadowStructure()
+{
+    return {
+        element::AmberDistance(2)
+      , element::ChaosDistance(98)
+      , element::Air(60)
+      , element::Ground(80)
+      , element::Sky(90)
+      , element::Water(20)
+      , element::Flora(100)
+      , element::Fauna(100)
+  };
+}
+
+ShadowStructure trueBergmaStructure()
+{
+    return {
+        element::AmberDistance(2)
+      , element::ChaosDistance(98)
+      , element::Air(70)
+      , element::Ground(90)
+      , element::Sky(100)
+      , element::Water(10)
+      , element::Flora(100)
+      , element::Fauna(100)
+  };
+}
 
 ShadowVariator amberVariator()
 {
@@ -97,10 +152,10 @@ Shadows amberPoleShadows()
 ShadowPaths amberPolePaths()
 {
     return {
-        { amberShadowStructure(),  ShadowPath{AmberPoleArea, AmberShadow} }
-      , { trueAmberStructure(),    ShadowPath{AmberPoleArea, TrueAmber} }
-      , { bergmaShadowStructure(), ShadowPath{AmberPoleArea, BergmaShadow} }
-      , { trueBergmaStructure(),   ShadowPath{AmberPoleArea, TrueBergma} }
+        { amberShadowStructure(),  WorldPosition{AmberPoleArea, AmberShadow} }
+      , { trueAmberStructure(),    WorldPosition{AmberPoleArea, TrueAmber} }
+      , { bergmaShadowStructure(), WorldPosition{AmberPoleArea, BergmaShadow} }
+      , { trueBergmaStructure(),   WorldPosition{AmberPoleArea, TrueBergma} }
     };
 }
 

@@ -2,7 +2,6 @@
 #define MAGIC_H
 
 #include "amber.h"
-
 #include "common.h"
 
 namespace magic

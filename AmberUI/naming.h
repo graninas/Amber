@@ -1,7 +1,7 @@
 #ifndef NAMING_H
 #define NAMING_H
 
-#include "shadowstructure.h"
+#include "knownareas.h"
 
 namespace naming
 {
@@ -22,6 +22,23 @@ std::string ElementName(Element::ElementType element)
     case Element::Water: return "Water";
     }
     return "unknown element";
+}
+
+std::string AreaName(const std::string& area)
+{
+    if (area == AmberPoleArea) return "Полюс Амбера";
+    if (area == ChaosPoleArea) return "Полюс Хаоса";
+    if (area == MiddleShadows) return "Средние тени";
+    return "unknown area";
+}
+
+std::string ShadowName(const std::string& shadow)
+{
+    if (shadow == AmberShadow) return "Тени Амбера";
+    if (shadow == TrueAmber) return "Истинный Амбер";
+    if (shadow == BergmaShadow) return "Тени Бергмы";
+    if (shadow == TrueBergma) return "Бергма";
+    return "unknown shadow";
 }
 
 

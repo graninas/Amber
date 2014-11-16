@@ -45,17 +45,16 @@ enum DirectionType
 typedef std::string ShadowName;
 typedef std::string AreaName;
 
+struct WorldPosition
+{
+    AreaName area;
+    ShadowName shadow;
+};
+
 typedef std::map<Element::ElementType, int> ShadowStructure;
 typedef std::function<ShadowStructure(ShadowStructure, Direction::DirectionType)> ShadowVariator;
 
-// obsolete.
-struct ShadowPath
-{
-    AreaName targetArea;
-    ShadowName targetShadow;
-};
-
-typedef std::map<ShadowStructure, ShadowPath> ShadowPaths;
+typedef std::map<ShadowStructure, WorldPosition> ShadowPaths;
 
 struct Shadow
 {
