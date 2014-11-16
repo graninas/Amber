@@ -17,7 +17,7 @@ SafeShadowStructure runSafe(const SafeShadowStructureAction& action, const Shado
 SafeShadowStructure safeElementChange(const ShadowStructure& structure, Element::ElementType elem, int diff);
 
 typedef ShadowStructure ElementModifiers;
-SafeShadowStructureAction safeChangeElements(const ElementModifiers& modifiers);
+SafeShadowStructureAction safeChangeElements(const ElementModifiers &modifiers);
 
 // This boilerplace can be replaced by macro.
 SafeShadowStructure safeAirChange(const ShadowStructure& structure, int diff);

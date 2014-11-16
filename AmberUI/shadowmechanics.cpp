@@ -34,12 +34,14 @@ SafeShadowStructure safeElementChange(const ShadowStructure& structure, Element:
 
 SafeShadowStructureAction safeChangeElements(const ElementModifiers& modifiers)
 {
-    SafeShadowStructureAction action = [&modifiers](const ShadowStructure& income)
+    // N.B., modifiers passing by value. Otherwise, this code will cause access violation
+    // because of destructing externally defined modifiers.
+    SafeShadowStructureAction action = [=](const ShadowStructure& income)
     {
         SafeShadowStructure value = safeWrap(income);
         std::for_each(modifiers.begin(), modifiers.end(), [&value](const ElementModifiers::value_type& modifier)
         {
-            SafeShadowStructure newValue = safeBind(value, [&modifier](const ShadowStructure& structure)
+            value = safeBind(value, [&modifier](const ShadowStructure& structure)
             {
                 return safeElementChange(structure, modifier.first, modifier.second);
             });
