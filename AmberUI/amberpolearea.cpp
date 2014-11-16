@@ -76,9 +76,12 @@ ShadowVariator amberVariator()
 
         SafeShadowStructureAction action;
 
+
         switch (direction)
         {
         case Direction::North:
+            // Presentation tip: this is buggy code because of access violation the implicit map gives on access.
+            // It created here and passed by a reference. This reference is invalid out of switch.
             action = safeChangeElements({ {Element::Water, -waterGroundNSChange }
                                         , {Element::Ground, waterGroundNSChange } });
             break;
@@ -97,15 +100,14 @@ ShadowVariator amberVariator()
             break;*/
         };
 
-        /*
-        magic::Result<ShadowStructue> result = magic::runSafe(changeAction, structure);
-        if (magic::isSuccess(result))
-            return magic::resultData(result);
-        else // TODO - fail tolerance, error reporting
+        SafeShadowStructure value = runSafe(action, structure);
+        if (magic::isFail(value))
+        {
+            // TODO - fail tolerance, error reporting
             return structure;
-        */
+        }
 
-        return structure;
+        return magic::valueData(value);
     };
     return variator;
 }

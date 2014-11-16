@@ -15,6 +15,11 @@ SafeShadowStructure safeBind(const SafeShadowStructure value, const SafeShadowSt
     return value;
 }
 
+SafeShadowStructure runSafe(const SafeShadowStructureAction& action, const ShadowStructure& data)
+{
+    return action(data);
+}
+
 SafeShadowStructure safeElementChange(const ShadowStructure& structure, Element::ElementType elem, int diff)
 {
     ShadowStructure newStructure = structure;
@@ -34,7 +39,7 @@ SafeShadowStructureAction safeChangeElements(const ElementModifiers& modifiers)
         SafeShadowStructure value = safeWrap(income);
         std::for_each(modifiers.begin(), modifiers.end(), [&value](const ElementModifiers::value_type& modifier)
         {
-            value = safeBind(value, [&modifier](const ShadowStructure& structure)
+            SafeShadowStructure newValue = safeBind(value, [&modifier](const ShadowStructure& structure)
             {
                 return safeElementChange(structure, modifier.first, modifier.second);
             });

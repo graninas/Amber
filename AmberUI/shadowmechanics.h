@@ -11,6 +11,7 @@ typedef std::function<SafeShadowStructure(ShadowStructure)> SafeShadowStructureA
 
 SafeShadowStructure safeWrap(const ShadowStructure& data);
 SafeShadowStructure safeBind(const SafeShadowStructure value, const SafeShadowStructureAction& action);
+SafeShadowStructure runSafe(const SafeShadowStructureAction& action, const ShadowStructure& data);
 
 // Presentation tip: monadic functions.
 SafeShadowStructure safeElementChange(const ShadowStructure& structure, Element::ElementType elem, int diff);

@@ -54,14 +54,25 @@ void ShadowsView::goNorth()
 
 void ShadowsView::test()
 {
-    amber::Amber northMoved = shadows::updateCurrentShadow(m_amber, amber::Direction::North);
-    amber::Amber southMoved = shadows::updateCurrentShadow(m_amber, amber::Direction::South);
-    amber::Amber westMoved = shadows::updateCurrentShadow(m_amber, amber::Direction::West);
-    amber::Amber eastMoved = shadows::updateCurrentShadow(m_amber, amber::Direction::East);
-
     amber::ShadowStructure s1 = amber::amberShadowStructure();
+    amber::SafeShadowStructure value = amber::safeWrap(s1);
+    Q_ASSERT(value.data == s1);
+    Q_ASSERT(value.result == magic::Result::Success);
 
-    magic::Value<amber::ShadowStructure> res = amber::safeElementChange(s1, amber::Element::Air, 100);
+    amber::SafeShadowStructure ss2 = amber::safeElementChange(s1, amber::Element::Air, 100);
+    Q_ASSERT(ss2.result == magic::Result::Success);
+    Q_ASSERT(ss2.data != s1);
+
+
+
+//    amber::Amber northMoved = shadows::updateCurrentShadow(m_amber, amber::Direction::North);
+//    amber::Amber southMoved = shadows::updateCurrentShadow(m_amber, amber::Direction::South);
+//    amber::Amber westMoved = shadows::updateCurrentShadow(m_amber, amber::Direction::West);
+//    amber::Amber eastMoved = shadows::updateCurrentShadow(m_amber, amber::Direction::East);
+
+//
+
+//    magic::Value<amber::ShadowStructure> res = amber::safeElementChange(s1, amber::Element::Air, 100);
     //Q_ASSERT(magic::resultData(res) == s1.at(amber::Element::Air) + 1);
 
     //Q_ASSERT(northMoved.currentShadowStructure != m_amber.currentShadowStructure);
