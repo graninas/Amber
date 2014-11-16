@@ -73,7 +73,6 @@ ShadowVariator amberVariator()
         int waterGroundWEChange = 1;
 
 
-
         // N.B.! This can be wrapped into a small 'Changing DSL'.
         // Invent a pairs of dependant elements, for example water-ground, sky-air, amber-chaos.
         // Show it in presentation.
