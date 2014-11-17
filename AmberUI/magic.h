@@ -73,8 +73,8 @@ template <class D> D valueData(const Value<D>& value)
 // Presentation tip
 // In order to do a monadic actions connecting for abstract type D,
 // a template std::function is needed! Something like this:
-// typedef template <class D> std::function<Result<D>(D)> SafeAction;
-// SafeAction<ShadowResult> action = [](const D& data) { return safeChangeData(data); }
+// typedef template <class D> std::function<Value<D>(D)> SafeAction;
+// SafeShadowAction<SafeShadowValue> action = [](const D& data) { return safeChangeData(data); }
 // Consider http://stackoverflow.com/questions/3575901/can-lambda-functions-be-templated
 
 

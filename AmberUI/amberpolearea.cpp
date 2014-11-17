@@ -74,35 +74,32 @@ ShadowVariator amberVariator()
         // Invent a pairs of dependant elements, for example water-ground, sky-air, amber-chaos.
         // Show it in presentation.
 
-        SafeShadowStructureAction northAction = safeChangeElements({ {Element::Water,  -waterGroundNSChange }
-                                                                   , {Element::Ground,  waterGroundNSChange } });
-
-        SafeShadowStructureAction southAction = safeChangeElements({ {Element::Water,   waterGroundNSChange }
-                                                                   , {Element::Ground, -waterGroundNSChange } });
-
-        SafeShadowStructureAction westAction = safeChangeElements({ {Element::Water,    waterGroundWEChange }
-                                                                   , {Element::Ground, -waterGroundWEChange } });
-
-        SafeShadowStructureAction eastAction = safeChangeElements({ {Element::Water,   -waterGroundWEChange }
-                                                                   , {Element::Ground,  waterGroundWEChange } });
-
-        SafeShadowStructure value = safeWrap(structure);
+        SafeShadowStructureAction action;
         switch (direction)
         {
         case Direction::North:
-            value = runSafe(northAction, structure);
+            action = safeChangeElements({ {Element::Water,  -waterGroundNSChange }
+                                        , {Element::Ground,  waterGroundNSChange } });
             break;
+
+            // N.B.: functions of the element namespace completely fit into this model.
+            // Presentation tip: this is a tiny eDSL.
         case Direction::South:
-            value = runSafe(southAction, structure);
+            action = safeChangeElements({ element::Air(waterGroundNSChange)
+                                        , element::Ground(-waterGroundNSChange) });
             break;
         case Direction::East:
-            //value = runSafe(eastAction, structure);
+            action = safeChangeElements({ element::Water(waterGroundWEChange)
+                                        , element::Ground(-waterGroundWEChange) });
             break;
         case Direction::West:
-            //value = runSafe(westAction, structure);
+            action = safeChangeElements({ {Element::Water,   -waterGroundWEChange }
+                                        , {Element::Ground,   waterGroundWEChange } });
             break;
         }
 
+        SafeShadowStructure value = safeWrap(structure);
+        value = runSafe(action, structure);
         if (magic::isFail(value))
         {
             // TODO - fail tolerance, error reporting
