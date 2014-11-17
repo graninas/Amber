@@ -37,7 +37,11 @@ enum DirectionType
     North,
     South,
     East,
-    West
+    West,
+    NorthEast,
+    NorthWest,
+    SouthEast,
+    SouthWest
 };
 }
 
