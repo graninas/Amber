@@ -734,7 +734,7 @@
       <item>
        <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0">
         <item row="0" column="0">
-         <widget class="QToolButton" name="toolButton_18">
+         <widget class="QToolButton" name="tb_goNorthWest">
           <property name="minimumSize">
            <size>
             <width>32</width>
@@ -747,7 +747,7 @@
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QToolButton" name="toolButton_19">
+         <widget class="QToolButton" name="tb_goWest">
           <property name="minimumSize">
            <size>
             <width>32</width>
@@ -760,7 +760,7 @@
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QToolButton" name="toolButton_20">
+         <widget class="QToolButton" name="tb_goSouth">
           <property name="minimumSize">
            <size>
             <width>32</width>
@@ -773,7 +773,7 @@
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="QToolButton" name="toolButton_21">
+         <widget class="QToolButton" name="tb_goSouthWest">
           <property name="minimumSize">
            <size>
             <width>32</width>
@@ -786,7 +786,7 @@
          </widget>
         </item>
         <item row="1" column="2">
-         <widget class="QToolButton" name="toolButton_22">
+         <widget class="QToolButton" name="tb_goEast">
           <property name="minimumSize">
            <size>
             <width>32</width>
@@ -799,7 +799,7 @@
          </widget>
         </item>
         <item row="2" column="2">
-         <widget class="QToolButton" name="toolButton_23">
+         <widget class="QToolButton" name="tb_goSouthEast">
           <property name="minimumSize">
            <size>
             <width>32</width>
@@ -812,7 +812,7 @@
          </widget>
         </item>
         <item row="0" column="2">
-         <widget class="QToolButton" name="toolButton_24">
+         <widget class="QToolButton" name="tb_goNorthEast">
           <property name="minimumSize">
            <size>
             <width>32</width>
@@ -825,7 +825,7 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QToolButton" name="toolButton_5">
+         <widget class="QToolButton" name="tb_goNorth">
           <property name="minimumSize">
            <size>
             <width>32</width>
@@ -869,7 +869,7 @@
  </resources>
  <connections>
   <connection>
-   <sender>toolButton_5</sender>
+   <sender>tb_goNorth</sender>
    <signal>clicked()</signal>
    <receiver>ShadowsView</receiver>
    <slot>goNorth()</slot>
@@ -1093,7 +1093,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>toolButton_19</sender>
+   <sender>tb_goWest</sender>
    <signal>clicked()</signal>
    <receiver>ShadowsView</receiver>
    <slot>goWest()</slot>
@@ -1109,7 +1109,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>toolButton_22</sender>
+   <sender>tb_goEast</sender>
    <signal>clicked()</signal>
    <receiver>ShadowsView</receiver>
    <slot>goEast()</slot>
@@ -1125,7 +1125,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>toolButton_20</sender>
+   <sender>tb_goSouth</sender>
    <signal>clicked()</signal>
    <receiver>ShadowsView</receiver>
    <slot>goSouth()</slot>
@@ -1140,6 +1140,70 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>tb_goNorthEast</sender>
+   <signal>clicked()</signal>
+   <receiver>ShadowsView</receiver>
+   <slot>goNorthEast()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>998</x>
+     <y>633</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1038</x>
+     <y>630</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tb_goSouthEast</sender>
+   <signal>clicked()</signal>
+   <receiver>ShadowsView</receiver>
+   <slot>goSouthEast()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1001</x>
+     <y>705</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1023</x>
+     <y>709</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tb_goSouthWest</sender>
+   <signal>clicked()</signal>
+   <receiver>ShadowsView</receiver>
+   <slot>goSouthWest()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>916</x>
+     <y>718</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>932</x>
+     <y>736</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tb_goNorthWest</sender>
+   <signal>clicked()</signal>
+   <receiver>ShadowsView</receiver>
+   <slot>goNorthWest()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>912</x>
+     <y>626</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>926</x>
+     <y>602</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>goNorth()</slot>
@@ -1149,5 +1213,9 @@
   <slot>goSouth()</slot>
   <slot>goWest()</slot>
   <slot>goEast()</slot>
+  <slot>goNorthEast()</slot>
+  <slot>goNorthWest()</slot>
+  <slot>goSouthEast()</slot>
+  <slot>goSouthWest()</slot>
  </slots>
 </ui>

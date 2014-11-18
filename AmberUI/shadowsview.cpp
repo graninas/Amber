@@ -38,6 +38,8 @@ ShadowsView::~ShadowsView()
     delete ui;
 }
 
+// This boilerplace can be removed by a macro.
+
 void ShadowsView::goNorth()
 {
     evalAmberTask(shadows::goNorth);
@@ -56,6 +58,26 @@ void ShadowsView::goWest()
 void ShadowsView::goEast()
 {
     evalAmberTask(shadows::goEast);
+}
+
+void ShadowsView::goNorthEast()
+{
+    evalAmberTask(shadows::goNorthEast);
+}
+
+void ShadowsView::goNorthWest()
+{
+    evalAmberTask(shadows::goNorthWest);
+}
+
+void ShadowsView::goSouthEast()
+{
+    evalAmberTask(shadows::goSouthEast);
+}
+
+void ShadowsView::goSouthWest()
+{
+    evalAmberTask(shadows::goSouthWest);
 }
 
 void ShadowsView::test()

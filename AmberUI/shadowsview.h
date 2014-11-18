@@ -20,10 +20,15 @@ public:
 
 public slots:
 
+    // This boilerplace can be removed by a macro.
     void goNorth();
     void goSouth();
     void goWest();
     void goEast();
+    void goNorthEast();
+    void goNorthWest();
+    void goSouthEast();
+    void goSouthWest();
 
     void test(); // temporary
 
@@ -40,3 +45,4 @@ private:
 };
 
 #endif // SHADOWSVIEW_H
+
