@@ -2,15 +2,10 @@
 #include "ui_shadowsview.h"
 
 #include "amber.h"
-#include "shadowstructure.h"
-#include "shadows.h"
+#include "ambermechanics.h"
 #include "magic.h"
-#include "shadowmechanics.h"
-
-#include "amberpolearea.h"
 
 #include "common.h"
-#include "assets.h"
 #include "naming.h"
 
 namespace
@@ -42,54 +37,42 @@ ShadowsView::~ShadowsView()
 
 void ShadowsView::goNorth()
 {
-    evalAmberTask(shadows::goNorth);
+    evalAmberTask(amber::goNorth);
 }
 
 void ShadowsView::goSouth()
 {
-    evalAmberTask(shadows::goSouth);
+    evalAmberTask(amber::goSouth);
 }
 
 void ShadowsView::goWest()
 {
-    evalAmberTask(shadows::goWest);
+    evalAmberTask(amber::goWest);
 }
 
 void ShadowsView::goEast()
 {
-    evalAmberTask(shadows::goEast);
+    evalAmberTask(amber::goEast);
 }
 
 void ShadowsView::goNorthEast()
 {
-    evalAmberTask(shadows::goNorthEast);
+    evalAmberTask(amber::goNorthEast);
 }
 
 void ShadowsView::goNorthWest()
 {
-    evalAmberTask(shadows::goNorthWest);
+    evalAmberTask(amber::goNorthWest);
 }
 
 void ShadowsView::goSouthEast()
 {
-    evalAmberTask(shadows::goSouthEast);
+    evalAmberTask(amber::goSouthEast);
 }
 
 void ShadowsView::goSouthWest()
 {
-    evalAmberTask(shadows::goSouthWest);
-}
-
-void ShadowsView::test()
-{
-    amber::ShadowStructure s1 = amber::amberShadowStructure();
-    amber::SafeShadowStructure value = amber::safeWrap(s1);
-    Q_ASSERT(value.data == s1);
-    Q_ASSERT(value.result == magic::Result::Success);
-
-    amber::SafeShadowStructure ss2 = amber::safeElementChange(s1, amber::Element::Air, 100);
-    Q_ASSERT(ss2.result == magic::Result::Success);
-    Q_ASSERT(ss2.data != s1);
+    evalAmberTask(amber::goSouthWest);
 }
 
 void ShadowsView::evalAmberTask(const amber::AmberTask& task)
@@ -98,7 +81,7 @@ void ShadowsView::evalAmberTask(const amber::AmberTask& task)
     amber::AmberTask resultTask = [&task](const amber::Amber& amber) -> amber::Amber
     {
         auto action1Res = magic::anyway(task, magic::wrap(amber));
-        auto action2Res = magic::anyway(shadows::tickDay, action1Res);
+        auto action2Res = magic::anyway(amber::tickDay, action1Res);
         return action2Res.amber;
     };
 

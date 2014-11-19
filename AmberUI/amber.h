@@ -21,6 +21,8 @@ typedef std::function<Amber (const Amber&)> AmberTask;
 
 void changeAmber(const AmberTask& task, Amber& amber);
 
+Amber defaultAmber();
+
 }
 
 #endif // AMBER_H

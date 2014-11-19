@@ -15,7 +15,6 @@ ShadowVariator amberVariator();
 ShadowVariator bergmaVariator();
 
 Shadows amberPoleShadows();
-ShadowPaths amberPolePaths();
 Area amberPoleArea();
 
 } // namespace amber

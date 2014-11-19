@@ -3,6 +3,8 @@
 namespace magic
 {
 
+using namespace amber;
+
 Artifact wrap(const Amber& amber)
 {
     Artifact artifact { amber, 0 };

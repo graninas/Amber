@@ -58,12 +58,13 @@ struct WorldPosition
 typedef std::map<Element::ElementType, int> ShadowStructure;
 typedef std::function<ShadowStructure(ShadowStructure, Direction::DirectionType)> ShadowVariator;
 
-typedef std::map<ShadowStructure, WorldPosition> ShadowPaths;
+typedef int ShadowInfluence;
 
 struct Shadow
 {
     ShadowVariator variator;
     ShadowStructure structure;
+    ShadowInfluence influence;
 };
 
 typedef std::map<ShadowName, Shadow> Shadows;
@@ -71,7 +72,6 @@ typedef std::map<ShadowName, Shadow> Shadows;
 struct Area
 {
     Shadows shadows;
-    ShadowPaths paths;
 };
 
 typedef std::map<AreaName, Area> Areas;

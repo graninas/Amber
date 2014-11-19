@@ -7,8 +7,6 @@
 namespace magic
 {
 
-using namespace amber;
-
 namespace Result
 {
 enum ResultType
@@ -77,25 +75,23 @@ template <class D> D valueData(const Value<D>& value)
 // SafeShadowAction<SafeShadowValue> action = [](const D& data) { return safeChangeData(data); }
 // Consider http://stackoverflow.com/questions/3575901/can-lambda-functions-be-templated
 
-
 struct Artifact
 {
-    Artifact(const Amber& a, int r)
+    Artifact(const amber::Amber& a, int r)
     {
         amber = a;
         result = r;
     }
 
-    Amber amber;
+    amber::Amber amber;
     int result;
     std::vector<std::string> systemLog;
 };
 
-Artifact wrap(const Amber& amber);
-Amber unwrap(const Artifact& amber);
-Artifact eval(const AmberTask& task, const Artifact& artifact);
-Artifact anyway(const AmberTask& task, const Artifact& artifact);
-
+Artifact wrap(const amber::Amber& amber);
+amber::Amber unwrap(const Artifact& amber);
+Artifact eval(const amber::AmberTask& task, const Artifact& artifact);
+Artifact anyway(const amber::AmberTask& task, const Artifact& artifact);
 
 }
 

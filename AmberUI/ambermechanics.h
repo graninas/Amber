@@ -1,13 +1,11 @@
-#ifndef SHADOWS_H
-#define SHADOWS_H
+#ifndef AMBERMECHANICS_H
+#define AMBERMECHANICS_H
 
 #include "amber.h"
 #include "common.h"
 
-namespace shadows
+namespace amber
 {
-
-using namespace amber;
 
 Amber updateCurrentShadow(const Amber& amber, Direction::DirectionType dir);
 Amber updateCurrentPosition(const Amber& amber);
@@ -62,9 +60,6 @@ const AmberTask tickDay = [](const Amber& amber)
 };
 
 
+} // namespace amber
 
-
-
-}
-
-#endif // SHADOWS_H
+#endif // AMBERMECHANICS_H

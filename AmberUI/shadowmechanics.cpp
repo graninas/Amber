@@ -52,45 +52,22 @@ SafeShadowStructureAction safeChangeElements(const ElementModifiers& modifiers)
     return action;
 }
 
-// This boilerplace can be replaced by macro.
-SafeShadowStructure safeAirChange(const ShadowStructure& structure, int diff)
+double shadowDistance(const ShadowStructure& shadow1, const ShadowStructure& shadow2)
 {
-    return safeElementChange(structure, Element::Air, diff);
-}
+    // TODO: do it safe.
 
-SafeShadowStructure safeSkyChange(const ShadowStructure& structure, int diff)
-{
-    return safeElementChange(structure, Element::Sky, diff);
-}
+    int d1 = shadow1.at(Element::Air)           - shadow2.at(Element::Air);
+    int d2 = shadow1.at(Element::Ground)        - shadow2.at(Element::Ground);
+    int d3 = shadow1.at(Element::Water)         - shadow2.at(Element::Water);
+    int d4 = shadow1.at(Element::Sky)           - shadow2.at(Element::Sky);
+    int d5 = shadow1.at(Element::AmberDistance) - shadow2.at(Element::AmberDistance);
+    int d6 = shadow1.at(Element::ChaosDistance) - shadow2.at(Element::ChaosDistance);
+    int d7 = shadow1.at(Element::Fauna)         - shadow2.at(Element::Fauna);
+    int d8 = shadow1.at(Element::Flora)         - shadow2.at(Element::Flora);
 
-SafeShadowStructure safeWaterChange(const ShadowStructure& structure, int diff)
-{
-    return safeElementChange(structure, Element::Water, diff);
-}
+    return sqrt(d1*d1 + d2*d2 + d3*d3 + d4*d4 +
+                d5*d5 + d6*d6 + d7*d7 + d8*d8);
 
-SafeShadowStructure safeGroundChange(const ShadowStructure& structure, int diff)
-{
-    return safeElementChange(structure, Element::Ground, diff);
-}
-
-SafeShadowStructure safeAmberDistanceChange(const ShadowStructure& structure, int diff)
-{
-    return safeElementChange(structure, Element::AmberDistance, diff);
-}
-
-SafeShadowStructure safeChaosDistanceChange(const ShadowStructure& structure, int diff)
-{
-    return safeElementChange(structure, Element::ChaosDistance, diff);
-}
-
-SafeShadowStructure safeFloreChange(const ShadowStructure& structure, int diff)
-{
-    return safeElementChange(structure, Element::Flora, diff);
-}
-
-SafeShadowStructure safeFaunaChange(const ShadowStructure& structure, int diff)
-{
-    return safeElementChange(structure, Element::Fauna, diff);
 }
 
 namespace element

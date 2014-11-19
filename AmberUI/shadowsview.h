@@ -30,8 +30,6 @@ public slots:
     void goSouthEast();
     void goSouthWest();
 
-    void test(); // temporary
-
 private:
     Ui::ShadowsView *ui;
 

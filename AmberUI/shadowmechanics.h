@@ -19,15 +19,8 @@ SafeShadowStructure safeElementChange(const ShadowStructure& structure, Element:
 typedef ShadowStructure ElementModifiers;
 SafeShadowStructureAction safeChangeElements(const ElementModifiers &modifiers);
 
-// This boilerplace can be replaced by macro.
-SafeShadowStructure safeAirChange(const ShadowStructure& structure, int diff);
-SafeShadowStructure safeSkyChange(const ShadowStructure& structure, int diff);
-SafeShadowStructure safeWaterChange(const ShadowStructure& structure, int diff);
-SafeShadowStructure safeGroundChange(const ShadowStructure& structure, int diff);
-SafeShadowStructure safeAmberDistanceChange(const ShadowStructure& structure, int diff);
-SafeShadowStructure safeChaosDistanceChange(const ShadowStructure& structure, int diff);
-SafeShadowStructure safeFloreChange(const ShadowStructure& structure, int diff);
-SafeShadowStructure safeFaunaChange(const ShadowStructure& structure, int diff);
+double shadowDistance(const ShadowStructure& shadow1, const ShadowStructure& shadow2);
+
 
 namespace element
 {

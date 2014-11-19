@@ -15,25 +15,24 @@ CONFIG += c++11
 
 SOURCES += main.cpp\
         shadowsview.cpp \
-    shadows.cpp \
     amber.cpp \
     magic.cpp \
-    assets.cpp \
     shadowstructure.cpp \
     shadowmechanics.cpp \
-    amberpolearea.cpp
+    amberpolearea.cpp \
+    ambermechanics.cpp
 
 HEADERS  += shadowsview.h \
     amber.h \
-    shadows.h \
     magic.h \
     common.h \
-    assets.h \
     shadowstructure.h \
     knownareas.h \
     amberpolearea.h \
     naming.h \
-    shadowmechanics.h
+    shadowmechanics.h \
+    monad.h \
+    ambermechanics.h
 
 FORMS    += shadowsview.ui
 

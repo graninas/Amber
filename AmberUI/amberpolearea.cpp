@@ -116,7 +116,7 @@ ShadowVariator amberPoleVariator(int multiplier)
             break;
         case Direction::South:
             action = safeChangeElements({ element::Water(multiplier)
-                                        , element::Ground(multiplier) });
+                                        , element::Ground(-multiplier) });
             break;
         case Direction::East:
             action = safeChangeElements({ element::Air(-multiplier)
@@ -124,7 +124,7 @@ ShadowVariator amberPoleVariator(int multiplier)
             break;
         case Direction::West:
             action = safeChangeElements({ {Element::Air, multiplier }
-                                        , {Element::Sky, multiplier } });
+                                        , {Element::Sky, -multiplier } });
             break;
         default:
             action = sideDirectionsElementChanger(direction, multiplier);
@@ -166,26 +166,18 @@ ShadowVariator trueBergmaVariator()
 Shadows amberPoleShadows()
 {
     return {
-        { AmberShadow,  Shadow { amberShadowVariator(),  amberShadowStructure()} }
-      , { TrueAmber,    Shadow { trueAmberVariator(),    trueAmberStructure()  } }
-      , { BergmaShadow, Shadow { bergmaShadowVariator(), bergmaShadowStructure() } }
-      , { TrueBergma,   Shadow { trueBergmaVariator(),   trueBergmaStructure() } }
-    };
-}
-
-ShadowPaths amberPolePaths()
-{
-    return {
-        { amberShadowStructure(),  WorldPosition{AmberPoleArea, AmberShadow} }
-      , { trueAmberStructure(),    WorldPosition{AmberPoleArea, TrueAmber} }
-      , { bergmaShadowStructure(), WorldPosition{AmberPoleArea, BergmaShadow} }
-      , { trueBergmaStructure(),   WorldPosition{AmberPoleArea, TrueBergma} }
+        // Presentation tip: lambdas and functions are highly coupled conceptions.
+        // Lambdas can be used directly or can be created by function call.
+        { AmberShadow,  Shadow { amberShadowVariator(),  amberShadowStructure(),  5  } }
+      , { TrueAmber,    Shadow { trueAmberVariator(),    trueAmberStructure(),    10 } }
+      , { BergmaShadow, Shadow { bergmaShadowVariator(), bergmaShadowStructure(), 5  } }
+      , { TrueBergma,   Shadow { trueBergmaVariator(),   trueBergmaStructure(),   5  } }
     };
 }
 
 Area amberPoleArea()
 {
-    return Area { amberPoleShadows(), amberPolePaths() };
+    return Area { amberPoleShadows() };
 }
 
 } // namespace amber
