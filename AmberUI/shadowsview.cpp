@@ -8,14 +8,6 @@
 #include "common.h"
 #include "naming.h"
 
-namespace
-{
-int worldPolePositionToSliderValue(int polePos)
-{
-    return polePos;
-}
-}
-
 ShadowsView::ShadowsView(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ShadowsView)
@@ -24,6 +16,11 @@ ShadowsView::ShadowsView(QWidget *parent) :
 
     ui->setupUi(this);
     setupWorldPlacesModel(m_amber);
+
+    m_amberTimer = new QTimer(this);
+    m_amberTimer->setSingleShot(false);
+    m_amberTimer->setInterval(5000);
+    QObject::connect(m_amberTimer, SIGNAL(timeout()), this, SLOT(tickOneAmberHour()));
 
     updateUI();
 }
@@ -75,10 +72,26 @@ void ShadowsView::goSouthWest()
     evalAmberTask(amber::goSouthWest);
 }
 
+void ShadowsView::tickOneAmberHour()
+{
+    evalAmberTask(amber::goSouthWest);
+}
+
+void ShadowsView::switchAmberTimeTicking(bool ticking)
+{
+    Q_ASSERT(m_amberTimer != nullptr);
+    Q_ASSERT(m_amberTimer->isActive() != ticking);
+
+    if (ticking)
+        m_amberTimer->start();
+    else
+        m_amberTimer->stop();
+}
+
 void ShadowsView::evalAmberTask(const amber::AmberTask& task)
 {
     // TODO: do something like frp.
-    amber::AmberTask resultTask = [&task](const amber::Amber& amber) -> amber::Amber
+    amber::AmberTask resultTask = [&task](const amber::Amber& amber)
     {
         auto action1Res = magic::anyway(task, magic::wrap(amber));
         auto action2Res = magic::anyway(amber::tickDay, action1Res);

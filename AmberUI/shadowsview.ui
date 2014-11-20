@@ -921,6 +921,29 @@
           </property>
          </widget>
         </item>
+        <item row="3" column="3">
+         <widget class="QToolButton" name="toolButton">
+          <property name="text">
+           <string>...</string>
+          </property>
+          <property name="icon">
+           <iconset resource="Icons.qrc">
+            <normaloff>:/icons/icons/refresh.png</normaloff>:/icons/icons/refresh.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item>
@@ -985,8 +1008,8 @@
    <slot>goNorth()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>962</x>
-     <y>641</y>
+     <x>596</x>
+     <y>567</y>
     </hint>
     <hint type="destinationlabel">
      <x>976</x>
@@ -1001,12 +1024,12 @@
    <slot>stepDown()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>283</x>
-     <y>425</y>
+     <x>97</x>
+     <y>302</y>
     </hint>
     <hint type="destinationlabel">
-     <x>351</x>
-     <y>421</y>
+     <x>160</x>
+     <y>298</y>
     </hint>
    </hints>
   </connection>
@@ -1017,12 +1040,12 @@
    <slot>stepUp()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>237</x>
-     <y>425</y>
+     <x>51</x>
+     <y>302</y>
     </hint>
     <hint type="destinationlabel">
-     <x>351</x>
-     <y>421</y>
+     <x>160</x>
+     <y>298</y>
     </hint>
    </hints>
   </connection>
@@ -1033,12 +1056,12 @@
    <slot>stepDown()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>283</x>
-     <y>473</y>
+     <x>97</x>
+     <y>351</y>
     </hint>
     <hint type="destinationlabel">
-     <x>351</x>
-     <y>469</y>
+     <x>160</x>
+     <y>347</y>
     </hint>
    </hints>
   </connection>
@@ -1049,12 +1072,12 @@
    <slot>stepUp()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>237</x>
-     <y>473</y>
+     <x>51</x>
+     <y>351</y>
     </hint>
     <hint type="destinationlabel">
-     <x>351</x>
-     <y>469</y>
+     <x>160</x>
+     <y>347</y>
     </hint>
    </hints>
   </connection>
@@ -1065,12 +1088,12 @@
    <slot>stepDown()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>283</x>
-     <y>521</y>
+     <x>97</x>
+     <y>400</y>
     </hint>
     <hint type="destinationlabel">
-     <x>351</x>
-     <y>517</y>
+     <x>160</x>
+     <y>396</y>
     </hint>
    </hints>
   </connection>
@@ -1081,12 +1104,12 @@
    <slot>stepUp()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>237</x>
-     <y>521</y>
+     <x>51</x>
+     <y>400</y>
     </hint>
     <hint type="destinationlabel">
-     <x>351</x>
-     <y>517</y>
+     <x>160</x>
+     <y>396</y>
     </hint>
    </hints>
   </connection>
@@ -1097,12 +1120,12 @@
    <slot>stepDown()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>283</x>
-     <y>569</y>
+     <x>97</x>
+     <y>449</y>
     </hint>
     <hint type="destinationlabel">
-     <x>351</x>
-     <y>565</y>
+     <x>160</x>
+     <y>445</y>
     </hint>
    </hints>
   </connection>
@@ -1113,12 +1136,12 @@
    <slot>stepUp()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>237</x>
-     <y>569</y>
+     <x>51</x>
+     <y>449</y>
     </hint>
     <hint type="destinationlabel">
-     <x>351</x>
-     <y>565</y>
+     <x>160</x>
+     <y>445</y>
     </hint>
    </hints>
   </connection>
@@ -1129,12 +1152,12 @@
    <slot>stepDown()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>941</x>
-     <y>425</y>
+     <x>430</x>
+     <y>302</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1009</x>
-     <y>421</y>
+     <x>493</x>
+     <y>298</y>
     </hint>
    </hints>
   </connection>
@@ -1145,12 +1168,12 @@
    <slot>stepUp()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>895</x>
-     <y>425</y>
+     <x>384</x>
+     <y>302</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1009</x>
-     <y>421</y>
+     <x>493</x>
+     <y>298</y>
     </hint>
    </hints>
   </connection>
@@ -1161,12 +1184,12 @@
    <slot>stepUp()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>885</x>
-     <y>449</y>
+     <x>384</x>
+     <y>351</y>
     </hint>
     <hint type="destinationlabel">
-     <x>960</x>
-     <y>459</y>
+     <x>493</x>
+     <y>347</y>
     </hint>
    </hints>
   </connection>
@@ -1177,12 +1200,12 @@
    <slot>stepDown()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>923</x>
-     <y>463</y>
+     <x>430</x>
+     <y>351</y>
     </hint>
     <hint type="destinationlabel">
-     <x>968</x>
-     <y>454</y>
+     <x>493</x>
+     <y>347</y>
     </hint>
    </hints>
   </connection>
@@ -1193,8 +1216,8 @@
    <slot>goWest()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>904</x>
-     <y>665</y>
+     <x>550</x>
+     <y>615</y>
     </hint>
     <hint type="destinationlabel">
      <x>982</x>
@@ -1209,8 +1232,8 @@
    <slot>goEast()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>992</x>
-     <y>668</y>
+     <x>642</x>
+     <y>615</y>
     </hint>
     <hint type="destinationlabel">
      <x>990</x>
@@ -1225,8 +1248,8 @@
    <slot>goSouth()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>965</x>
-     <y>706</y>
+     <x>596</x>
+     <y>663</y>
     </hint>
     <hint type="destinationlabel">
      <x>974</x>
@@ -1241,8 +1264,8 @@
    <slot>goNorthEast()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>998</x>
-     <y>633</y>
+     <x>642</x>
+     <y>567</y>
     </hint>
     <hint type="destinationlabel">
      <x>1038</x>
@@ -1257,8 +1280,8 @@
    <slot>goSouthEast()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1001</x>
-     <y>705</y>
+     <x>642</x>
+     <y>663</y>
     </hint>
     <hint type="destinationlabel">
      <x>1023</x>
@@ -1273,8 +1296,8 @@
    <slot>goSouthWest()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>916</x>
-     <y>718</y>
+     <x>550</x>
+     <y>663</y>
     </hint>
     <hint type="destinationlabel">
      <x>932</x>
@@ -1289,12 +1312,28 @@
    <slot>goNorthWest()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>912</x>
-     <y>626</y>
+     <x>550</x>
+     <y>567</y>
     </hint>
     <hint type="destinationlabel">
      <x>926</x>
      <y>602</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toolButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>ShadowsView</receiver>
+   <slot>switchAmberTimeTicking(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>588</x>
+     <y>588</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>991</x>
+     <y>645</y>
     </hint>
    </hints>
   </connection>
@@ -1311,5 +1350,6 @@
   <slot>goNorthWest()</slot>
   <slot>goSouthEast()</slot>
   <slot>goSouthWest()</slot>
+  <slot>switchAmberTimeTicking(bool)</slot>
  </slots>
 </ui>

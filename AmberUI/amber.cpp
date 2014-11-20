@@ -9,6 +9,7 @@ namespace amber
 void changeAmber(const AmberTask &task, Amber& amber)
 {
     Amber newAmber = task(amber);
+    // TODO: atomic change it.
     amber = newAmber;
 }
 

@@ -67,7 +67,6 @@ double shadowDistance(const ShadowStructure& shadow1, const ShadowStructure& sha
 
     return sqrt(d1*d1 + d2*d2 + d3*d3 + d4*d4 +
                 d5*d5 + d6*d6 + d7*d7 + d8*d8);
-
 }
 
 namespace element

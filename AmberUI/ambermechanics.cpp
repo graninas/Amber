@@ -37,22 +37,6 @@ Amber updateCurrentPosition(const Amber& amber)
     if (nearestDistance != std::numeric_limits<int>::max())
         newAmber.position.shadow = nearestShadow;
 
-    /*
-typedef std::function<monad::maybe::MaybeBool(ShadowStructure)> MaybeBoolAction;
-        auto monadicAction = {
-            on(
-                both(
-                    safeAccess(Element::Air, shadow.second),
-                    safeAccess(Element::Air, amber.currentShadowStructure)),
-
-                [](const std::pair<int, int>& values)
-                {
-
-                }
-
-            )
-        };*/
-
     return newAmber;
 }
 

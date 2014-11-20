@@ -10,5 +10,10 @@
         <file>icons/arrow_right-down.png</file>
         <file>icons/arrow_right-up.png</file>
         <file>icons/arrow_up.png</file>
+        <file>icons/pause.png</file>
+        <file>icons/play.png</file>
+        <file>icons/stop.png</file>
+        <file>icons/stop_2.png</file>
+        <file>icons/refresh.png</file>
     </qresource>
 </RCC>

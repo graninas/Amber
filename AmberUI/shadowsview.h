@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QStringListModel>
+#include <QTimer>
 
 #include "amber.h"
 
@@ -29,9 +30,13 @@ public slots:
     void goNorthWest();
     void goSouthEast();
     void goSouthWest();
+    void tickOneAmberHour();
+
+    void switchAmberTimeTicking(bool ticking);
 
 private:
     Ui::ShadowsView *ui;
+    QTimer *m_amberTimer;
 
     amber::Amber m_amber;
 
