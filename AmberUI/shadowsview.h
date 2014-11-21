@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QStringListModel>
 #include <QTimer>
+#include <mutex>
 
 #include "amber.h"
 
@@ -38,6 +39,7 @@ private:
     Ui::ShadowsView *ui;
     QTimer *m_amberTimer;
 
+    mutable std::mutex m_amberChangeGuard;
     amber::Amber m_amber;
 
     void evalAmberTask(const amber::AmberTask& task);
@@ -45,6 +47,8 @@ private:
     void setupWorldPlacesModel(const amber::Amber& amber);
     void updateUI();
 
+    amber::Amber readAmber() const;
+    void changeAmber(const amber::AmberTask& task);
 };
 
 #endif // SHADOWSVIEW_H

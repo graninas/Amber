@@ -19,7 +19,7 @@ ShadowsView::ShadowsView(QWidget *parent) :
 
     m_amberTimer = new QTimer(this);
     m_amberTimer->setSingleShot(false);
-    m_amberTimer->setInterval(5000);
+    m_amberTimer->setInterval(1000);
     QObject::connect(m_amberTimer, SIGNAL(timeout()), this, SLOT(tickOneAmberHour()));
 
     updateUI();
@@ -74,6 +74,7 @@ void ShadowsView::goSouthWest()
 
 void ShadowsView::tickOneAmberHour()
 {
+    // Temp
     evalAmberTask(amber::goSouthWest);
 }
 
@@ -91,14 +92,14 @@ void ShadowsView::switchAmberTimeTicking(bool ticking)
 void ShadowsView::evalAmberTask(const amber::AmberTask& task)
 {
     // TODO: do something like frp.
-    amber::AmberTask resultTask = [&task](const amber::Amber& amber)
+    amber::AmberTask combinedTask = [&task](const amber::Amber& amber)
     {
         auto action1Res = magic::anyway(task, magic::wrap(amber));
         auto action2Res = magic::anyway(amber::tickDay, action1Res);
         return action2Res.amber;
     };
 
-    amber::changeAmber(resultTask, m_amber);
+    changeAmber(combinedTask);
     updateUI();
 }
 
@@ -177,16 +178,34 @@ void ShadowsView::setupWorldPlacesModel(const amber::Amber& amber)
 
 void ShadowsView::updateUI()
 {
-    ui->l_time->setText(QString::number(m_amber.hoursElapsed));
-    ui->l_area->setText(QString::fromStdString(naming::AreaName(m_amber.position.area)));
-    ui->l_shadow->setText(QString::fromStdString(naming::ShadowName(m_amber.position.shadow)));
+    amber::Amber amber = readAmber();
 
-    ui->l_air->setText(QString::number(m_amber.currentShadowStructure.at(amber::Element::Air)));
-    ui->l_water->setText(QString::number(m_amber.currentShadowStructure.at(amber::Element::Water)));
-    ui->l_ground->setText(QString::number(m_amber.currentShadowStructure.at(amber::Element::Ground)));
-    ui->l_sky->setText(QString::number(m_amber.currentShadowStructure.at(amber::Element::Sky)));
-    ui->l_amberDistance->setText(QString::number(m_amber.currentShadowStructure.at(amber::Element::AmberDistance)));
-    ui->l_chaosDistance->setText(QString::number(m_amber.currentShadowStructure.at(amber::Element::ChaosDistance)));
-    ui->l_flora->setText(QString::number(m_amber.currentShadowStructure.at(amber::Element::Flora)));
-    ui->l_fauna->setText(QString::number(m_amber.currentShadowStructure.at(amber::Element::Fauna)));
+    ui->l_time->setText(QString::number(amber.hoursElapsed));
+    ui->l_area->setText(QString::fromStdString(naming::AreaName(amber.position.area)));
+    ui->l_shadow->setText(QString::fromStdString(naming::ShadowName(amber.position.shadow)));
+
+    ui->l_air->setText(QString::number(amber.currentShadowStructure.at(amber::Element::Air)));
+    ui->l_water->setText(QString::number(amber.currentShadowStructure.at(amber::Element::Water)));
+    ui->l_ground->setText(QString::number(amber.currentShadowStructure.at(amber::Element::Ground)));
+    ui->l_sky->setText(QString::number(amber.currentShadowStructure.at(amber::Element::Sky)));
+    ui->l_amberDistance->setText(QString::number(amber.currentShadowStructure.at(amber::Element::AmberDistance)));
+    ui->l_chaosDistance->setText(QString::number(amber.currentShadowStructure.at(amber::Element::ChaosDistance)));
+    ui->l_flora->setText(QString::number(amber.currentShadowStructure.at(amber::Element::Flora)));
+    ui->l_fauna->setText(QString::number(amber.currentShadowStructure.at(amber::Element::Fauna)));
+}
+
+amber::Amber ShadowsView::readAmber() const
+{
+    m_amberChangeGuard.lock();
+    amber::Amber amber = m_amber;
+    m_amberChangeGuard.unlock();
+    return amber;
+}
+
+// Presentation tip: C++ hasn't atomic methods.
+void ShadowsView::changeAmber(const amber::AmberTask& task)
+{
+    m_amberChangeGuard.lock();
+    m_amber = task(m_amber);
+    m_amberChangeGuard.unlock();
 }
