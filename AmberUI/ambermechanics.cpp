@@ -2,6 +2,7 @@
 
 #include "shadowmechanics.h"
 #include "monads.h"
+#include "functionalutils.h"
 
 namespace amber
 {
@@ -96,27 +97,35 @@ Amber tickHour(const Amber &amber)
     return newAmber;
 }
 
-typedef monad::MonadicValue<monad::Maybe<Area>> MaybeArea;
-typedef monad::MonadicValue<monad::Maybe<Shadow>> MaybeShadow;
+typedef monad::MonadicValue<monad::maybe::Maybe<Area>> MaybeArea;
+typedef monad::MonadicValue<monad::maybe::Maybe<Shadow>> MaybeShadow;
 
 const std::function<MaybeShadow(Area, ShadowName)> lookupShadow =
         [](const Area& area, const ShadowName& shadow)
 {
-    return monad::lookupMap(shadow, area.shadows);
+    return utils::lookupMap(shadow, area.shadows);
 };
 
 MaybeArea lookupCurrentArea(const Amber& amber)
 {
-    return monad::lookupMap(amber.position.area, amber.areas);
+    return utils::lookupMap(amber.position.area, amber.areas);
 }
 
 MaybeShadow lookupCurrentShadow(const Amber& amber)
 {
     MaybeArea mbArea = lookupCurrentArea(amber);
     // Presentation tip: poor template types deducing for function bind(). It is requres an explicit types.
-    return monad::bind<Area, Shadow>(mbArea, [&amber](const Area& area)
+    return monad::maybe::bind<Area, Shadow>(mbArea, [&amber](const Area& area)
     {
         return lookupShadow(area, amber.position.shadow);
+    });
+}
+
+monad::MaybeDouble maybeShadowDistance(const ShadowStructure& shadowStructure1, const MaybeShadow& mbShadow)
+{
+    return monad::maybe::bind<Shadow, double>(mbShadow, [&shadowStructure1](const Shadow& shadow2)
+    {
+        return monad::maybe::wrap(shadowDistance(shadowStructure1, shadow2.structure));
     });
 }
 
@@ -127,15 +136,14 @@ Amber stabilizeShadow(const Amber& amber)
     // MonadicValue<Maybe> area = mbCurrentArea(amber);
 
     MaybeShadow mbShadow = lookupCurrentShadow(amber);
+    monad::MaybeDouble mbDistance = maybeShadowDistance(amber.currentShadowStructure, mbShadow);
 
-    const Area& area = amber.areas.at(amber.position.area);
-    const Shadow& nearestShadow = area.shadows.at(amber.position.shadow);
+    if (monad::maybe::isNothing(mbDistance)
+        || monad::maybe::isNothing(mbShadow))
+        return amber;
 
-
-
-    double distance = shadowDistance(amber.currentShadowStructure, nearestShadow.structure);
-
-    if (distance <= nearestShadow.influence)
+    const Shadow &nearestShadow = monad::maybe::unwrap(mbShadow);
+    if (monad::maybe::unwrap(mbDistance) <= nearestShadow.influence)
     {
         ShadowVariator influenceVariator = composeInfluenceVariator(amber.currentShadowStructure, nearestShadow.structure);
 

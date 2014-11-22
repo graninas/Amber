@@ -5,6 +5,8 @@
 
 namespace monad
 {
+namespace maybe
+{
 
 enum MaybeValue
 {
@@ -18,6 +20,16 @@ template <typename Data> struct Maybe
     MaybeValue mValue;
 };
 
+template <typename Input> bool isNothing(const MonadicValue<Maybe<Input>>& input)
+{
+    return input.genericData.mValue == Nothing;
+}
+
+template <typename Input> bool isJust(const MonadicValue<Maybe<Input>>& input)
+{
+    return !isNothing(input);
+}
+
 template <typename Input> MonadicValue<Maybe<Input>> wrap(const Input& input)
 {
     Maybe<Input> mbValue;
@@ -29,9 +41,11 @@ template <typename Input> MonadicValue<Maybe<Input>> wrap(const Input& input)
     return value;
 }
 
-template <typename Input> bool isNothing(const MonadicValue<Maybe<Input>>& input)
+template <typename Data> Data unwrap(const MonadicValue<Maybe<Data>>& input)
 {
-    return input.genericData.mValue == Nothing;
+    if (isNothing(input))
+        throw std::logic_error("This is Nothing value, and cannot be unwrapped.");
+    return input.genericData.data;
 }
 
 template <typename Output> MonadicValue<Maybe<Output>> nothing()
@@ -61,6 +75,7 @@ template <typename Input, typename Output> MonadicValue<Maybe<Output>>
     return action(input.genericData.data);
 }
 
+} // namespace maybe
 } // namespace monad
 
 
