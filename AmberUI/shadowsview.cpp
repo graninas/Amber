@@ -186,17 +186,17 @@ void ShadowsView::updateUI()
     amber::Amber amber = readAmber();
 
     ui->l_time->setText(QString::number(amber.hoursElapsed));
-    ui->l_area->setText(QString::fromStdString(naming::AreaName(amber.position.area)));
-    ui->l_shadow->setText(QString::fromStdString(naming::ShadowName(amber.position.shadow)));
+    ui->l_area->setText(QString::fromStdString(naming::AreaName(amber.nearestPlace.area)));
+    ui->l_shadow->setText(QString::fromStdString(naming::ShadowName(amber.nearestPlace.shadow)));
 
-    ui->l_air->setText(QString::number(amber.currentShadowStructure.at(amber::Element::Air)));
-    ui->l_water->setText(QString::number(amber.currentShadowStructure.at(amber::Element::Water)));
-    ui->l_ground->setText(QString::number(amber.currentShadowStructure.at(amber::Element::Ground)));
-    ui->l_sky->setText(QString::number(amber.currentShadowStructure.at(amber::Element::Sky)));
-    ui->l_amberDistance->setText(QString::number(amber.currentShadowStructure.at(amber::Element::AmberDistance)));
-    ui->l_chaosDistance->setText(QString::number(amber.currentShadowStructure.at(amber::Element::ChaosDistance)));
-    ui->l_flora->setText(QString::number(amber.currentShadowStructure.at(amber::Element::Flora)));
-    ui->l_fauna->setText(QString::number(amber.currentShadowStructure.at(amber::Element::Fauna)));
+    ui->l_air->setText(QString::number(amber.playerShadowStructure.at(amber::Element::Air)));
+    ui->l_water->setText(QString::number(amber.playerShadowStructure.at(amber::Element::Water)));
+    ui->l_ground->setText(QString::number(amber.playerShadowStructure.at(amber::Element::Ground)));
+    ui->l_sky->setText(QString::number(amber.playerShadowStructure.at(amber::Element::Sky)));
+    ui->l_amberDistance->setText(QString::number(amber.playerShadowStructure.at(amber::Element::AmberDistance)));
+    ui->l_chaosDistance->setText(QString::number(amber.playerShadowStructure.at(amber::Element::ChaosDistance)));
+    ui->l_flora->setText(QString::number(amber.playerShadowStructure.at(amber::Element::Flora)));
+    ui->l_fauna->setText(QString::number(amber.playerShadowStructure.at(amber::Element::Fauna)));
 }
 
 amber::Amber ShadowsView::readAmber() const

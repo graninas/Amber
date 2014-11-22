@@ -69,6 +69,21 @@ double shadowDistance(const ShadowStructure& shadow1, const ShadowStructure& sha
                 d5*d5 + d6*d6 + d7*d7 + d8*d8);
 }
 
+double elementalDistance(const ShadowStructure& shadow1, const ShadowStructure& shadow2)
+{
+    // TODO: do it safe.
+
+    int d1 = shadow1.at(Element::Air)           - shadow2.at(Element::Air);
+    int d2 = shadow1.at(Element::Ground)        - shadow2.at(Element::Ground);
+    int d3 = shadow1.at(Element::Water)         - shadow2.at(Element::Water);
+    int d4 = shadow1.at(Element::Sky)           - shadow2.at(Element::Sky);
+    int d5 = shadow1.at(Element::Fauna)         - shadow2.at(Element::Fauna);
+    int d6 = shadow1.at(Element::Flora)         - shadow2.at(Element::Flora);
+
+    return sqrt(d1*d1 + d2*d2 + d3*d3 + d4*d4 +
+                d5*d5 + d6*d6);
+}
+
 namespace element
 {
 

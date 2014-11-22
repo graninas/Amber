@@ -18,9 +18,9 @@ Amber defaultAmber()
     Amber amber;
     amber.hoursElapsed = 0;
     amber.areas = areas();
-    amber.position.area = AmberPoleArea;
-    amber.position.shadow = BergmaShadow;
-    amber.currentShadowStructure = bergmaShadowStructure();
+    amber.nearestPlace.area = AmberPoleArea;
+    amber.nearestPlace.shadow = BergmaShadow;
+    amber.playerShadowStructure = bergmaShadowStructure();
 
     return amber;
 }

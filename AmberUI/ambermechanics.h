@@ -3,13 +3,18 @@
 
 #include "amber.h"
 #include "common.h"
+#include "maybemonad.h"
 
 namespace amber
 {
 
+typedef monad::MonadicValue<monad::maybe::Maybe<Amber>> MaybeAmber;
+typedef monad::MonadicValue<monad::maybe::Maybe<Area>> MaybeArea;
+typedef monad::MonadicValue<monad::maybe::Maybe<Shadow>> MaybeShadow;
+
 Amber goDirection(const Amber& amber, Direction::DirectionType dir);
 Amber tickHour(const Amber& amber);
-Amber stabilizeShadow(const Amber& amber);
+MaybeAmber stabilizeShadow(const Amber& amber);
 
 // This boilerplace can be removed by a macro.
 const AmberTask goNorth = [](const Amber& amber)
@@ -57,9 +62,10 @@ const AmberTask tickWorldTime = [](const Amber& amber)
     return tickHour(amber);
 };
 
+// Presentation tip: potential place to lift from one monad to another.
 const AmberTask shadowStabilization = [](const Amber& amber)
 {
-    return stabilizeShadow(amber);
+    return monad::maybe::maybe(stabilizeShadow(amber), amber);
 };
 
 

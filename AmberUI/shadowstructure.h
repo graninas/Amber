@@ -49,7 +49,7 @@ enum DirectionType
 typedef std::string ShadowName;
 typedef std::string AreaName;
 
-struct WorldPosition
+struct NearestPlace
 {
     AreaName area;
     ShadowName shadow;

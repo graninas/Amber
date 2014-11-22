@@ -10,43 +10,54 @@ namespace amber
 namespace // anonymous
 {
 
-Amber updateCurrentShadow(const Amber& amber, Direction::DirectionType dir)
+// Auxiliary type.
+typedef std::pair<Shadow, double> ShadowAndDistance;
+
+Amber updatePlayerShadowStructure(const Amber& amber, Direction::DirectionType dir)
 {
     // TODO: make it safe.
     // TODO: replace by monadic function something like that:
     // MonadicValue<Maybe> area = mbCurrentArea(amber);
-    const Area& area = amber.areas.at(amber.position.area);
-    const Shadow& shadow = area.shadows.at(amber.position.shadow);
+    const Area& area = amber.areas.at(amber.nearestPlace.area);
+    const Shadow& shadow = area.shadows.at(amber.nearestPlace.shadow);
 
     Amber newAmber = amber;
-    newAmber.currentShadowStructure = shadow.variator(amber.currentShadowStructure, dir);
+    newAmber.playerShadowStructure = shadow.variator(amber.playerShadowStructure, dir);
     return newAmber;
 }
 
-// TODO: update current shadow structure!
-Amber updateCurrentPosition(const Amber& amber)
+Amber updateNearestPlace(const Amber& amber)
 {
     // TODO: make it safe.
     // TODO: replace by monadic function something like that:
     // MonadicValue<Maybe> area = mbCurrentArea(amber);
-    const Area& area = amber.areas.at(amber.position.area);
+    const Area& area = amber.areas.at(amber.nearestPlace.area);
 
     ShadowName nearestShadow = "";
+    ShadowStructure nearestShadowStructure = amber.playerShadowStructure;
     double nearestDistance = std::numeric_limits<double>::max();
 
-    std::for_each(area.shadows.begin(), area.shadows.end(), [&amber, &nearestDistance, &nearestShadow](const Shadows::value_type& shadow)
+    std::for_each(area.shadows.begin(), area.shadows.end(),
+                  [&amber, &nearestDistance, &nearestShadowStructure, &nearestShadow](const Shadows::value_type& shadow)
     {
-        double distance = shadowDistance(amber.currentShadowStructure, shadow.second.structure);
-        if (distance < nearestDistance)
+        double eDistance = elementalDistance(amber.playerShadowStructure, shadow.second.structure);
+        if (eDistance < nearestDistance)
         {
-            nearestDistance = distance;
+            nearestDistance = eDistance;
             nearestShadow = shadow.first;
+            nearestShadowStructure = shadow.second.structure;
         }
     });
 
     Amber newAmber = amber;
     if (nearestDistance != std::numeric_limits<int>::max())
-        newAmber.position.shadow = nearestShadow;
+    {
+        newAmber.nearestPlace.shadow = nearestShadow;
+        if (abs(nearestDistance) < 1)
+        {
+            newAmber.playerShadowStructure = nearestShadowStructure;
+        }
+    }
 
     return newAmber;
 }
@@ -87,7 +98,7 @@ ShadowVariator composeInfluenceVariator(const ShadowStructure& fromStructure, co
 
 Amber goDirection(const Amber& amber, Direction::DirectionType dir)
 {
-    return updateCurrentPosition(updateCurrentShadow(amber, dir));
+    return updateNearestPlace(updatePlayerShadowStructure(amber, dir));
 }
 
 Amber tickHour(const Amber &amber)
@@ -97,27 +108,24 @@ Amber tickHour(const Amber &amber)
     return newAmber;
 }
 
-typedef monad::MonadicValue<monad::maybe::Maybe<Area>> MaybeArea;
-typedef monad::MonadicValue<monad::maybe::Maybe<Shadow>> MaybeShadow;
-
 const std::function<MaybeShadow(Area, ShadowName)> lookupShadow =
         [](const Area& area, const ShadowName& shadow)
 {
     return utils::lookupMap(shadow, area.shadows);
 };
 
-MaybeArea lookupCurrentArea(const Amber& amber)
+MaybeArea lookupNearestArea(const Amber& amber)
 {
-    return utils::lookupMap(amber.position.area, amber.areas);
+    return utils::lookupMap(amber.nearestPlace.area, amber.areas);
 }
 
-MaybeShadow lookupCurrentShadow(const Amber& amber)
+MaybeShadow lookupNearestShadow(const Amber& amber)
 {
-    MaybeArea mbArea = lookupCurrentArea(amber);
+    MaybeArea mbArea = lookupNearestArea(amber);
     // Presentation tip: poor template types deducing for function bind(). It is requres an explicit types.
     return monad::maybe::bind<Area, Shadow>(mbArea, [&amber](const Area& area)
     {
-        return lookupShadow(area, amber.position.shadow);
+        return lookupShadow(area, amber.nearestPlace.shadow);
     });
 }
 
@@ -129,31 +137,28 @@ monad::MaybeDouble maybeShadowDistance(const ShadowStructure& shadowStructure1, 
     });
 }
 
-Amber stabilizeShadow(const Amber& amber)
+MaybeAmber stabilizeShadow(const Amber& amber)
 {
-    // TODO: make it safe.
-    // TODO: replace by monadic function something like that:
-    // MonadicValue<Maybe> area = mbCurrentArea(amber);
+    MaybeShadow mbNearestShadow = lookupNearestShadow(amber);
+    monad::MaybeDouble mbDistance = maybeShadowDistance(amber.playerShadowStructure, mbNearestShadow);
 
-    MaybeShadow mbShadow = lookupCurrentShadow(amber);
-    monad::MaybeDouble mbDistance = maybeShadowDistance(amber.currentShadowStructure, mbShadow);
+    return monad::maybe::bind<ShadowAndDistance, Amber>(monad::maybe::both(mbNearestShadow, mbDistance),
+        [&amber](const ShadowAndDistance& shadowAndDistance)
+        {
+            const Shadow& nearestShadow = shadowAndDistance.first;
+            double distance = shadowAndDistance.second;
 
-    if (monad::maybe::isNothing(mbDistance)
-        || monad::maybe::isNothing(mbShadow))
-        return amber;
+            if (distance <= nearestShadow.influence)
+            {
+                ShadowVariator influenceVariator = composeInfluenceVariator(amber.playerShadowStructure, nearestShadow.structure);
 
-    const Shadow &nearestShadow = monad::maybe::unwrap(mbShadow);
-    if (monad::maybe::unwrap(mbDistance) <= nearestShadow.influence)
-    {
-        ShadowVariator influenceVariator = composeInfluenceVariator(amber.currentShadowStructure, nearestShadow.structure);
+                Amber newAmber = amber;
+                newAmber.playerShadowStructure = influenceVariator(amber.playerShadowStructure, Direction::North); // Direction doen't matter.
+                return monad::maybe::wrap(newAmber);
+            }
 
-        // TODO: refactor the same code at the begining of abmermechanics.cpp.
-        Amber newAmber = amber;
-        newAmber.currentShadowStructure = influenceVariator(amber.currentShadowStructure, Direction::North); // Direction doen't matter.
-        return newAmber;
-    }
-
-    return amber;
+            return monad::maybe::nothing<Amber>();
+        });
 }
 
 } // namespace amber

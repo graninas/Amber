@@ -20,7 +20,7 @@ typedef ShadowStructure ElementModifiers;
 SafeShadowStructureAction safeChangeElements(const ElementModifiers &modifiers);
 
 double shadowDistance(const ShadowStructure& shadow1, const ShadowStructure& shadow2);
-
+double elementalDistance(const ShadowStructure& shadow1, const ShadowStructure& shadow2);
 
 namespace element
 {
