@@ -17,7 +17,6 @@ SOURCES += main.cpp\
         shadowsview.cpp \
     amber.cpp \
     magic.cpp \
-    shadowstructure.cpp \
     shadowmechanics.cpp \
     amberpolearea.cpp \
     ambermechanics.cpp

@@ -74,8 +74,14 @@ void ShadowsView::goSouthWest()
 
 void ShadowsView::tickOneAmberHour()
 {
-    // Temp
-    evalAmberTask(amber::goSouthWest);
+    amber::AmberTask combinedTask = [](const amber::Amber& amber)
+    {
+        auto action1Res = magic::anyway(amber::shadowStabilization, magic::wrap(amber));
+        auto action2Res = magic::anyway(amber::tickWorldTime, action1Res);
+        return action2Res.amber;
+    };
+
+    changeAmber(combinedTask);
 }
 
 void ShadowsView::switchAmberTimeTicking(bool ticking)
@@ -95,12 +101,11 @@ void ShadowsView::evalAmberTask(const amber::AmberTask& task)
     amber::AmberTask combinedTask = [&task](const amber::Amber& amber)
     {
         auto action1Res = magic::anyway(task, magic::wrap(amber));
-        auto action2Res = magic::anyway(amber::tickDay, action1Res);
+        auto action2Res = magic::anyway(amber::tickWorldTime, action1Res);
         return action2Res.amber;
     };
 
     changeAmber(combinedTask);
-    updateUI();
 }
 
 void ShadowsView::setupWorldPlacesModel(const amber::Amber& amber)
@@ -208,4 +213,5 @@ void ShadowsView::changeAmber(const amber::AmberTask& task)
     m_amberChangeGuard.lock();
     m_amber = task(m_amber);
     m_amberChangeGuard.unlock();
+    updateUI();
 }

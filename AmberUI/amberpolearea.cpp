@@ -8,7 +8,7 @@ namespace amber
 {
 
 // Presentation tip: the map of Amber can be shown.
-ShadowStructure trueAmberStructure()
+ShadowStructure amberShadowStructure()
 {
     return {
         element::AmberDistance(0)
@@ -22,13 +22,13 @@ ShadowStructure trueAmberStructure()
     };
 }
 
-ShadowStructure amberShadowStructure()
+ShadowStructure bergmaShadowStructure()
 {
     return {
-        element::AmberDistance(1)
-      , element::ChaosDistance(99)
-      , element::Ground(70)
-      , element::Water(30)
+        element::AmberDistance(2)
+      , element::ChaosDistance(98)
+      , element::Ground(50)
+      , element::Water(50)
       , element::Air(100)
       , element::Sky(70)
       , element::Flora(100)
@@ -36,11 +36,11 @@ ShadowStructure amberShadowStructure()
     };
 }
 
-ShadowStructure bergmaShadowStructure()
+ShadowStructure kashfaShadowStructure()
 {
     return {
-        element::AmberDistance(2)
-      , element::ChaosDistance(98)
+        element::AmberDistance(3)
+      , element::ChaosDistance(97)
       , element::Ground(40)
       , element::Water(60)
       , element::Air(90)
@@ -50,11 +50,11 @@ ShadowStructure bergmaShadowStructure()
     };
 }
 
-ShadowStructure trueBergmaStructure()
+ShadowStructure avalonShadowStructure()
 {
     return {
-        element::AmberDistance(3)
-      , element::ChaosDistance(97)
+        element::AmberDistance(4)
+      , element::ChaosDistance(96)
       , element::Ground(30)
       , element::Water(70)
       , element::Air(80)
@@ -143,22 +143,22 @@ ShadowVariator amberPoleVariator(int multiplier)
     return variator;
 }
 
-ShadowVariator trueAmberVariator()
+ShadowVariator amberShadowVariator()
 {
     return amberPoleVariator(1);
 }
 
-ShadowVariator amberShadowVariator()
+ShadowVariator bergmaShadowVariator()
 {
     return amberPoleVariator(2);
 }
 
-ShadowVariator bergmaShadowVariator()
+ShadowVariator kashfaShadowVariator()
 {
     return amberPoleVariator(3);
 }
 
-ShadowVariator trueBergmaVariator()
+ShadowVariator avalonShadowVariator()
 {
     return amberPoleVariator(4);
 }
@@ -168,10 +168,10 @@ Shadows amberPoleShadows()
     return {
         // Presentation tip: lambdas and functions are highly coupled conceptions.
         // Lambdas can be used directly or can be created by function call.
-        { AmberShadow,  Shadow { amberShadowVariator(),  amberShadowStructure(),  5  } }
-      , { TrueAmber,    Shadow { trueAmberVariator(),    trueAmberStructure(),    10 } }
-      , { BergmaShadow, Shadow { bergmaShadowVariator(), bergmaShadowStructure(), 5  } }
-      , { TrueBergma,   Shadow { trueBergmaVariator(),   trueBergmaStructure(),   5  } }
+        { AmberShadow,  Shadow { amberShadowVariator(),  amberShadowStructure(),  40.0 } }
+      , { BergmaShadow, Shadow { bergmaShadowVariator(), bergmaShadowStructure(), 5.0  } }
+      , { KashfaShadow, Shadow { kashfaShadowVariator(), kashfaShadowStructure(), 5.0  } }
+      , { AvalonShadow, Shadow { avalonShadowVariator(), avalonShadowStructure(), 5.0  } }
     };
 }
 

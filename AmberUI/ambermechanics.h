@@ -7,9 +7,9 @@
 namespace amber
 {
 
-Amber updateCurrentShadow(const Amber& amber, Direction::DirectionType dir);
-Amber updateCurrentPosition(const Amber& amber);
 Amber goDirection(const Amber& amber, Direction::DirectionType dir);
+Amber tickHour(const Amber& amber);
+Amber stabilizeShadow(const Amber& amber);
 
 // This boilerplace can be removed by a macro.
 const AmberTask goNorth = [](const Amber& amber)
@@ -52,11 +52,14 @@ const AmberTask goSouthWest = [](const Amber& amber)
     return goDirection(amber, Direction::SouthWest);
 };
 
-const AmberTask tickDay = [](const Amber& amber)
+const AmberTask tickWorldTime = [](const Amber& amber)
 {
-    Amber newAmber = amber;
-    newAmber.hoursElapsed++;
-    return newAmber;
+    return tickHour(amber);
+};
+
+const AmberTask shadowStabilization = [](const Amber& amber)
+{
+    return stabilizeShadow(amber);
 };
 
 

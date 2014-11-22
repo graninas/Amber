@@ -19,8 +19,8 @@ Amber defaultAmber()
     amber.hoursElapsed = 0;
     amber.areas = areas();
     amber.position.area = AmberPoleArea;
-    amber.position.shadow = AmberShadow;
-    amber.currentShadowStructure = amberShadowStructure();
+    amber.position.shadow = BergmaShadow;
+    amber.currentShadowStructure = bergmaShadowStructure();
 
     return amber;
 }

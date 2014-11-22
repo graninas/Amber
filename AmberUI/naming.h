@@ -34,10 +34,10 @@ std::string AreaName(const std::string& area)
 
 std::string ShadowName(const std::string& shadow)
 {
-    if (shadow == AmberShadow) return "Тени Амбера";
-    if (shadow == TrueAmber) return "Истинный Амбер";
-    if (shadow == BergmaShadow) return "Тени Бергмы";
-    if (shadow == TrueBergma) return "Бергма";
+    if (shadow == AmberShadow)  return "Амбер";
+    if (shadow == BergmaShadow) return "Бергма";
+    if (shadow == KashfaShadow) return "Кашфа";
+    if (shadow == AvalonShadow) return "Авалон";
     return "unknown shadow";
 }
 
