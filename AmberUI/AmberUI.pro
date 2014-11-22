@@ -30,8 +30,10 @@ HEADERS  += shadowsview.h \
     amberpolearea.h \
     naming.h \
     shadowmechanics.h \
-    monad.h \
-    ambermechanics.h
+    ambermechanics.h \
+    monads.h \
+    maybemonad.h \
+    monadicvalue.h
 
 FORMS    += shadowsview.ui
 

@@ -1,9 +1,7 @@
 #include "ambermechanics.h"
 
 #include "shadowmechanics.h"
-#include "monad.h"
-
-#include <QDebug>
+#include "monads.h"
 
 namespace amber
 {
@@ -15,7 +13,7 @@ Amber updateCurrentShadow(const Amber& amber, Direction::DirectionType dir)
 {
     // TODO: make it safe.
     // TODO: replace by monadic function something like that:
-    // GenericValue<Maybe> area = mbCurrentArea(amber);
+    // MonadicValue<Maybe> area = mbCurrentArea(amber);
     const Area& area = amber.areas.at(amber.position.area);
     const Shadow& shadow = area.shadows.at(amber.position.shadow);
 
@@ -29,7 +27,7 @@ Amber updateCurrentPosition(const Amber& amber)
 {
     // TODO: make it safe.
     // TODO: replace by monadic function something like that:
-    // GenericValue<Maybe> area = mbCurrentArea(amber);
+    // MonadicValue<Maybe> area = mbCurrentArea(amber);
     const Area& area = amber.areas.at(amber.position.area);
 
     ShadowName nearestShadow = "";
@@ -38,7 +36,6 @@ Amber updateCurrentPosition(const Amber& amber)
     std::for_each(area.shadows.begin(), area.shadows.end(), [&amber, &nearestDistance, &nearestShadow](const Shadows::value_type& shadow)
     {
         double distance = shadowDistance(amber.currentShadowStructure, shadow.second.structure);
-        qDebug() << "Distance (" << QString::fromStdString(shadow.first) << "):" << distance;
         if (distance < nearestDistance)
         {
             nearestDistance = distance;
@@ -99,19 +96,47 @@ Amber tickHour(const Amber &amber)
     return newAmber;
 }
 
+typedef monad::MonadicValue<monad::Maybe<Area>> MaybeArea;
+typedef monad::MonadicValue<monad::Maybe<Shadow>> MaybeShadow;
+
+const std::function<MaybeShadow(Area, ShadowName)> lookupShadow =
+        [](const Area& area, const ShadowName& shadow)
+{
+    return monad::lookupMap(shadow, area.shadows);
+};
+
+MaybeArea lookupCurrentArea(const Amber& amber)
+{
+    return monad::lookupMap(amber.position.area, amber.areas);
+}
+
+MaybeShadow lookupCurrentShadow(const Amber& amber)
+{
+    MaybeArea mbArea = lookupCurrentArea(amber);
+    // Presentation tip: poor template types deducing for function bind(). It is requres an explicit types.
+    return monad::bind<Area, Shadow>(mbArea, [&amber](const Area& area)
+    {
+        return lookupShadow(area, amber.position.shadow);
+    });
+}
+
 Amber stabilizeShadow(const Amber& amber)
 {
     // TODO: make it safe.
     // TODO: replace by monadic function something like that:
-    // GenericValue<Maybe> area = mbCurrentArea(amber);
+    // MonadicValue<Maybe> area = mbCurrentArea(amber);
+
+    MaybeShadow mbShadow = lookupCurrentShadow(amber);
+
     const Area& area = amber.areas.at(amber.position.area);
     const Shadow& nearestShadow = area.shadows.at(amber.position.shadow);
+
+
 
     double distance = shadowDistance(amber.currentShadowStructure, nearestShadow.structure);
 
     if (distance <= nearestShadow.influence)
     {
-        qDebug() << "Activating influence of " << QString::fromStdString(amber.position.shadow);
         ShadowVariator influenceVariator = composeInfluenceVariator(amber.currentShadowStructure, nearestShadow.structure);
 
         // TODO: refactor the same code at the begining of abmermechanics.cpp.
