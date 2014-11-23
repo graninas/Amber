@@ -80,6 +80,8 @@ struct Area
 
 typedef std::map<AreaName, Area> Areas;
 
+typedef std::list<std::string> Log;
+
 struct Amber
 {
     int hoursElapsed;
@@ -89,6 +91,8 @@ struct Amber
 
     NearestPlace nearestPlace;
     ShadowStructure playerShadowStructure;
+
+    Log log;
 };
 
 } // namespace amber

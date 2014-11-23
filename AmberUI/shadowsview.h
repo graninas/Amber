@@ -40,16 +40,16 @@ private:
     Ui::ShadowsView *ui;
     QTimer *m_amberTimer;
     QAmberSurroundingsTableModel *m_amberModel;
+    QString m_amberLog;
 
     mutable std::mutex m_amberChangeGuard;
     amber::Amber m_amber;
 
     void evalAmberTask(const amber::AmberTask& task);
-
-    void updateUI();
-
-    amber::Amber readAmber() const;
     void changeAmber(const amber::AmberTask& task);
+
+    void updateUI(const amber::Amber &amber);
+    void appendAmberLog(const amber::Log& log);
 };
 
 #endif // SHADOWSVIEW_H

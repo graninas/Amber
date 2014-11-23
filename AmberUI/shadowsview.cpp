@@ -21,7 +21,7 @@ ShadowsView::ShadowsView(QWidget *parent) :
     m_amberTimer->setInterval(1000);
     QObject::connect(m_amberTimer, SIGNAL(timeout()), this, SLOT(tickOneAmberHour()));
 
-    updateUI();
+    updateUI(m_amber);
 }
 
 ShadowsView::~ShadowsView()
@@ -110,10 +110,18 @@ void ShadowsView::evalAmberTask(const amber::AmberTask& task)
     changeAmber(combinedTask);
 }
 
-void ShadowsView::updateUI()
+// Presentation tip: C++ hasn't atomic methods.
+void ShadowsView::changeAmber(const amber::AmberTask& task)
 {
-    amber::Amber amber = readAmber();
+    m_amberChangeGuard.lock();
+    m_amber = task(m_amber);
+    updateUI(m_amber);
+    m_amberChangeGuard.unlock();
+}
 
+
+void ShadowsView::updateUI(const amber::Amber& amber)
+{
     ui->l_time->setText(QString::number(amber.hoursElapsed));
     ui->l_area->setText(QString::fromStdString(naming::areaName(amber.nearestPlace.area)));
     ui->l_shadow->setText(QString::fromStdString(naming::shadowName(amber.nearestPlace.shadow)));
@@ -126,21 +134,21 @@ void ShadowsView::updateUI()
     ui->l_chaosDistance->setText(QString::number(amber.playerShadowStructure.at(amber::Element::ChaosDistance)));
     ui->l_flora->setText(QString::number(amber.playerShadowStructure.at(amber::Element::Flora)));
     ui->l_fauna->setText(QString::number(amber.playerShadowStructure.at(amber::Element::Fauna)));
+
+    ui->l_air_2->setText(QString::number(amber.playerShadowStructure.at(amber::Element::Air)));
+    ui->l_water_2->setText(QString::number(amber.playerShadowStructure.at(amber::Element::Water)));
+    ui->l_ground_2->setText(QString::number(amber.playerShadowStructure.at(amber::Element::Ground)));
+    ui->l_sky_2->setText(QString::number(amber.playerShadowStructure.at(amber::Element::Sky)));
+
+    appendAmberLog(amber.log);
+    ui->pte_amberLog->setPlainText(m_amberLog);
 }
 
-amber::Amber ShadowsView::readAmber() const
+void ShadowsView::appendAmberLog(const amber::Log& log)
 {
-    m_amberChangeGuard.lock();
-    amber::Amber amber = m_amber;
-    m_amberChangeGuard.unlock();
-    return amber;
-}
-
-// Presentation tip: C++ hasn't atomic methods.
-void ShadowsView::changeAmber(const amber::AmberTask& task)
-{
-    m_amberChangeGuard.lock();
-    m_amber = task(m_amber);
-    m_amberChangeGuard.unlock();
-    updateUI();
+    for (auto s: log)
+    {
+        m_amberLog.append(QString::fromStdString(s));
+        m_amberLog.append("\n");
+    }
 }
