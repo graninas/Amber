@@ -16,6 +16,7 @@ Areas areas()
 
 Amber defaultAmber()
 {
+    qDebug() << "default amber";
     Amber amber;
     amber.hoursElapsed = 0;
     amber.areas = areas();
@@ -24,6 +25,7 @@ Amber defaultAmber()
     amber.nearestPlace.shadow = BergmaShadow;
     amber.playerShadowStructure = bergmaShadowStructure();
 
+    qDebug() << "end of default amber";
     return amber;
 }
 

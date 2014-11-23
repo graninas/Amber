@@ -11,8 +11,8 @@ typedef magic::Value<ShadowStructure> SafeShadowStructure;
 typedef std::function<SafeShadowStructure(ShadowStructure)> SafeShadowStructureAction;
 
 typedef ShadowStructure ElementModifiers;
-typedef std::function<int(int, double)> ElementVariator;
-typedef std::map<Element::ElementType, ElementVariator> ElementVariators;
+typedef std::function<int(int, double)> TimedElementVariator;
+typedef std::map<Element::ElementType, TimedElementVariator> TimedElementVariators;
 
 SafeShadowStructure safeWrap(const ShadowStructure& data);
 SafeShadowStructure safeBind(const SafeShadowStructure value, const SafeShadowStructureAction& action);
@@ -20,10 +20,11 @@ SafeShadowStructure runSafe(const SafeShadowStructureAction& action, const Shado
 
 // Presentation tip: monadic functions.
 SafeShadowStructure safeElementChange(const ShadowStructure& structure, Element::ElementType elem, int diff);
-SafeShadowStructure safeElementChange(const ShadowStructure& structure, Element::ElementType elem, const ElementVariator& variator);
+SafeShadowStructure safeElementChange(const ShadowStructure& structure, Element::ElementType elem,
+                                      const TimedElementVariator &variator);
 
 SafeShadowStructureAction safeChangeElements(const ElementModifiers &modifiers);
-SafeShadowStructureAction safeEvalOverElements(const ElementVariators& variators);
+SafeShadowStructureAction safeTimedEvalOverElements(int time, const TimedElementVariators& variators);
 
 double shadowDistance(const ShadowStructure& shadow1, const ShadowStructure& shadow2);
 double elementalDistance(const ShadowStructure& shadow1, const ShadowStructure& shadow2);

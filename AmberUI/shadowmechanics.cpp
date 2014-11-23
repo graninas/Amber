@@ -32,7 +32,8 @@ SafeShadowStructure safeElementChange(const ShadowStructure& structure, Element:
     return magic::success(newStructure);
 }
 
-SafeShadowStructure safeElementChange(const ShadowStructure& structure, Element::ElementType elem, const ElementVariator& variator)
+SafeShadowStructure safeElementChange(const ShadowStructure& structure, Element::ElementType elem,
+                                      const TimedElementVariator& variator)
 {
     ShadowStructure newStructure = structure;
     ShadowStructure::iterator it = newStructure.find(elem);
@@ -65,14 +66,14 @@ SafeShadowStructureAction safeChangeElements(const ElementModifiers& modifiers)
 }
 
 // TODO: this code is very like the code above.
-SafeShadowStructureAction safeEvalOverElements(const ElementVariators& variators)
+SafeShadowStructureAction safeTimedEvalOverElements(int time, const TimedElementVariators& variators)
 {
     // N.B., modifiers passing by value. Otherwise, this code will cause access violation
     // because of destructing externally defined modifiers.
     SafeShadowStructureAction action = [=](const ShadowStructure& income)
     {
         SafeShadowStructure value = safeWrap(income);
-        std::for_each(variators.begin(), variators.end(), [&value](const ElementVariators::value_type& variator)
+        std::for_each(variators.begin(), variators.end(), [&value](const TimedElementVariators::value_type& variator)
         {
             value = safeBind(value, [&variator](const ShadowStructure& structure)
             {

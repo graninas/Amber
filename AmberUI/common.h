@@ -5,8 +5,12 @@
 #include <map>
 #include <list>
 #include <string>
+#include <tuple>
 
 #include <functional>
 #include <algorithm>
+
+
+#include <QDebug>
 
 #endif // COMMON_H

@@ -65,6 +65,7 @@ struct ShadowStorm
     ShadowStructure currentShadow;
     ShadowInfluence outerInfluence;
     ShadowInfluence innerInfluence;
+    int timeToStart;
     int timeToLive;
 };
 

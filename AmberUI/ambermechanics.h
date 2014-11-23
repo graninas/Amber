@@ -11,10 +11,13 @@ namespace amber
 typedef monad::MonadicValue<monad::maybe::Maybe<Amber>> MaybeAmber;
 typedef monad::MonadicValue<monad::maybe::Maybe<Area>> MaybeArea;
 typedef monad::MonadicValue<monad::maybe::Maybe<Shadow>> MaybeShadow;
+typedef monad::MonadicValue<monad::maybe::Maybe<ShadowStorm>> MaybeShadowStorm;
+typedef monad::MonadicValue<monad::maybe::Maybe<ShadowStorms>> MaybeShadowStorms;
 
 Amber goDirection(const Amber& amber, Direction::DirectionType dir);
 Amber tickHour(const Amber& amber);
 MaybeAmber stabilizeShadow(const Amber& amber);
+MaybeAmber inflateShadowStorms(const Amber& amber);
 
 // This boilerplace can be removed by a macro.
 const AmberTask goNorth = [](const Amber& amber)
@@ -66,6 +69,11 @@ const AmberTask tickWorldTime = [](const Amber& amber)
 const AmberTask shadowStabilization = [](const Amber& amber)
 {
     return monad::maybe::maybe(stabilizeShadow(amber), amber);
+};
+
+const AmberTask shadowStormsInfluence = [](const Amber& amber)
+{
+    return monad::maybe::maybe(inflateShadowStorms(amber), amber);
 };
 
 

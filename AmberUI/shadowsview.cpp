@@ -75,9 +75,10 @@ void ShadowsView::tickOneAmberHour()
 {
     amber::AmberTask combinedTask = [](const amber::Amber& amber)
     {
-        auto action1Res = magic::anyway(amber::shadowStabilization, magic::wrap(amber));
-        auto action2Res = magic::anyway(amber::tickWorldTime, action1Res);
-        return action2Res.amber;
+        auto action1Res = magic::anyway(amber::shadowStormsInfluence, magic::wrap(amber));
+        auto action2Res = magic::anyway(amber::shadowStabilization, action1Res);
+        auto action3Res = magic::anyway(amber::tickWorldTime, action2Res);
+        return action3Res.amber;
     };
 
     changeAmber(combinedTask);
@@ -97,6 +98,7 @@ void ShadowsView::switchAmberTimeTicking(bool ticking)
 void ShadowsView::evalAmberTask(const amber::AmberTask& task)
 {
     // TODO: do something like frp.
+    // Presentation tip: combinatorial pattern with a little combinatorial eDSL.
     amber::AmberTask combinedTask = [&task](const amber::Amber& amber)
     {
         auto action1Res = magic::anyway(task, magic::wrap(amber));
