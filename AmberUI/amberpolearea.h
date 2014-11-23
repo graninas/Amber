@@ -1,18 +1,20 @@
 #ifndef AMBERSHADOW_H
 #define AMBERSHADOW_H
 
-#include "shadowstructure.h"
+#include "amberstructure.h"
 
 namespace amber
 {
 
 ShadowStructure amberShadowStructure();
-ShadowStructure trueAmberStructure();
 ShadowStructure bergmaShadowStructure();
-ShadowStructure trueBergmaStructure();
+ShadowStructure kashfaShadowStructure();
+ShadowStructure avalonShadowStructure();
 
-ShadowVariator amberVariator();
-ShadowVariator bergmaVariator();
+ShadowVariator amberPoleVariator(int multiplier);
+ShadowVariator bergmaShadowVariator();
+ShadowVariator kashfaShadowVariator();
+ShadowVariator avalonShadowVariator();
 
 Shadows amberPoleShadows();
 Area amberPoleArea();
@@ -20,3 +22,4 @@ Area amberPoleArea();
 } // namespace amber
 
 #endif // AMBERSHADOW_H
+

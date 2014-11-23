@@ -19,13 +19,15 @@ SOURCES += main.cpp\
     magic.cpp \
     shadowmechanics.cpp \
     amberpolearea.cpp \
-    ambermechanics.cpp
+    ambermechanics.cpp \
+    qambersurroundingstablemodel.cpp \
+    naming.cpp \
+    storms.cpp
 
 HEADERS  += shadowsview.h \
     amber.h \
     magic.h \
     common.h \
-    shadowstructure.h \
     knownareas.h \
     amberpolearea.h \
     naming.h \
@@ -34,7 +36,10 @@ HEADERS  += shadowsview.h \
     monads.h \
     maybemonad.h \
     monadicvalue.h \
-    functionalutils.h
+    functionalutils.h \
+    qambersurroundingstablemodel.h \
+    amberstructure.h \
+    storms.h
 
 FORMS    += shadowsview.ui
 

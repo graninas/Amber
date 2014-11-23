@@ -6,8 +6,13 @@
 namespace amber
 {
 
+// TODO: unify 'Safe' concept and Maybe monad.
 typedef magic::Value<ShadowStructure> SafeShadowStructure;
 typedef std::function<SafeShadowStructure(ShadowStructure)> SafeShadowStructureAction;
+
+typedef ShadowStructure ElementModifiers;
+typedef std::function<int(int, double)> ElementVariator;
+typedef std::map<Element::ElementType, ElementVariator> ElementVariators;
 
 SafeShadowStructure safeWrap(const ShadowStructure& data);
 SafeShadowStructure safeBind(const SafeShadowStructure value, const SafeShadowStructureAction& action);
@@ -15,12 +20,14 @@ SafeShadowStructure runSafe(const SafeShadowStructureAction& action, const Shado
 
 // Presentation tip: monadic functions.
 SafeShadowStructure safeElementChange(const ShadowStructure& structure, Element::ElementType elem, int diff);
+SafeShadowStructure safeElementChange(const ShadowStructure& structure, Element::ElementType elem, const ElementVariator& variator);
 
-typedef ShadowStructure ElementModifiers;
 SafeShadowStructureAction safeChangeElements(const ElementModifiers &modifiers);
+SafeShadowStructureAction safeEvalOverElements(const ElementVariators& variators);
 
 double shadowDistance(const ShadowStructure& shadow1, const ShadowStructure& shadow2);
 double elementalDistance(const ShadowStructure& shadow1, const ShadowStructure& shadow2);
+
 
 namespace element
 {
@@ -34,9 +41,8 @@ ShadowStructure::value_type Water(int water);
 ShadowStructure::value_type Flora(int flora);
 ShadowStructure::value_type Fauna(int fauna);
 
-}
+} // namespace element
 
-
-}
+} // namespace amber
 
 #endif // SHADOWMECHANICS_H

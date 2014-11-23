@@ -1,19 +1,10 @@
-#ifndef SHADOWSTRUCTURE_H
-#define SHADOWSTRUCTURE_H
+#ifndef AMBERSTRUCTURE_H
+#define AMBERSTRUCTURE_H
 
 #include "common.h"
 
 namespace amber
 {
-
-namespace Pole
-{
-enum PoleType
-{
-    Amber,
-    Chaos
-};
-}
 
 namespace Element
 {
@@ -57,7 +48,6 @@ struct NearestPlace
 
 typedef std::map<Element::ElementType, int> ShadowStructure;
 typedef std::function<ShadowStructure(ShadowStructure, Direction::DirectionType)> ShadowVariator;
-
 typedef double ShadowInfluence;
 
 struct Shadow
@@ -69,6 +59,17 @@ struct Shadow
 
 typedef std::map<ShadowName, Shadow> Shadows;
 
+struct ShadowStorm
+{
+    ShadowVariator movingPath;
+    ShadowStructure currentShadow;
+    ShadowInfluence outerInfluence;
+    ShadowInfluence innerInfluence;
+    int timeToLive;
+};
+
+typedef std::list<ShadowStorm> ShadowStorms;
+
 struct Area
 {
     Shadows shadows;
@@ -76,6 +77,17 @@ struct Area
 
 typedef std::map<AreaName, Area> Areas;
 
-}
+struct Amber
+{
+    int hoursElapsed;
 
-#endif // SHADOWSTRUCTURE_H
+    ShadowStorms storms;
+    Areas areas;
+
+    NearestPlace nearestPlace;
+    ShadowStructure playerShadowStructure;
+};
+
+} // namespace amber
+
+#endif // AMBERSTRUCTURE_H

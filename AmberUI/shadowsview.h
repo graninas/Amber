@@ -7,6 +7,7 @@
 #include <mutex>
 
 #include "amber.h"
+#include "qambersurroundingstablemodel.h"
 
 namespace Ui {
 class ShadowsView;
@@ -38,13 +39,13 @@ public slots:
 private:
     Ui::ShadowsView *ui;
     QTimer *m_amberTimer;
+    QAmberSurroundingsTableModel *m_amberModel;
 
     mutable std::mutex m_amberChangeGuard;
     amber::Amber m_amber;
 
     void evalAmberTask(const amber::AmberTask& task);
 
-    void setupWorldPlacesModel(const amber::Amber& amber);
     void updateUI();
 
     amber::Amber readAmber() const;

@@ -1,6 +1,7 @@
 #include "amber.h"
 
 #include "amberpolearea.h"
+#include "storms.h"
 #include "knownareas.h"
 
 namespace amber
@@ -18,6 +19,7 @@ Amber defaultAmber()
     Amber amber;
     amber.hoursElapsed = 0;
     amber.areas = areas();
+    amber.storms = storms();
     amber.nearestPlace.area = AmberPoleArea;
     amber.nearestPlace.shadow = BergmaShadow;
     amber.playerShadowStructure = bergmaShadowStructure();
@@ -25,4 +27,4 @@ Amber defaultAmber()
     return amber;
 }
 
-}
+} // namespace amber
