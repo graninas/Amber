@@ -75,10 +75,11 @@ void ShadowsView::tickOneAmberHour()
 {
     amber::AmberTask combinedTask = [](const amber::Amber& amber)
     {
-        auto action1Res = magic::anyway(amber::shadowStormsInfluence, magic::wrap(amber));
-        auto action2Res = magic::anyway(amber::shadowStabilization, action1Res);
-        auto action3Res = magic::anyway(amber::tickWorldTime, action2Res);
-        return action3Res.amber;
+        auto action1Res = magic::anyway(amber::inflateShadowStorms, magic::wrap(amber));
+        auto action2Res = magic::anyway(amber::affectShadowStorms, action1Res);
+        auto action3Res = magic::anyway(amber::shadowStabilization, action2Res);
+        auto action4Res = magic::anyway(amber::tickWorldTime, action3Res);
+        return action4Res.amber;
     };
 
     changeAmber(combinedTask);

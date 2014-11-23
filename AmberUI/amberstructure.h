@@ -59,9 +59,11 @@ struct Shadow
 
 typedef std::map<ShadowName, Shadow> Shadows;
 
+typedef std::function<ShadowStructure(ShadowStructure, int)> TimedShadowVariator;
+
 struct ShadowStorm
 {
-    ShadowVariator movingPath;
+    TimedShadowVariator pathVariator;
     ShadowStructure currentShadow;
     ShadowInfluence outerInfluence;
     ShadowInfluence innerInfluence;

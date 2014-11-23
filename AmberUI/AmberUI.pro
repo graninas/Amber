@@ -39,7 +39,8 @@ HEADERS  += shadowsview.h \
     functionalutils.h \
     qambersurroundingstablemodel.h \
     amberstructure.h \
-    storms.h
+    storms.h \
+    lenses.h
 
 FORMS    += shadowsview.ui
 

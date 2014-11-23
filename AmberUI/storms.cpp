@@ -48,27 +48,22 @@ TimedElementVariator elementVariator(double factor, const TimedElementVariator& 
     };
 }
 
-ShadowVariator circullarStormMovingPath(double factor1, double factor2)
+TimedShadowVariator circullarStormPathVariator(double factor1, double factor2)
 {
-    ShadowVariator variator = [=](const ShadowStructure& structure, Direction::DirectionType)
+    TimedShadowVariator variator = [=](const ShadowStructure& structure, int time)
     {
-        return structure;
-        /*
         // Lift 'Safe' concept to monads.
         SafeShadowStructureAction action;
-
         // Presentation tip: power of combinatorial pattern.
         // You can combine lambdas and regular functions to achieve simplicity.
-        action = safeTimedEvalOverElements({ { Element::Water,  sinElementVariator(factor1) }
-                                           , { Element::Ground, cosElementVariator(-factor1) }
+        action = safeTimedEvalOverElements(time,
+            { { Element::Water,  sinElementVariator(factor1) }
+            , { Element::Ground, cosElementVariator(-factor1) }
+            , { Element::Sky,    elementVariator(factor2,  variators::SinElementVariator) } // N.B., strategy passed.
+            , { Element::Air,    elementVariator(-factor2, variators::CosElementVariator) }
+            });
 
-                                           // N.B., strategy passed.
-                                           , { Element::Sky,    elementVariator(factor2,  variators::SinElementVariator) }
-                                           , { Element::Air,    elementVariator(-factor2, variators::CosElementVariator) }
-                                           });
-
-        SafeShadowStructure value = safeWrap(structure);
-        value = runSafe(action, structure);
+        SafeShadowStructure value = runSafe(action, structure);
         if (magic::isFail(value))
         {
             // TODO - fail tolerance, error reporting
@@ -76,19 +71,18 @@ ShadowVariator circullarStormMovingPath(double factor1, double factor2)
         }
 
         return magic::valueData(value);
-        */
     };
     return variator;
 }
 
-ShadowVariator smallStormMovingPath()
+TimedShadowVariator smallStormPathVariator()
 {
-    return circullarStormMovingPath(10, 10);
+    return circullarStormPathVariator(10, 10);
 }
 
-ShadowVariator bigStormMovingPath()
+TimedShadowVariator bigStormPathVariator()
 {
-    return circullarStormMovingPath(30, 40);
+    return circullarStormPathVariator(30, 40);
 }
 
 ShadowStructure smallStormStartShadow()
@@ -113,7 +107,7 @@ ShadowStorms storms()
     smallStorm.outerInfluence = 10;
 
     qDebug() << "storms small moving path";
-    smallStorm.movingPath = smallStormMovingPath();
+    smallStorm.pathVariator = smallStormPathVariator();
     qDebug() << "storms small stomr start shadow";
     smallStorm.currentShadow = smallStormStartShadow();
 
@@ -124,7 +118,7 @@ ShadowStorms storms()
     bigStorm.outerInfluence = 50;
 
     qDebug() << "storms big storm moving path";
-    bigStorm.movingPath = bigStormMovingPath();
+    bigStorm.pathVariator = bigStormPathVariator();
 
     qDebug() << "storms big storm shadow";
     bigStorm.currentShadow = bigStormStartShadow();

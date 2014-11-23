@@ -32,8 +32,10 @@ SafeShadowStructure safeElementChange(const ShadowStructure& structure, Element:
     return magic::success(newStructure);
 }
 
-SafeShadowStructure safeElementChange(const ShadowStructure& structure, Element::ElementType elem,
-                                      const TimedElementVariator& variator)
+SafeShadowStructure safeTimedElementChange(const ShadowStructure& structure,
+                                           int time,
+                                           Element::ElementType elem,
+                                           const TimedElementVariator& variator)
 {
     ShadowStructure newStructure = structure;
     ShadowStructure::iterator it = newStructure.find(elem);
@@ -41,7 +43,7 @@ SafeShadowStructure safeElementChange(const ShadowStructure& structure, Element:
     if (it == newStructure.end())
         return magic::fail(structure);
 
-    it->second = variator(it->second, 0); // The factor will be ignored.
+    it->second = variator(time, it->second);
     return magic::success(newStructure);
 }
 
@@ -68,16 +70,17 @@ SafeShadowStructureAction safeChangeElements(const ElementModifiers& modifiers)
 // TODO: this code is very like the code above.
 SafeShadowStructureAction safeTimedEvalOverElements(int time, const TimedElementVariators& variators)
 {
-    // N.B., modifiers passing by value. Otherwise, this code will cause access violation
-    // because of destructing externally defined modifiers.
-    SafeShadowStructureAction action = [=](const ShadowStructure& income)
+    // N.B., variators passing by value. Otherwise, this code will cause access violation
+    // because of destructing externally defined variators.
+    SafeShadowStructureAction action = [variators, time](const ShadowStructure& income)
     {
         SafeShadowStructure value = safeWrap(income);
-        std::for_each(variators.begin(), variators.end(), [&value](const TimedElementVariators::value_type& variator)
+        std::for_each(variators.begin(), variators.end(),
+                      [&value, variators, time](const TimedElementVariators::value_type& variator)
         {
-            value = safeBind(value, [&variator](const ShadowStructure& structure)
+            value = safeBind(value, [&variator, time](const ShadowStructure& structure)
             {
-                return safeElementChange(structure, variator.first, variator.second);
+                return safeTimedElementChange(structure, time, variator.first, variator.second);
             });
         });
         return value;

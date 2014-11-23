@@ -20,8 +20,10 @@ SafeShadowStructure runSafe(const SafeShadowStructureAction& action, const Shado
 
 // Presentation tip: monadic functions.
 SafeShadowStructure safeElementChange(const ShadowStructure& structure, Element::ElementType elem, int diff);
-SafeShadowStructure safeElementChange(const ShadowStructure& structure, Element::ElementType elem,
-                                      const TimedElementVariator &variator);
+SafeShadowStructure safeTimedElementChange(const ShadowStructure& structure,
+                                           int time,
+                                           Element::ElementType elem,
+                                           const TimedElementVariator &variator);
 
 SafeShadowStructureAction safeChangeElements(const ElementModifiers &modifiers);
 SafeShadowStructureAction safeTimedEvalOverElements(int time, const TimedElementVariators& variators);

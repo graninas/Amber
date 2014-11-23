@@ -10,7 +10,7 @@ namespace amber
 namespace // anonymous
 {
 
-// Auxiliary type.
+// Auxiliary types.
 typedef std::pair<Shadow, double> ShadowAndDistance;
 
 Amber updatePlayerShadowStructure(const Amber& amber, Direction::DirectionType dir)
@@ -82,8 +82,7 @@ ShadowVariator composeInfluenceVariator(const ShadowStructure& fromStructure, co
     {
         // TODO: refactor this boilerplate.
         SafeShadowStructureAction action = safeChangeElements(elementalInfluence);
-        SafeShadowStructure value = safeWrap(structure);
-        value = runSafe(action, structure);
+        SafeShadowStructure value = runSafe(action, structure);
         if (magic::isFail(value))
         {
             // TODO - fail tolerance, error reporting
@@ -95,6 +94,9 @@ ShadowVariator composeInfluenceVariator(const ShadowStructure& fromStructure, co
 }
 
 } // namespace anonymous
+
+namespace workers
+{
 
 Amber goDirection(const Amber& amber, Direction::DirectionType dir)
 {
@@ -137,6 +139,16 @@ monad::MaybeDouble maybeShadowDistance(const ShadowStructure& shadowStructure1, 
     });
 }
 
+monad::MaybeDouble maybeShadowStructureDistance(const ShadowStructure& shadowStructure1,
+                                                const MaybeShadowStructure& mbShadowStructure2)
+{
+    return monad::maybe::bind<ShadowStructure, double>(mbShadowStructure2,
+        [&shadowStructure1](const ShadowStructure& shadowStructure2)
+        {
+            return monad::maybe::wrap(shadowDistance(shadowStructure1, shadowStructure2));
+        });
+}
+
 MaybeAmber stabilizeShadow(const Amber& amber)
 {
     MaybeShadow mbNearestShadow = lookupNearestShadow(amber);
@@ -161,163 +173,78 @@ MaybeAmber stabilizeShadow(const Amber& amber)
         });
 }
 
-// Experimental 'lenses-like' design.
-
-namespace experimental
-{
-
-
-namespace lenses
-{
-
-template <typename Input, typename Zoomed, typename... Zoomers> struct Lense
-{
-    std::function<Zoomed(Input)> zoomer;
-    Lense<Input, Zoomers...> lenses;
-};
-
-template <typename Input, typename Zoomed, typename... Zoomers> std::list<Zoomed>
-    rolloutLense(const Lense<Input, Zoomed, Zoomers...>& l, const Input& input)
-{
-    std::list<Zoomed> zoomed;
-    if (sizeof...(Zoomers) == 0)
-    {
-        zoomed.push_back(l.zoomer(input));
-    }
-    else
-    {
-        std::for_each(l.lenses.begin(), l.lenses.end(),
-                      [&zoomed, &input](const Lense<Input, Zoomers...>& internalLense)
-        {
-            std::list<Zoomed> rolledOut = rolloutLense(internalLense, input);
-            zoomed.insert(zoomed.end(), rolledOut.begin(), rolledOut.end());
-        });
-    }
-    return zoomed;
-}
-
-template <typename Input, typename Zoomed> std::list<Zoomed>
-    rolloutLense(const Lense<Input, Zoomed>& l, const Input& input)
-{
-    std::list<Zoomed> zoomed { l.zoomer(input) };
-    return zoomed;
-}
-
-
-template <typename Input, typename Zoomed, typename... Zoomers>
-    std::list<Zoomed>
-    overLense(const Lense<Input, Zoomed, Zoomers...>& l,
-              const Input& input,
-              const std::function<Zoomed(Zoomed)>& action)
-{
-    std::list<Zoomed> zoomed = rolloutLense(l, input);
-    std::transform(zoomed.begin(), zoomed.end(), zoomed.begin(), action);
-    return zoomed;
-}
-
-/*
-template <typename Input, typename Zoomed, typename... Zoomers> struct Lense
-{
-    std::function<Zoomed(Input)> zoomer;
-    Lense<Input, Zoomers...> lenses;
-};
-
-template <typename Input, typename Zoomed, typename... Zoomers> std::list<Zoomed>
-    rolloutLense(const Lense<Input, Zoomed, Zoomers...>& l, const Input& input)
-{
-    std::list<Zoomed> zoomed;
-    if (sizeof...(Zoomers) == 0)
-    {
-        zoomed.push_back(l.zoomer(input));
-    }
-    else
-    {
-        std::for_each(l.lenses.begin(), l.lenses.end(),
-                      [&zoomed, &input](const Lense<Input, Zoomers...>& internalLense)
-        {
-            std::list<Zoomed> rolledOut = rolloutLense(internalLense, input);
-            zoomed.insert(zoomed.end(), rolledOut.begin(), rolledOut.end());
-        });
-    }
-    return zoomed;
-}
-
-template <typename Input, typename Zoomed> std::list<Zoomed>
-    rolloutLense(const Lense<Input, Zoomed>& l, const Input& input)
-{
-    std::list<Zoomed> zoomed { l.zoomer(input) };
-    return zoomed;
-}
-
-
-template <typename Input, typename Zoomed, typename... Zoomers>
-    std::list<Zoomed>
-    overLense(const Lense<Input, Zoomed, Zoomers...>& l,
-              const Input& input,
-              const std::function<Zoomed(Zoomed)>& action)
-{
-    std::list<Zoomed> zoomed = rolloutLense(l, input);
-    std::transform(zoomed.begin(), zoomed.end(), zoomed.begin(), action);
-    return zoomed;
-}
-*/
-    /*
-    template <typename Input, typename Output> Lense<Input, Output> lense(const Input& input)
-    {
-        Lense<Input> l;
-        l.kind = LenseKind::Regular;
-        l.value = input;
-        return l;
-    }
-*/
-
-
-} // namespace lenses
-
-typedef lenses::Lense<Amber, ShadowStorms> ShadowStormsLense;
-typedef lenses::Lense<ShadowStorms, ShadowStorm> ShadowStormLense;
-
-ShadowStormsLense shadowStormsLense()
-{
-    lenses::Lense<Amber, ShadowStorms, ShadowStorm> l;
-    l.zoomer = [](const Amber& amber)
-    {
-        return amber.storms;
-    };
-    return l;
-}
-/*
-const ShadowStormLense shadowStormLense = [](const ShadowStorms& storms)
-{
-    return lenseEach<ShadowStorms, ShadowStorm>(storms);
-};
-
-
-const ShadowStorm moveShadowStorm = [](const ShadowStorm& storm)
-{
-    // TODO
-    return storm;
-};
-*/
-
-//zoom<Amber, ShadowStorms>(shadowStormsLense, zoom<ShadowStorms, ShadowStorm>(shadowStormLense, idLense)
-
-} // namespace experimental
-
-
-
-
 MaybeAmber inflateShadowStorms(const Amber& amber)
 {
-    /*
-    MaybeShadowStorms mbShadowStorms = bind<Amber, ShadowStorms>(monad::maybe::just(amber),
-        [](const Amber& a)
+    ShadowStorms newStorms;
+    std::for_each(amber.storms.begin(), amber.storms.end(), [&amber, &newStorms](const ShadowStorm& storm)
+    {
+        ShadowStorm newStorm = storm;
+        if (storm.timeToStart >= amber.hoursElapsed
+            && storm.timeToLive > 0)
         {
-            return overLense<Amber, ShadowStorms, ShadowStorm>(shadowStormsLense, a, moveShadowStorm);
-        });
-    // TODO
-    */
-    return monad::maybe::wrap(amber);
+            newStorm.timeToLive--;
+            newStorm.currentShadow = storm.pathVariator(storm.currentShadow, amber.hoursElapsed);
+        };
+        newStorms.push_back(storm);
+    });
+
+    Amber newAmber = amber;
+    newAmber.storms = newStorms;
+    return monad::maybe::just(newAmber);
 }
+
+MaybeTimedShadowVariator stormOuterInfluence(const ShadowStorm& storm, const Amber& amber)
+{
+    if (storm.timeToLive > 0
+        && storm.timeToStart >= amber.hoursElapsed)
+    {
+        monad::MaybeDouble mbPlayerDistance = maybeShadowStructureDistance(amber.playerShadowStructure,
+                                                                           monad::maybe::just(storm.currentShadow));
+        return monad::maybe::bind<double, TimedShadowVariator>(mbPlayerDistance, [&storm](double dist)
+        {
+            if (dist <= storm.outerInfluence)
+                return monad::maybe::just(storm.pathVariator);
+            return monad::maybe::nothing<TimedShadowVariator>();
+        });
+    }
+
+    return monad::maybe::nothing<TimedShadowVariator>();
+}
+
+MaybeAmber affectPlayerCurrentShadow(const Amber& amber, const TimedShadowVariator& variator)
+{
+    Amber newAmber = amber;
+    newAmber.playerShadowStructure = variator(amber.playerShadowStructure, amber.hoursElapsed);
+    return monad::maybe::just(newAmber);
+}
+
+MaybeAmber affectShadowStorms(const Amber& amber)
+{
+    MaybeAmber mbAmber = monad::maybe::just(amber);
+    MaybeAmber newMbAmber = mbAmber;
+    std::for_each(amber.storms.begin(), amber.storms.end(),
+                  [&newMbAmber, &mbAmber](const ShadowStorm& storm)
+    {
+        newMbAmber = monad::maybe::bind<Amber, Amber>(mbAmber, [&storm](const Amber& amber)
+        {
+            MaybeTimedShadowVariator mbStormInfluence = stormOuterInfluence(storm, amber);
+            return monad::maybe::bind<TimedShadowVariator, Amber>(mbStormInfluence,
+                                                                  [&amber](const TimedShadowVariator& variator)
+            {
+                return affectPlayerCurrentShadow(amber, variator);
+            });
+
+            return monad::maybe::just(amber);
+        });
+
+        // Only affectable storms are counting.
+        if (monad::maybe::isJust(newMbAmber))
+            mbAmber = newMbAmber;
+    });
+
+    return mbAmber;
+}
+
+} // namespace workers
 
 } // namespace amber
