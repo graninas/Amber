@@ -38,4 +38,31 @@ std::string shadowName(const std::string& shadow)
     return "unknown shadow";
 }
 
+std::string shadowNameForm1(const std::string& shadow)
+{
+    if (shadow == AmberShadow)  return "Амбера";
+    if (shadow == BergmaShadow) return "Бергмы";
+    if (shadow == KashfaShadow) return "Кашфы";
+    if (shadow == AvalonShadow) return "Авалона";
+    return "unknown shadow";
+}
+
+std::string shadowNameForm2(const std::string& shadow)
+{
+    if (shadow == AmberShadow)  return "Амберу";
+    if (shadow == BergmaShadow) return "Бергме";
+    if (shadow == KashfaShadow) return "Кашфу";
+    if (shadow == AvalonShadow) return "Авалону";
+    return "unknown shadow";
+}
+
+std::string shadowNameForm3(const std::string& shadow)
+{
+    if (shadow == AmberShadow)  return "Амбер";
+    if (shadow == BergmaShadow) return "Бергму";
+    if (shadow == KashfaShadow) return "Кашфу";
+    if (shadow == AvalonShadow) return "Авалон";
+    return "unknown shadow";
+}
+
 }

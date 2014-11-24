@@ -3,6 +3,7 @@
 #include "shadowmechanics.h"
 #include "monads.h"
 #include "functionalutils.h"
+#include "strings.h"
 
 namespace amber
 {
@@ -56,6 +57,11 @@ Amber updateNearestPlace(const Amber& amber)
         if (abs(nearestDistance) < 1)
         {
             newAmber.playerShadowStructure = nearestShadowStructure;
+            newAmber.log.push_back(strings::playerArrivedToPlace(newAmber.nearestPlace));
+        }
+        else
+        {
+            newAmber.log.push_back(strings::playerArrivedToArea(newAmber.nearestPlace));
         }
     }
 
@@ -166,7 +172,7 @@ MaybeAmber stabilizeShadow(const Amber& amber)
 
                 Amber newAmber = amber;
                 newAmber.playerShadowStructure = influenceVariator(amber.playerShadowStructure, Direction::North); // Direction doen't matter.
-                return monad::maybe::wrap(newAmber);
+                return monad::maybe::wrap(updateNearestPlace(newAmber));
             }
 
             return monad::maybe::nothing<Amber>();
@@ -215,6 +221,7 @@ MaybeAmber affectPlayerCurrentShadow(const Amber& amber, const TimedShadowVariat
 {
     Amber newAmber = amber;
     newAmber.playerShadowStructure = variator(amber.playerShadowStructure, amber.hoursElapsed);
+    newAmber.log.push_back(strings::playerAffectedByStormAt(amber.nearestPlace.shadow));
     return monad::maybe::just(newAmber);
 }
 

@@ -7,14 +7,14 @@ namespace amber
 
 namespace variators
 {
-const TimedElementVariator SinElementVariator = [](int time, double factor)
+const TimedElementVariator SinElementVariator = [](int time, int value, double factor)
 {
-    return int(sin(double(time)) * factor);
+    return int(sin(time) * value * factor) + value;
 };
 
-const TimedElementVariator CosElementVariator = [](int time, double factor)
+const TimedElementVariator CosElementVariator = [](int time, int value, double factor)
 {
-    return int(cos(double(time)) * factor);
+    return int(cos(time) * value * factor) + value;
 };
 } // namespace variators
 
@@ -23,17 +23,17 @@ const TimedElementVariator CosElementVariator = [](int time, double factor)
 // Overridding the second argument.
 TimedElementVariator sinElementVariator(double factor)
 {
-    return [&factor](int time, double)
+    return [&factor](int time, int value, double)
     {
-        return variators::SinElementVariator(time, factor);
+        return variators::SinElementVariator(time, value, factor);
     };
 }
 
 TimedElementVariator cosElementVariator(double factor)
 {
-    return [&factor](int time, double)
+    return [&factor](int time, int value, double)
     {
-        return variators::CosElementVariator(time, factor);
+        return variators::CosElementVariator(time, value, factor);
     };
 }
 
@@ -42,9 +42,9 @@ TimedElementVariator cosElementVariator(double factor)
 // Overridding the second argument.
 TimedElementVariator elementVariator(double factor, const TimedElementVariator& function)
 {
-    return [&factor, &function](int time, double)
+    return [&factor, &function](int time, int value, double)
     {
-        return function(time, factor);
+        return function(time, value, factor);
     };
 }
 
@@ -77,12 +77,12 @@ TimedShadowVariator circullarStormPathVariator(double factor1, double factor2)
 
 TimedShadowVariator smallStormPathVariator()
 {
-    return circullarStormPathVariator(10, 10);
+    return circullarStormPathVariator(1, 1);
 }
 
 TimedShadowVariator bigStormPathVariator()
 {
-    return circullarStormPathVariator(30, 40);
+    return circullarStormPathVariator(1, 1);
 }
 
 ShadowStructure smallStormStartShadow()
@@ -99,16 +99,13 @@ ShadowStructure bigStormStartShadow()
 
 ShadowStorms storms()
 {
-    qDebug() << "storms begin";
     ShadowStorm smallStorm;
     smallStorm.timeToStart = 0;
     smallStorm.timeToLive = std::numeric_limits<int>::max(); // Eternal storms can be done much better.
     smallStorm.innerInfluence = 5;
     smallStorm.outerInfluence = 10;
 
-    qDebug() << "storms small moving path";
     smallStorm.pathVariator = smallStormPathVariator();
-    qDebug() << "storms small stomr start shadow";
     smallStorm.currentShadow = smallStormStartShadow();
 
     ShadowStorm bigStorm;
@@ -117,20 +114,13 @@ ShadowStorms storms()
     bigStorm.innerInfluence = 30;
     bigStorm.outerInfluence = 50;
 
-    qDebug() << "storms big storm moving path";
     bigStorm.pathVariator = bigStormPathVariator();
-
-    qDebug() << "storms big storm shadow";
     bigStorm.currentShadow = bigStormStartShadow();
 
-    qDebug() << "storms";
     ShadowStorms storms;
-    qDebug() << "pushing back 1";
     storms.push_back(smallStorm);
-    qDebug() << "pushing back 2";
     storms.push_back(bigStorm);
 
-    qDebug() << "storms end";
     return storms;
 }
 

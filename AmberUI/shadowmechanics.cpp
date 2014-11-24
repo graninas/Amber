@@ -43,7 +43,7 @@ SafeShadowStructure safeTimedElementChange(const ShadowStructure& structure,
     if (it == newStructure.end())
         return magic::fail(structure);
 
-    it->second = variator(time, it->second);
+    it->second = variator(time, it->second, 1);
     return magic::success(newStructure);
 }
 

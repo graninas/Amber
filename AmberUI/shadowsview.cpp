@@ -146,8 +146,14 @@ void ShadowsView::updateUI(const amber::Amber& amber)
 
 void ShadowsView::appendAmberLog(const amber::Log& log)
 {
+    m_amberLog.clear();
+    std::string prev = "";
     for (auto s: log)
     {
+        if (s == prev)
+            continue;
+
+        prev = s;
         m_amberLog.append(QString::fromStdString(s));
         m_amberLog.append("\n");
     }

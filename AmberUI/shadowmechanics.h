@@ -11,7 +11,7 @@ typedef magic::Value<ShadowStructure> SafeShadowStructure;
 typedef std::function<SafeShadowStructure(ShadowStructure)> SafeShadowStructureAction;
 
 typedef ShadowStructure ElementModifiers;
-typedef std::function<int(int, double)> TimedElementVariator;
+typedef std::function<int(int, int, double)> TimedElementVariator;
 typedef std::map<Element::ElementType, TimedElementVariator> TimedElementVariators;
 
 SafeShadowStructure safeWrap(const ShadowStructure& data);

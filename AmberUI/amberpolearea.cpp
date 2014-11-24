@@ -168,10 +168,10 @@ Shadows amberPoleShadows()
     return {
         // Presentation tip: lambdas and functions are highly coupled conceptions.
         // Lambdas can be used directly or can be created by function call.
-        { AmberShadow,  Shadow { amberShadowVariator(),  amberShadowStructure(),  40.0 } }
-      , { BergmaShadow, Shadow { bergmaShadowVariator(), bergmaShadowStructure(), 5.0  } }
-      , { KashfaShadow, Shadow { kashfaShadowVariator(), kashfaShadowStructure(), 5.0  } }
-      , { AvalonShadow, Shadow { avalonShadowVariator(), avalonShadowStructure(), 5.0  } }
+        { AmberShadow,  Shadow { AmberShadow,  amberShadowVariator(),  amberShadowStructure(),  40.0 } }
+      , { BergmaShadow, Shadow { BergmaShadow, bergmaShadowVariator(), bergmaShadowStructure(), 5.0  } }
+      , { KashfaShadow, Shadow { KashfaShadow, kashfaShadowVariator(), kashfaShadowStructure(), 5.0  } }
+      , { AvalonShadow, Shadow { AvalonShadow, avalonShadowVariator(), avalonShadowStructure(), 5.0  } }
     };
 }
 

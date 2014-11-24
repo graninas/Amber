@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     ambermechanics.cpp \
     qambersurroundingstablemodel.cpp \
     naming.cpp \
-    storms.cpp
+    storms.cpp \
+    strings.cpp
 
 HEADERS  += shadowsview.h \
     amber.h \
@@ -40,7 +41,8 @@ HEADERS  += shadowsview.h \
     qambersurroundingstablemodel.h \
     amberstructure.h \
     storms.h \
-    lenses.h
+    lenses.h \
+    strings.h
 
 FORMS    += shadowsview.ui
 

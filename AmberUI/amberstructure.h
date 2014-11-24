@@ -52,6 +52,7 @@ typedef double ShadowInfluence;
 
 struct Shadow
 {
+    ShadowName name;
     ShadowVariator variator;
     ShadowStructure structure;
     ShadowInfluence influence;
