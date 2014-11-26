@@ -35,6 +35,8 @@ public slots:
 
     void switchAmberTimeTicking(bool ticking);
 
+    void test();
+
 private:
     Ui::ShadowsView *ui;
     QTimer *m_amberTimer;

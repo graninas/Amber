@@ -5,8 +5,6 @@
 #include "functionalutils.h"
 #include "strings.h"
 
-#include <memory>
-
 namespace amber
 {
 
@@ -261,135 +259,22 @@ MaybeAmber affectShadowStorms(const Amber& amber)
     return monad::maybe::nothing<Amber>();
 }
 
+} // namespace workers
+
 namespace experimental
 {
 
-
-namespace LensKind
-{
-enum LensKindType
-{
-    Focus,
-    Single,
-    Multiple
-};
-}
-
-struct Identity
-{
-};
-
-template <typename Zoomed1, typename Zoomed2>
-struct Lens
-{
-    LensKind::LensKindType kind;
-    std::function<Zoomed2(Zoomed1)> getter;
-    std::function<void(Zoomed1&, Zoomed2)> setter;
-};
-
-template <typename Zoomed1, typename Zoomed2, typename Zoomed3 = Identity, typename Zoomed4 = Identity>
-struct LensStack
-{
-    Lens<Zoomed1, Zoomed2> lens1;
-    Lens<Zoomed2, Zoomed3> lens2;
-    Lens<Zoomed3, Zoomed4> lens3;
-};
-
-template <typename Focused>
-Lens<Focused, Identity> idL()
-{
-    Lens<Focused, Identity> l;
-    l.kind = LensKind::Focus;
-    return l;
-}
-
-template <typename Zoomed1, typename Zoomed2>
-Lens<Zoomed1, Zoomed2>
-    lens(const std::function<Zoomed2(Zoomed1)>& getter,
-         const std::function<Zoomed1(Zoomed1, Zoomed2)>& setter)
-{
-    Lens<Zoomed1, Zoomed2> l;
-    l.kind = LensKind::Single;
-    l.getter = getter;
-    l.setter = setter;
-    return l;
-}
-
-template <typename Zoomed1, typename Zoomed2, typename Zoomed3, typename Zoomed4>
-LensStack<Zoomed1, Zoomed2, Zoomed3, Zoomed4>
-    zoom(Lens<Zoomed1, Zoomed2> l1
-       , Lens<Zoomed2, Zoomed3> l2
-       , Lens<Zoomed3, Zoomed4> l3)
-{
-    LensStack<Zoomed1, Zoomed2,  Zoomed3, Zoomed4> ls;
-    ls.lens1 = l1;
-    ls.lens2 = l2;
-    ls.lens3 = l3;
-    return ls;
-}
-
-template <typename Zoomed1, typename Zoomed2, typename Zoomed3>
-LensStack<Zoomed1, Zoomed2, Zoomed3, Identity>
-    zoom(Lens<Zoomed1, Zoomed2> l1
-       , Lens<Zoomed2, Zoomed3> l2)
-{
-    LensStack<Zoomed1, Zoomed2,  Zoomed3, Identity> ls;
-    ls.lens1 = l1;
-    ls.lens2 = l2;
-    ls.lens3 = idL<Zoomed3>();
-    return ls;
-}
-
-template <typename Zoomed1, typename Zoomed2>
-LensStack<Zoomed1, Zoomed2, Identity, Identity>
-    zoom(Lens<Zoomed1, Zoomed2> l1)
-{
-    LensStack<Zoomed1, Zoomed2, Identity, Identity> ls;
-    ls.lens1 = l1;
-    ls.lens2 = idL<Zoomed2>();
-    ls.lens3 = idL<Identity>();
-    return ls;
-}
-
-template <typename Focused,
-          typename Zoomed1,
-          typename Zoomed2,
-          typename Zoomed3 = Identity,
-          typename Zoomed4 = Identity>
-monad::maybe::Maybe<Zoomed1> evalLens(const LensStack<Zoomed1, Zoomed2, Zoomed3, Zoomed4>& lensStack,
-                                      const Zoomed1& zoomed1,
-                                      const std::function<Focused(Focused)>& variator)
-{
-
-}
-
-struct InnerStruct
-{
-    int i;
-};
-
-struct Test
-{
-    InnerStruct inner;
-};
-
-typedef monad::MonadicValue<monad::maybe::Maybe<Test>> MaybeTest;
-
 const std::function<int(int)> increaseI = [](int i)
 {
-    return i++;
+    return ++i;
 };
 
-Lens<Test, InnerStruct> innerL()
+std::function<std::string(std::string)> replaceString(const std::string& s)
 {
-    return lens<Test, InnerStruct>
-            ( [](const Test& t) { return t.inner; }
-            , [](const Test& t, const InnerStruct& inner) {
-                Test newTest = t;
-                newTest.inner = inner;
-                return newTest;
-            }
-    );
+    return [=](const std::string&)
+    {
+        return s;
+    };
 }
 
 Lens<InnerStruct, int> intIL()
@@ -404,60 +289,44 @@ Lens<InnerStruct, int> intIL()
         );
 }
 
-MaybeTest testLens(const Test& amber)
+Lens<Test, std::string> stringL()
 {
-    LensStack<Test, InnerStruct, int> lensStack
+    return lens<Test, std::string>
+            ( [](const Test& t) { return t.s; }
+            , [](const Test& t, const std::string& s) {
+                Test newTest = t;
+                newTest.s = s;
+                return newTest;
+            }
+    );
+}
+
+Lens<Test, InnerStruct> innerL()
+{
+    return lens<Test, InnerStruct>
+            ( [](const Test& t) { return t.inner; }
+            , [](const Test& t, const InnerStruct& inner) {
+                Test newTest = t;
+                newTest.inner = inner;
+                return newTest;
+            }
+    );
+}
+
+Test testLens(const Test& test)
+{
+    LensStack<Test, InnerStruct, int> lensStack1
        = zoom<Test, InnerStruct, int>(innerL(), intIL());
 
-//    MaybeAmber mbNewAmber = evalLens<int>(lensStack, amber, increaseI);
+    LensStack<Test, std::string> lensStack2
+       = zoom<Test, std::string>(stringL());
 
-  //  return mbNewAmber;
+    Test newTest1 = evalLens(lensStack1, test, increaseI);
+    Test newTest2 = evalLens(lensStack2, newTest1, replaceString("bla-bla"));
+
+    return newTest2;
 }
-
-/*
-typedef std::function<ShadowStorm(ShadowStorm)> ShadowStormVariator;
-
-const ShadowStormVariator tickTimeToLive = [](const ShadowStorm& storm)
-{
-    ShadowStorm newStorm = storm;
-    newStorm.timeToLive++;
-    return newStorm;
-};
-
-Lens shadowStormsL()
-{
-    return lens( [](const Amber& amber) { return amber.storms; }
-               , [](Amber& amber, const ShadowStorms& storms) { amber.storms = storms; }
-    );
-}
-
-Lens shadowStormL()
-{
-    return listL<ShadowStorm>();
-}
-
-Lens timeToLiveL()
-{
-    return lens( [](const ShadowStorm& storm) { return storm.timeToLive; }
-               , [](ShadowStorm& storm, int ttl) { storm.timeToLive = ttl; }
-    );
-}
-
-MaybeAmber inflateShadowStorms2(const Amber& amber)
-{
-    Lens lens = zoom(shadowStormsL(),
-                     zoomEvery(shadowStormL(),
-                               focus(timeToLiveL())));
-
-    MaybeAmber mbNewAmber = evalLens(lens, amber, tickTimeToLive);
-
-    return mbNewAmber;
-}
-
-*/
 
 } // namespace experimental
 
-
-} // namespace workers
 } // namespace amber

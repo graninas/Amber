@@ -41,6 +41,13 @@
      </widget>
     </item>
     <item>
+     <widget class="QPushButton" name="pushButton">
+      <property name="text">
+       <string>PushButton</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="Line" name="line_5">
       <property name="frameShadow">
        <enum>QFrame::Plain</enum>
@@ -924,7 +931,7 @@
    <slot>goNorth()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>596</x>
+     <x>906</x>
      <y>567</y>
     </hint>
     <hint type="destinationlabel">
@@ -940,7 +947,7 @@
    <slot>goWest()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>550</x>
+     <x>860</x>
      <y>615</y>
     </hint>
     <hint type="destinationlabel">
@@ -956,7 +963,7 @@
    <slot>goEast()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>642</x>
+     <x>952</x>
      <y>615</y>
     </hint>
     <hint type="destinationlabel">
@@ -972,7 +979,7 @@
    <slot>goSouth()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>596</x>
+     <x>906</x>
      <y>663</y>
     </hint>
     <hint type="destinationlabel">
@@ -988,7 +995,7 @@
    <slot>goNorthEast()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>642</x>
+     <x>952</x>
      <y>567</y>
     </hint>
     <hint type="destinationlabel">
@@ -1004,7 +1011,7 @@
    <slot>goSouthEast()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>642</x>
+     <x>952</x>
      <y>663</y>
     </hint>
     <hint type="destinationlabel">
@@ -1020,7 +1027,7 @@
    <slot>goSouthWest()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>550</x>
+     <x>860</x>
      <y>663</y>
     </hint>
     <hint type="destinationlabel">
@@ -1036,7 +1043,7 @@
    <slot>goNorthWest()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>550</x>
+     <x>860</x>
      <y>567</y>
     </hint>
     <hint type="destinationlabel">
@@ -1052,12 +1059,28 @@
    <slot>switchAmberTimeTicking(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>588</x>
-     <y>588</y>
+     <x>906</x>
+     <y>615</y>
     </hint>
     <hint type="destinationlabel">
      <x>991</x>
      <y>645</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>ShadowsView</receiver>
+   <slot>test()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>890</x>
+     <y>435</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1015</x>
+     <y>404</y>
     </hint>
    </hints>
   </connection>

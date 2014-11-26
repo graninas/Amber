@@ -96,6 +96,14 @@ void ShadowsView::switchAmberTimeTicking(bool ticking)
         m_amberTimer->stop();
 }
 
+void ShadowsView::test()
+{
+    amber::experimental::Test t { amber::experimental::InnerStruct { 10 } };
+    amber::experimental::Test newTest = amber::experimental::testLens(t);
+    Q_ASSERT(newTest.inner.i == 11);
+    Q_ASSERT(newTest.s == "bla-bla");
+}
+
 void ShadowsView::evalAmberTask(const amber::AmberTask& task)
 {
     std::list<amber::AmberTask> tasks = {
