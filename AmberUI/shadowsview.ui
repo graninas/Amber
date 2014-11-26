@@ -41,13 +41,6 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="pushButton">
-      <property name="text">
-       <string>PushButton</string>
-      </property>
-     </widget>
-    </item>
-    <item>
      <widget class="Line" name="line_5">
       <property name="frameShadow">
        <enum>QFrame::Plain</enum>
@@ -1065,22 +1058,6 @@
     <hint type="destinationlabel">
      <x>991</x>
      <y>645</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>ShadowsView</receiver>
-   <slot>test()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>890</x>
-     <y>435</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1015</x>
-     <y>404</y>
     </hint>
    </hints>
   </connection>
