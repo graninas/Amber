@@ -44,6 +44,7 @@ private:
     amber::Amber m_amber;
 
     void evalAmberTask(const amber::AmberTask& task);
+    void evaluateTasks(const std::list<amber::AmberTask> &tasks);
     void changeAmber(const amber::AmberTask& task);
 
     void updateUI(const amber::Amber &amber);

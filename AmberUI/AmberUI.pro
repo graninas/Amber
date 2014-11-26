@@ -42,7 +42,8 @@ HEADERS  += shadowsview.h \
     amberstructure.h \
     storms.h \
     lenses.h \
-    strings.h
+    strings.h \
+    presentationsnippets.h
 
 FORMS    += shadowsview.ui
 

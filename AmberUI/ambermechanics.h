@@ -86,7 +86,13 @@ const AmberTask inflateShadowStorms = [](const Amber& amber)
 
 const AmberTask affectShadowStorms = [](const Amber& amber)
 {
-    return monad::maybe::maybe(workers::affectShadowStorms(amber), amber);
+    MaybeAmber mbAmber = workers::affectShadowStorms(amber);
+    if (monad::maybe::isNothing(mbAmber))
+    {
+        qDebug() << "storm has no effect";
+        throw std::domain_error("Storm has no effect"); // This is a very, very bad design. Just a showcase.
+    }
+    return monad::maybe::maybe(mbAmber, amber);
 };
 
 

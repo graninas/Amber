@@ -13,8 +13,8 @@ ShadowStructure amberShadowStructure()
     return {
         element::AmberDistance(0)
       , element::ChaosDistance(100)
-      , element::Ground(90)
-      , element::Water(10)
+      , { Element::Ground, 90 }
+      , { Element::Water, 10 }
       , element::Air(100)
       , element::Sky(70)
       , element::Flora(100)

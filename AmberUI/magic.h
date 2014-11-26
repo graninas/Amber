@@ -77,14 +77,8 @@ template <class D> D valueData(const Value<D>& value)
 
 struct Artifact
 {
-    Artifact(const amber::Amber& a, int r)
-    {
-        amber = a;
-        result = r;
-    }
-
     amber::Amber amber;
-    int result;
+    bool success;
     std::vector<std::string> systemLog;
 };
 
@@ -92,6 +86,7 @@ Artifact wrap(const amber::Amber& amber);
 amber::Amber unwrap(const Artifact& amber);
 Artifact eval(const amber::AmberTask& task, const Artifact& artifact);
 Artifact anyway(const amber::AmberTask& task, const Artifact& artifact);
+Artifact onFail(const amber::AmberTask& task, const Artifact& artifact);
 
 }
 

@@ -77,7 +77,7 @@ void ShadowsView::tickOneAmberHour()
     {
         auto action1Res = magic::anyway(amber::inflateShadowStorms, magic::wrap(amber));
         auto action2Res = magic::anyway(amber::affectShadowStorms, action1Res);
-        auto action3Res = magic::anyway(amber::shadowStabilization, action2Res);
+        auto action3Res = magic::onFail(amber::shadowStabilization, action2Res);
         auto action4Res = magic::anyway(amber::tickWorldTime, action3Res);
         return action4Res.amber;
     };
@@ -98,6 +98,14 @@ void ShadowsView::switchAmberTimeTicking(bool ticking)
 
 void ShadowsView::evalAmberTask(const amber::AmberTask& task)
 {
+    std::list<amber::AmberTask> tasks = {
+        task,
+        amber::tickWorldTime
+    };
+
+    evaluateTasks(tasks);
+
+/*
     // TODO: do something like frp.
     // Presentation tip: combinatorial pattern with a little combinatorial eDSL.
     amber::AmberTask combinedTask = [&task](const amber::Amber& amber)
@@ -108,6 +116,23 @@ void ShadowsView::evalAmberTask(const amber::AmberTask& task)
     };
 
     changeAmber(combinedTask);
+    */
+}
+
+void ShadowsView::evaluateTasks(const std::list<amber::AmberTask>& tasks)
+{
+    m_amberChangeGuard.lock();
+    amber::Amber currentAmber = m_amber;
+
+    std::for_each(tasks.begin(), tasks.end(),
+        [&currentAmber](const amber::AmberTask& task)
+        {
+            currentAmber = task(currentAmber);
+        });
+
+    m_amber = currentAmber;
+    updateUI(m_amber);
+    m_amberChangeGuard.unlock();
 }
 
 // Presentation tip: C++ hasn't atomic methods.
