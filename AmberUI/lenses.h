@@ -1,163 +1,118 @@
 #ifndef LENSES_H
 #define LENSES_H
 
-// Experimental 'lenses-like' design.
-
-namespace experimental
-{
-
-
 namespace lenses
 {
 
-template <typename Input, typename Zoomed, typename... Zoomers> struct Lense
+struct Identity
 {
-    std::function<Zoomed(Input)> zoomer;
-    Lense<Input, Zoomers...> lenses;
 };
 
-template <typename Input, typename Zoomed, typename... Zoomers> std::list<Zoomed>
-    rolloutLense(const Lense<Input, Zoomed, Zoomers...>& l, const Input& input)
+template <typename Zoomed1, typename Zoomed2>
+struct Lens
 {
-    std::list<Zoomed> zoomed;
-    if (sizeof...(Zoomers) == 0)
-    {
-        zoomed.push_back(l.zoomer(input));
-    }
-    else
-    {
-        std::for_each(l.lenses.begin(), l.lenses.end(),
-                      [&zoomed, &input](const Lense<Input, Zoomers...>& internalLense)
-        {
-            std::list<Zoomed> rolledOut = rolloutLense(internalLense, input);
-            zoomed.insert(zoomed.end(), rolledOut.begin(), rolledOut.end());
-        });
-    }
-    return zoomed;
-}
-
-template <typename Input, typename Zoomed> std::list<Zoomed>
-    rolloutLense(const Lense<Input, Zoomed>& l, const Input& input)
-{
-    std::list<Zoomed> zoomed { l.zoomer(input) };
-    return zoomed;
-}
-
-
-template <typename Input, typename Zoomed, typename... Zoomers>
-    std::list<Zoomed>
-    overLense(const Lense<Input, Zoomed, Zoomers...>& l,
-              const Input& input,
-              const std::function<Zoomed(Zoomed)>& action)
-{
-    std::list<Zoomed> zoomed = rolloutLense(l, input);
-    std::transform(zoomed.begin(), zoomed.end(), zoomed.begin(), action);
-    return zoomed;
-}
-
-/*
-template <typename Input, typename Zoomed, typename... Zoomers> struct Lense
-{
-    std::function<Zoomed(Input)> zoomer;
-    Lense<Input, Zoomers...> lenses;
+    std::function<Zoomed2(Zoomed1)> getter;
+    std::function<Zoomed1(Zoomed1&, Zoomed2)> setter;
 };
 
-template <typename Input, typename Zoomed, typename... Zoomers> std::list<Zoomed>
-    rolloutLense(const Lense<Input, Zoomed, Zoomers...>& l, const Input& input)
+template <typename Zoomed1, typename Zoomed2, typename Zoomed3 = Identity, typename Zoomed4 = Identity>
+struct LensStack
 {
-    std::list<Zoomed> zoomed;
-    if (sizeof...(Zoomers) == 0)
-    {
-        zoomed.push_back(l.zoomer(input));
-    }
-    else
-    {
-        std::for_each(l.lenses.begin(), l.lenses.end(),
-                      [&zoomed, &input](const Lense<Input, Zoomers...>& internalLense)
-        {
-            std::list<Zoomed> rolledOut = rolloutLense(internalLense, input);
-            zoomed.insert(zoomed.end(), rolledOut.begin(), rolledOut.end());
-        });
-    }
-    return zoomed;
-}
+    Lens<Zoomed1, Zoomed2> lens1;
+    Lens<Zoomed2, Zoomed3> lens2;
+    Lens<Zoomed3, Zoomed4> lens3;
+};
 
-template <typename Input, typename Zoomed> std::list<Zoomed>
-    rolloutLense(const Lense<Input, Zoomed>& l, const Input& input)
+template <typename Focused>
+Lens<Focused, Identity> idL()
 {
-    std::list<Zoomed> zoomed { l.zoomer(input) };
-    return zoomed;
-}
-
-
-template <typename Input, typename Zoomed, typename... Zoomers>
-    std::list<Zoomed>
-    overLense(const Lense<Input, Zoomed, Zoomers...>& l,
-              const Input& input,
-              const std::function<Zoomed(Zoomed)>& action)
-{
-    std::list<Zoomed> zoomed = rolloutLense(l, input);
-    std::transform(zoomed.begin(), zoomed.end(), zoomed.begin(), action);
-    return zoomed;
-}
-*/
-    /*
-    template <typename Input, typename Output> Lense<Input, Output> lense(const Input& input)
-    {
-        Lense<Input> l;
-        l.kind = LenseKind::Regular;
-        l.value = input;
-        return l;
-    }
-*/
-
-
-} // namespace lenses
-
-typedef lenses::Lense<Amber, ShadowStorms> ShadowStormsLense;
-typedef lenses::Lense<ShadowStorms, ShadowStorm> ShadowStormLense;
-
-ShadowStormsLense shadowStormsLense()
-{
-    lenses::Lense<Amber, ShadowStorms, ShadowStorm> l;
-    l.zoomer = [](const Amber& amber)
-    {
-        return amber.storms;
-    };
+    Lens<Focused, Identity> l;
     return l;
 }
-/*
-const ShadowStormLense shadowStormLense = [](const ShadowStorms& storms)
+
+template <typename Zoomed1, typename Zoomed2>
+Lens<Zoomed1, Zoomed2>
+    lens(const std::function<Zoomed2(Zoomed1)>& getter,
+         const std::function<Zoomed1(Zoomed1, Zoomed2)>& setter)
 {
-    return lenseEach<ShadowStorms, ShadowStorm>(storms);
-};
-
-
-const ShadowStorm moveShadowStorm = [](const ShadowStorm& storm)
-{
-    // TODO
-    return storm;
-};
-*/
-
-//zoom<Amber, ShadowStorms>(shadowStormsLense, zoom<ShadowStorms, ShadowStorm>(shadowStormLense, idLense)
-
-} // namespace experimental
-
-
-
-
-MaybeAmber inflateShadowStorms(const Amber& amber)
-{
-    /*
-    MaybeShadowStorms mbShadowStorms = bind<Amber, ShadowStorms>(monad::maybe::just(amber),
-        [](const Amber& a)
-        {
-            return overLense<Amber, ShadowStorms, ShadowStorm>(shadowStormsLense, a, moveShadowStorm);
-        });
-    // TODO
-    */
-    return monad::maybe::wrap(amber);
+    Lens<Zoomed1, Zoomed2> l;
+    l.getter = getter;
+    l.setter = setter;
+    return l;
 }
+
+template <typename Zoomed1, typename Zoomed2, typename Zoomed3, typename Zoomed4>
+LensStack<Zoomed1, Zoomed2, Zoomed3, Zoomed4>
+    zoom(Lens<Zoomed1, Zoomed2> l1
+       , Lens<Zoomed2, Zoomed3> l2
+       , Lens<Zoomed3, Zoomed4> l3)
+{
+    LensStack<Zoomed1, Zoomed2,  Zoomed3, Zoomed4> ls;
+    ls.lens1 = l1;
+    ls.lens2 = l2;
+    ls.lens3 = l3;
+    return ls;
+}
+
+template <typename Zoomed1, typename Zoomed2, typename Zoomed3>
+LensStack<Zoomed1, Zoomed2, Zoomed3, Identity>
+    zoom(Lens<Zoomed1, Zoomed2> l1
+       , Lens<Zoomed2, Zoomed3> l2)
+{
+    LensStack<Zoomed1, Zoomed2,  Zoomed3, Identity> ls;
+    ls.lens1 = l1;
+    ls.lens2 = l2;
+    ls.lens3 = idL<Zoomed3>();
+    return ls;
+}
+
+template <typename Zoomed1, typename Zoomed2>
+LensStack<Zoomed1, Zoomed2, Identity, Identity>
+    zoom(Lens<Zoomed1, Zoomed2> l1)
+{
+    LensStack<Zoomed1, Zoomed2, Identity, Identity> ls;
+    ls.lens1 = l1;
+    ls.lens2 = idL<Zoomed2>();
+    ls.lens3 = idL<Identity>();
+    return ls;
+}
+
+template <typename Zoomed1, typename Zoomed2> bool isFocus(const Lens<Zoomed1, Zoomed2>& l)
+{
+    return false;
+}
+
+template <typename Zoomed1> bool isFocus(const Lens<Zoomed1, Identity>& l)
+{
+    return true;
+}
+
+template <typename Zoomed1,
+          typename Zoomed2,
+          typename Zoomed3>
+Zoomed1 evalLens(const LensStack<Zoomed1, Zoomed2, Zoomed3, Identity>& lensStack,
+                 const Zoomed1& zoomed1,
+                 const std::function<Zoomed3(Zoomed3)>& variator)
+{
+    Zoomed1 z1 = zoomed1;
+    Zoomed2 z2 = lensStack.lens1.getter(z1);
+    Zoomed3 z3 = lensStack.lens2.getter(z2);
+    z2 = lensStack.lens2.setter(z2, variator(z3));
+    z1 = lensStack.lens1.setter(z1, z2);
+    return z1;
+}
+
+template <typename Zoomed1,
+          typename Zoomed2>
+Zoomed1 evalLens(const LensStack<Zoomed1, Zoomed2, Identity, Identity>& lensStack,
+                 const Zoomed1& zoomed1,
+                 const std::function<Zoomed2(Zoomed2)>& variator)
+{
+    Zoomed1 z1 = zoomed1;
+    Zoomed2 z2 = lensStack.lens1.getter(z1);
+    return lensStack.lens1.setter(z1, variator(z2));
+}
+
+} // namespace lenses
 
 #endif // LENSES_H

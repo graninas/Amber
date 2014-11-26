@@ -4,9 +4,92 @@
 #include "amber.h"
 #include "ambermechanics.h"
 #include "magic.h"
+#include "lenses.h"
 
 #include "common.h"
 #include "naming.h"
+
+namespace experimental
+{
+
+using namespace lenses;
+
+struct InnerStruct
+{
+    int i;
+};
+
+struct Test
+{
+    InnerStruct inner;
+    std::string s;
+};
+
+const std::function<int(int)> increaseI = [](int i)
+{
+    return ++i;
+};
+
+std::function<std::string(std::string)> replaceString(const std::string& s)
+{
+    return [=](const std::string&)
+    {
+        return s;
+    };
+}
+
+// TODO: create a macro for this.
+Lens<InnerStruct, int> intIL()
+{
+    return lens<InnerStruct, int>
+            ( [](const InnerStruct& inner) { return inner.i; }
+            , [](const InnerStruct& inner, int i) {
+                InnerStruct newInnerStruct = inner;
+                newInnerStruct.i = i;
+                return newInnerStruct;
+            }
+        );
+}
+
+Lens<Test, std::string> stringL()
+{
+    return lens<Test, std::string>
+            ( [](const Test& t) { return t.s; }
+            , [](const Test& t, const std::string& s) {
+                Test newTest = t;
+                newTest.s = s;
+                return newTest;
+            }
+    );
+}
+
+Lens<Test, InnerStruct> innerL()
+{
+    return lens<Test, InnerStruct>
+            ( [](const Test& t) { return t.inner; }
+            , [](const Test& t, const InnerStruct& inner) {
+                Test newTest = t;
+                newTest.inner = inner;
+                return newTest;
+            }
+    );
+}
+
+Test testLens(const Test& test)
+{
+    LensStack<Test, InnerStruct, int> lensStack1
+       = zoom<Test, InnerStruct, int>(innerL(), intIL());
+
+    LensStack<Test, std::string> lensStack2
+       = zoom<Test, std::string>(stringL());
+
+    Test newTest1 = evalLens(lensStack1, test, increaseI);
+    Test newTest2 = evalLens(lensStack2, newTest1, replaceString("bla-bla"));
+
+    return newTest2;
+}
+
+} // namespace experimental
 
 ShadowsView::ShadowsView(QWidget *parent) :
     QMainWindow(parent),
@@ -98,8 +181,8 @@ void ShadowsView::switchAmberTimeTicking(bool ticking)
 
 void ShadowsView::test()
 {
-    amber::experimental::Test t { amber::experimental::InnerStruct { 10 } };
-    amber::experimental::Test newTest = amber::experimental::testLens(t);
+    experimental::Test t { experimental::InnerStruct { 10 } };
+    experimental::Test newTest = experimental::testLens(t);
     Q_ASSERT(newTest.inner.i == 11);
     Q_ASSERT(newTest.s == "bla-bla");
 }
