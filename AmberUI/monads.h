@@ -2,6 +2,7 @@
 #define MONADS_H
 
 #include "maybemonad.h"
+#include "maybeactionstack.h"
 
 namespace monad
 {

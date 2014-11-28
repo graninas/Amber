@@ -1,12 +1,10 @@
 #ifndef LENSES_H
 #define LENSES_H
 
+#include "identity.h"
+
 namespace lenses
 {
-
-struct Identity
-{
-};
 
 template <typename Zoomed1, typename Zoomed2>
 struct Lens

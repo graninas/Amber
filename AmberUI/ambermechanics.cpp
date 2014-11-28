@@ -147,7 +147,8 @@ namespace workers
 {
 
 typedef std::function<MaybeAmber(Amber)> MaybeAmberTask;
-typedef std::function<MaybeAmber(ShadowVariator)> MaybeShadowVariatorToAmber;
+typedef std::function<MaybeAmber(ShadowVariator)> MaybeShadowVariatorToAmberTask;
+typedef std::function<MaybeShadowVariator(Amber)> MaybeAmberToShadowVariatorTask;
 
 const std::function<MaybeShadowVariator(Shadow)> getShadowVariator =
     [](const Shadow& shadow)
@@ -168,7 +169,13 @@ MaybeShadowVariator lookupShadowVariator(const Amber& amber)
     return mb::bind(mbShadow, getShadowVariator);
 }
 
-MaybeShadowVariatorToAmber applyMovingVariator(const Amber& amber, Direction::DirectionType dir)
+const MaybeAmberToShadowVariatorTask lookupShadowVariatorA =
+        [](const Amber& amber)
+{
+    return lookupShadowVariator(amber);
+};
+
+MaybeShadowVariatorToAmberTask applyMovingVariator(const Amber& amber, Direction::DirectionType dir)
 {
     return [&amber, dir](const ShadowVariator& variator)
     {
@@ -187,12 +194,28 @@ MaybeAmberTask safeMovePlayer(Direction::DirectionType dir)
     };
 }
 
+Amber goDirectionBinded(const Amber& amber, Direction::DirectionType dir)
+{
+   MaybeAmber mbAmber = mb::just(amber);
+   mbAmber = mb::bind(mbAmber, safeMovePlayer(dir));
+   mbAmber = mb::bind(mbAmber, safeUpdateNearestPlace);
+   return mb::maybe(mbAmber, amber);
+}
+
+Amber goDirectionStacked(const Amber& amber, Direction::DirectionType dir)
+{
+    mb::MaybeActionStack<Amber, ShadowVariator, Amber, Amber>
+    stack = bind(lookupShadowVariatorA,
+                 applyMovingVariator(amber, dir),
+                 safeUpdateNearestPlace);
+
+    MaybeAmber mbAmber = mb::evalMaybes(mb::just(amber), stack);
+    return mb::maybe(mbAmber, amber);
+}
+
 Amber goDirection(const Amber& amber, Direction::DirectionType dir)
 {
-    MaybeAmber mbAmber = mb::just(amber);
-    mbAmber = mb::bind(mbAmber, safeMovePlayer(dir));
-    mbAmber = mb::bind(mbAmber, safeUpdateNearestPlace);
-    return mb::maybe(mbAmber, amber);
+    return goDirectionStacked(amber, dir);
 }
 
 Amber tickHour(const Amber &amber)

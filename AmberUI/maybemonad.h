@@ -1,6 +1,8 @@
 #ifndef MAYBEMONAD_H
 #define MAYBEMONAD_H
 
+#include "identity.h"
+
 namespace monad
 {
 namespace maybe
