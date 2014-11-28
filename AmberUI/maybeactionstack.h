@@ -88,11 +88,11 @@ template <typename M1> std::function<Maybe<Identity>(M1)> idA()
 
 template <typename M1, typename M2, typename M3, typename M4, typename M5, typename M6>
 MaybeActionStack<M1, M2, M3, M4, M5, M6>
-    bind(const std::function<Maybe<M2>(M1)> action1,
-         const std::function<Maybe<M3>(M2)> action2,
-         const std::function<Maybe<M4>(M3)> action3,
-         const std::function<Maybe<M5>(M4)> action4,
-         const std::function<Maybe<M6>(M5)> action5)
+    bindMany(const std::function<Maybe<M2>(M1)> action1,
+             const std::function<Maybe<M3>(M2)> action2,
+             const std::function<Maybe<M4>(M3)> action3,
+             const std::function<Maybe<M5>(M4)> action4,
+             const std::function<Maybe<M6>(M5)> action5)
 {
     MaybeActionStack<M1, M2, M3, M4, M5, M6> stack;
     stack.action1 = action1;
@@ -105,10 +105,10 @@ MaybeActionStack<M1, M2, M3, M4, M5, M6>
 
 template <typename M1, typename M2, typename M3, typename M4, typename M5>
 MaybeActionStack<M1, M2, M3, M4, M5, Identity>
-    bind(const std::function<Maybe<M2>(M1)> action1,
-         const std::function<Maybe<M3>(M2)> action2,
-         const std::function<Maybe<M4>(M3)> action3,
-         const std::function<Maybe<M5>(M4)> action4)
+    bindMany(const std::function<Maybe<M2>(M1)> action1,
+             const std::function<Maybe<M3>(M2)> action2,
+             const std::function<Maybe<M4>(M3)> action3,
+             const std::function<Maybe<M5>(M4)> action4)
 {
     MaybeActionStack<M1, M2, M3, M4, M5, Identity> stack;
     stack.action1 = action1;
@@ -121,9 +121,9 @@ MaybeActionStack<M1, M2, M3, M4, M5, Identity>
 
 template <typename M1, typename M2, typename M3, typename M4>
 MaybeActionStack<M1, M2, M3, M4, Identity, Identity>
-    bind(const std::function<Maybe<M2>(M1)> action1,
-         const std::function<Maybe<M3>(M2)> action2,
-         const std::function<Maybe<M4>(M3)> action3)
+    bindMany(const std::function<Maybe<M2>(M1)> action1,
+             const std::function<Maybe<M3>(M2)> action2,
+             const std::function<Maybe<M4>(M3)> action3)
 {
     MaybeActionStack<M1, M2, M3, M4, Identity, Identity> stack;
     stack.action1 = action1;
@@ -136,8 +136,8 @@ MaybeActionStack<M1, M2, M3, M4, Identity, Identity>
 
 template <typename M1, typename M2, typename M3>
 MaybeActionStack<M1, M2, M3, Identity, Identity, Identity>
-    bind(const std::function<Maybe<M2>(M1)> action1,
-         const std::function<Maybe<M3>(M2)> action2)
+    bindMany(const std::function<Maybe<M2>(M1)> action1,
+             const std::function<Maybe<M3>(M2)> action2)
 {
     MaybeActionStack<M1, M2, M3, Identity, Identity, Identity> stack;
     stack.action1 = action1;

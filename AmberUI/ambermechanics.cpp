@@ -205,9 +205,9 @@ Amber goDirectionBinded(const Amber& amber, Direction::DirectionType dir)
 Amber goDirectionStacked(const Amber& amber, Direction::DirectionType dir)
 {
     mb::MaybeActionStack<Amber, ShadowVariator, Amber, Amber>
-    stack = bind(lookupShadowVariatorA,
-                 applyMovingVariator(amber, dir),
-                 safeUpdateNearestPlace);
+    stack = bindMany(lookupShadowVariatorA,
+                     applyMovingVariator(amber, dir),
+                     safeUpdateNearestPlace);
 
     MaybeAmber mbAmber = mb::evalMaybes(mb::just(amber), stack);
     return mb::maybe(mbAmber, amber);
