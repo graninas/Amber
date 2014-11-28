@@ -8,11 +8,53 @@
 namespace amber
 {
 
+namespace mb = monad::maybe;
+
 namespace // anonymous
 {
 
 // Auxiliary types.
 typedef std::pair<Shadow, double> ShadowAndDistance;
+
+
+const std::function<MaybeShadow(Area, ShadowName)> lookupShadow =
+        [](const Area& area, const ShadowName& shadow)
+{
+    return utils::lookupMap(shadow, area.shadows);
+};
+
+MaybeArea lookupNearestArea(const Amber& amber)
+{
+    return utils::lookupMap(amber.nearestPlace.area, amber.areas);
+}
+
+MaybeShadow lookupNearestShadow(const Amber& amber)
+{
+    MaybeArea mbArea = lookupNearestArea(amber);
+    // Presentation tip: poor template types deducing for function bind(). It is requres an explicit types.
+    return monad::maybe::bind<Area, Shadow>(mbArea, [&amber](const Area& area)
+    {
+        return lookupShadow(area, amber.nearestPlace.shadow);
+    });
+}
+
+monad::MaybeDouble maybeShadowDistance(const ShadowStructure& shadowStructure1, const MaybeShadow& mbShadow)
+{
+    return monad::maybe::bind<Shadow, double>(mbShadow, [&shadowStructure1](const Shadow& shadow2)
+    {
+        return monad::maybe::wrap(shadowDistance(shadowStructure1, shadow2.structure));
+    });
+}
+
+monad::MaybeDouble maybeShadowStructureDistance(const ShadowStructure& shadowStructure1,
+                                                const MaybeShadowStructure& mbShadowStructure2)
+{
+    return monad::maybe::bind<ShadowStructure, double>(mbShadowStructure2,
+        [&shadowStructure1](const ShadowStructure& shadowStructure2)
+        {
+            return monad::maybe::wrap(shadowDistance(shadowStructure1, shadowStructure2));
+        });
+}
 
 Amber updatePlayerShadowStructure(const Amber& amber, Direction::DirectionType dir)
 {
@@ -104,9 +146,53 @@ ShadowVariator composeInfluenceVariator(const ShadowStructure& fromStructure, co
 namespace workers
 {
 
+typedef std::function<MaybeAmber(Amber)> MaybeAmberTask;
+typedef std::function<MaybeAmber(ShadowVariator)> MaybeShadowVariatorToAmber;
+
+const std::function<MaybeShadowVariator(Shadow)> getShadowVariator =
+    [](const Shadow& shadow)
+    {
+        return mb::just(shadow.variator);
+    };
+
+const MaybeAmberTask safeUpdateNearestPlace =
+    [](const Amber& amber)
+    {
+        // TODO: make it safe, but not now (presentation work is needed).
+        return mb::just(updateNearestPlace(amber));
+    };
+
+MaybeShadowVariator lookupShadowVariator(const Amber& amber)
+{
+    MaybeShadow mbShadow = lookupNearestShadow(amber);
+    return mb::bind(mbShadow, getShadowVariator);
+}
+
+MaybeShadowVariatorToAmber applyMovingVariator(const Amber& amber, Direction::DirectionType dir)
+{
+    return [&amber, dir](const ShadowVariator& variator)
+    {
+        Amber newAmber = amber;
+        newAmber.playerShadowStructure = variator(amber.playerShadowStructure, dir);
+        return mb::just(newAmber);
+    };
+}
+
+MaybeAmberTask safeMovePlayer(Direction::DirectionType dir)
+{
+    return [=](const Amber& amber)
+    {
+        MaybeShadowVariator mbVariator = lookupShadowVariator(amber);
+        return mb::bind(mbVariator, applyMovingVariator(amber, dir));
+    };
+}
+
 Amber goDirection(const Amber& amber, Direction::DirectionType dir)
 {
-    return updateNearestPlace(updatePlayerShadowStructure(amber, dir));
+    MaybeAmber mbAmber = mb::just(amber);
+    mbAmber = mb::bind(mbAmber, safeMovePlayer(dir));
+    mbAmber = mb::bind(mbAmber, safeUpdateNearestPlace);
+    return mb::maybe(mbAmber, amber);
 }
 
 Amber tickHour(const Amber &amber)
@@ -114,45 +200,6 @@ Amber tickHour(const Amber &amber)
     Amber newAmber = amber;
     newAmber.hoursElapsed++;
     return newAmber;
-}
-
-const std::function<MaybeShadow(Area, ShadowName)> lookupShadow =
-        [](const Area& area, const ShadowName& shadow)
-{
-    return utils::lookupMap(shadow, area.shadows);
-};
-
-MaybeArea lookupNearestArea(const Amber& amber)
-{
-    return utils::lookupMap(amber.nearestPlace.area, amber.areas);
-}
-
-MaybeShadow lookupNearestShadow(const Amber& amber)
-{
-    MaybeArea mbArea = lookupNearestArea(amber);
-    // Presentation tip: poor template types deducing for function bind(). It is requres an explicit types.
-    return monad::maybe::bind<Area, Shadow>(mbArea, [&amber](const Area& area)
-    {
-        return lookupShadow(area, amber.nearestPlace.shadow);
-    });
-}
-
-monad::MaybeDouble maybeShadowDistance(const ShadowStructure& shadowStructure1, const MaybeShadow& mbShadow)
-{
-    return monad::maybe::bind<Shadow, double>(mbShadow, [&shadowStructure1](const Shadow& shadow2)
-    {
-        return monad::maybe::wrap(shadowDistance(shadowStructure1, shadow2.structure));
-    });
-}
-
-monad::MaybeDouble maybeShadowStructureDistance(const ShadowStructure& shadowStructure1,
-                                                const MaybeShadowStructure& mbShadowStructure2)
-{
-    return monad::maybe::bind<ShadowStructure, double>(mbShadowStructure2,
-        [&shadowStructure1](const ShadowStructure& shadowStructure2)
-        {
-            return monad::maybe::wrap(shadowDistance(shadowStructure1, shadowStructure2));
-        });
 }
 
 MaybeAmber stabilizeShadow(const Amber& amber)

@@ -1,7 +1,6 @@
 #ifndef FUNCTIONALUTILS_H
 #define FUNCTIONALUTILS_H
 
-#include "monadicvalue.h"
 #include "maybemonad.h"
 #include "common.h"
 
@@ -10,7 +9,7 @@ namespace utils
 
 // Lookup of maps
 template <typename KeyType, typename MappedType>
-    monad::MonadicValue<monad::maybe::Maybe<MappedType>>
+    monad::maybe::Maybe<MappedType>
     lookupMap(const KeyType& key, const std::map<KeyType, MappedType>& dataMap)
 {
     if (dataMap.find(key) != dataMap.end())

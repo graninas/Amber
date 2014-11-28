@@ -36,7 +36,6 @@ HEADERS  += shadowsview.h \
     ambermechanics.h \
     monads.h \
     maybemonad.h \
-    monadicvalue.h \
     functionalutils.h \
     qambersurroundingstablemodel.h \
     amberstructure.h \

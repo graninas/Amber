@@ -1,7 +1,6 @@
 #ifndef MONADS_H
 #define MONADS_H
 
-#include "monadicvalue.h"
 #include "maybemonad.h"
 
 namespace monad
@@ -9,9 +8,9 @@ namespace monad
 
 // Maybe monad definitions
 
-typedef MonadicValue<maybe::Maybe<bool>> MaybeBool;
-typedef MonadicValue<maybe::Maybe<int>> MaybeInt;
-typedef MonadicValue<maybe::Maybe<double>> MaybeDouble;
+typedef maybe::Maybe<bool>   MaybeBool;
+typedef maybe::Maybe<int>    MaybeInt;
+typedef maybe::Maybe<double> MaybeDouble;
 
 }
 

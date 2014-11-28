@@ -53,4 +53,13 @@ Artifact onFail(const AmberTask& task, const Artifact& artifact)
     return artifact;
 }
 
+Artifact times(uint n, const amber::AmberTask& task, const Artifact& artifact)
+{
+    Artifact newArtifact = artifact;
+    for (uint i = 0; i < n; ++i) {
+        newArtifact = anyway (task, newArtifact);
+    }
+    return newArtifact;
 }
+
+} // namespace magic

@@ -89,6 +89,8 @@ Test testLens(const Test& test)
     return newTest2;
 }
 
+
+
 } // namespace experimental
 
 ShadowsView::ShadowsView(QWidget *parent) :
@@ -156,16 +158,7 @@ void ShadowsView::goSouthWest()
 
 void ShadowsView::tickOneAmberHour()
 {
-    amber::AmberTask combinedTask = [](const amber::Amber& amber)
-    {
-        auto action1Res = magic::anyway(amber::inflateShadowStorms, magic::wrap(amber));
-        auto action2Res = magic::anyway(amber::affectShadowStorms, action1Res);
-        auto action3Res = magic::onFail(amber::shadowStabilization, action2Res);
-        auto action4Res = magic::anyway(amber::tickWorldTime, action3Res);
-        return action4Res.amber;
-    };
-
-    changeAmber(combinedTask);
+    changeAmber(amber::tickOneAmberHour);
 }
 
 void ShadowsView::switchAmberTimeTicking(bool ticking)
@@ -181,22 +174,16 @@ void ShadowsView::switchAmberTimeTicking(bool ticking)
 
 void ShadowsView::test()
 {
-    experimental::Test t { experimental::InnerStruct { 10 } };
+    experimental::Test t { experimental::InnerStruct { 10 }, "" };
     experimental::Test newTest = experimental::testLens(t);
     Q_ASSERT(newTest.inner.i == 11);
     Q_ASSERT(newTest.s == "bla-bla");
+
+    changeAmber(amber::sleep8hours);
 }
 
 void ShadowsView::evalAmberTask(const amber::AmberTask& task)
 {
-    std::list<amber::AmberTask> tasks = {
-        task,
-        amber::tickWorldTime
-    };
-
-    evaluateTasks(tasks);
-
-/*
     // TODO: do something like frp.
     // Presentation tip: combinatorial pattern with a little combinatorial eDSL.
     amber::AmberTask combinedTask = [&task](const amber::Amber& amber)
@@ -207,7 +194,6 @@ void ShadowsView::evalAmberTask(const amber::AmberTask& task)
     };
 
     changeAmber(combinedTask);
-    */
 }
 
 void ShadowsView::evaluateTasks(const std::list<amber::AmberTask>& tasks)

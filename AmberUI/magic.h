@@ -87,6 +87,7 @@ amber::Amber unwrap(const Artifact& amber);
 Artifact eval(const amber::AmberTask& task, const Artifact& artifact);
 Artifact anyway(const amber::AmberTask& task, const Artifact& artifact);
 Artifact onFail(const amber::AmberTask& task, const Artifact& artifact);
+Artifact times(uint n, const amber::AmberTask& task, const Artifact& artifact);
 
 }
 
