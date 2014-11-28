@@ -163,16 +163,16 @@ const MaybeAmberTask safeUpdateNearestPlace =
         return mb::just(updateNearestPlace(amber));
     };
 
-MaybeShadowVariator lookupShadowVariator(const Amber& amber)
+MaybeShadowVariator lookupShadowStructureVariator(const Amber& amber)
 {
     MaybeShadow mbShadow = lookupNearestShadow(amber);
     return mb::bind(mbShadow, getShadowVariator);
 }
 
-const MaybeAmberToShadowVariatorTask lookupShadowVariatorA =
+const MaybeAmberToShadowVariatorTask lookupShadowVariator =
         [](const Amber& amber)
 {
-    return lookupShadowVariator(amber);
+    return lookupShadowStructureVariator(amber);
 };
 
 MaybeShadowVariatorToAmberTask applyMovingVariator(const Amber& amber, Direction::DirectionType dir)
@@ -189,7 +189,7 @@ MaybeAmberTask safeMovePlayer(Direction::DirectionType dir)
 {
     return [=](const Amber& amber)
     {
-        MaybeShadowVariator mbVariator = lookupShadowVariator(amber);
+        MaybeShadowVariator mbVariator = lookupShadowStructureVariator(amber);
         return mb::bind(mbVariator, applyMovingVariator(amber, dir));
     };
 }
@@ -202,10 +202,34 @@ Amber goDirectionBinded(const Amber& amber, Direction::DirectionType dir)
    return mb::maybe(mbAmber, amber);
 }
 
+// Presentation tip: too easy to mistake here. For example, miss mbAmber3:
+// auto m4 = mb::bind(mbAmber4, safeUpdateNearestPlace); // Recursion!
+// Use stack instead.
+Amber goDirectionBinded1(const Amber& amber, Direction::DirectionType dir)
+{
+   MaybeAmber mbAmber1            = mb::just(amber);
+   MaybeShadowVariator mbVariator = mb::bind(mbAmber1,   lookupShadowVariator);
+   MaybeAmber mbAmber2            = mb::bind(mbVariator, applyMovingVariator(amber, dir));
+   MaybeAmber mbAmber3            = mb::bind(mbAmber2,   safeUpdateNearestPlace);
+   return mb::maybe(mbAmber3, amber);
+}
+
+// Presentation tip: too easy to mistake here. For example, miss m3:
+// auto m4 = mb::bind(m4, safeUpdateNearestPlace); // Recursion!
+// Use stack instead.
+Amber goDirectionBinded2(const Amber& amber, Direction::DirectionType dir)
+{
+   auto m1 = mb::just(amber);
+   auto m2 = mb::bind(m1, lookupShadowVariator);
+   auto m3 = mb::bind(m2, applyMovingVariator(amber, dir));
+   auto m4 = mb::bind(m3, safeUpdateNearestPlace);
+   return mb::maybe(m4, amber);
+}
+
 Amber goDirectionStacked(const Amber& amber, Direction::DirectionType dir)
 {
     mb::MaybeActionStack<Amber, ShadowVariator, Amber, Amber>
-    stack = bindMany(lookupShadowVariatorA,
+    stack = bindMany(lookupShadowVariator,
                      applyMovingVariator(amber, dir),
                      safeUpdateNearestPlace);
 
@@ -215,7 +239,7 @@ Amber goDirectionStacked(const Amber& amber, Direction::DirectionType dir)
 
 Amber goDirection(const Amber& amber, Direction::DirectionType dir)
 {
-    return goDirectionStacked(amber, dir);
+    return goDirectionBinded2(amber, dir);
 }
 
 Amber tickHour(const Amber &amber)

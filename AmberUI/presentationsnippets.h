@@ -25,11 +25,26 @@ public:
 
 typedef std::list<AmberTask> AmberTaskList;
 
+typedef monad::maybe::Maybe<Amber> MaybeAmber;
+typedef monad::maybe::Maybe<Area> MaybeArea;
+typedef monad::maybe::Maybe<Shadow> MaybeShadow;
+typedef monad::maybe::Maybe<ShadowStructure> MaybeShadowStructure;
+typedef monad::maybe::Maybe<ShadowVariator> MaybeShadowVariator;
+typedef monad::maybe::Maybe<ShadowStorm> MaybeShadowStorm;
+typedef monad::maybe::Maybe<ShadowStorms> MaybeShadowStorms;
+typedef monad::maybe::Maybe<TimedShadowVariator> MaybeTimedShadowVariator;
+
+struct Test{
+    void changeElementTest();
+};
+
 }
 
 using namespace aux;
 using namespace amber;
 using namespace element;
+using namespace monad;
+using namespace maybe;
 
 
 // Snippets
@@ -280,6 +295,108 @@ SafeAmber moveNorth(const amber::Amber& amber) {
     safeAmber = bind(safeAmber, safeMovePlayerNorth);
     safeAmber = bind(safeAmber, safeUpdateNearestPlace);
     return safeAmber;
+}
+
+// Maybe monad
+
+// Monadic functions
+
+const std::function<Maybe<ShadowVariator>(Amber)>
+   lookupVariator = [](const Amber& amber) {
+   return ...; // Retrieve the nearest shadow's variator
+};
+
+std::function<MaybeAmber(ShadowVariator)>
+    applyVariator(const Amber& amber,
+                  Direction::DirectionType dir) {
+    return [&amber, dir](const ShadowVariator& variator) {
+        // apply variator to passed amber, using dir
+    };
+}
+
+
+// Using monad
+
+MaybeAmber goDirectionBinded1(const Amber& amber,
+                              Direction::DirectionType dir) {
+   MaybeAmber mbAmber1            = just(amber);
+   MaybeShadowVariator mbVariator = bind(mbAmber1,   lookupVariator);
+   MaybeAmber mbAmber2            = bind(mbVariator, applyVariator(amber, dir));
+   MaybeAmber mbAmber3            = bind(mbAmber2,   updateNearestPlace);
+   return mbAmber3;
+}
+
+MaybeAmber goDirectionBinded2(const Amber& amber,
+                              Direction::DirectionType dir)
+{
+   auto m1 = mb::just(amber);
+   auto m2 = mb::bind(m1, lookupVariator);
+   auto m3 = mb::bind(m2, applyVariator(amber, dir));
+   auto m4 = mb::bind(m3, updateNearestPlace);
+   return m4;
+}
+
+// Bind many
+
+MaybeAmber goDirectionStacked(const Amber& amber,
+                         Direction::DirectionType dir) {
+    MaybeActionStack<Amber, ShadowVariator, Amber, Amber>
+        stack = bindMany(lookupShadowVariator,
+                         applyMovingVariator(amber, dir),
+                         safeUpdateNearestPlace);
+
+    MaybeAmber mbAmber = evalMaybes(just(amber), stack);
+    return mbAmber;
+}
+
+// MaybeActionStack implementation
+
+struct Identity {}; // Helper, can be of any type
+
+template <typename M1, typename M2,
+          typename M3 = Identity, typename M4 = Identity>
+struct MaybeActionStack {
+   std::function<Maybe<M2>(M1)> action1;
+   std::function<Maybe<M3>(M2)> action2;
+   std::function<Maybe<M4>(M3)> action3;
+};
+
+template <typename M1, typename M2, typename M3, typename M4>
+ MaybeActionStack<M1, M2, M3, M4>
+    bindMany(const std::function<Maybe<M2>(M1)> action1,
+             const std::function<Maybe<M3>(M2)> action2,
+             const std::function<Maybe<M4>(M3)> action3)
+{
+    MaybeActionStack<M1, M2, M3, M4> stack;
+    stack.action1 = action1;
+    stack.action2 = action2;
+    stack.action3 = action3;
+    return stack;
+}
+
+template <typename M1, typename M2, typename M3, typename M4>
+Maybe<M4> evalMaybes(const Maybe<M1>& m1,
+                     const MaybeActionStack<M1, M2, M3, M4>& stack)
+{
+    Maybe<M2> m2 = bind<M1, M2>(m1, stack.action1);
+    Maybe<M3> m3 = bind<M2, M3>(m2, stack.action2);
+    Maybe<M4> m4 = bind<M3, M4>(m3, stack.action3);
+    return m4;
+}
+
+// Testing
+
+void Testing::changeElementTest() {
+    amber::ShadowStructure structure =
+        { { amber::Element::Ground, 90 }
+        , { amber::Element::Water, 10 } };
+
+    amber::ShadowStructure expected =
+        { { amber::Element::Ground, 100 }
+        , { amber::Element::Water, 10 } };
+
+    auto newStructure = changeElement(structure, amber::Element::Ground, 10);
+    ASSERT_EQ(expected, newStructure);
 }
 
 } // presentationsnippets

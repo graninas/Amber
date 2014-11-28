@@ -35,7 +35,7 @@ public slots:
 
     void switchAmberTimeTicking(bool ticking);
 
-    void test();
+    void test();    
 
 private:
     Ui::ShadowsView *ui;

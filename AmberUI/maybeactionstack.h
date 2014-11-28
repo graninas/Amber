@@ -48,11 +48,6 @@ Maybe<M5> evalMaybes(const Maybe<M1>& m1, const MaybeActionStack<M1, M2, M3, M4,
     return m5;
 }
 
-/*
-template <typename Input, typename Output> Maybe<Output>
-    bind(const Maybe<Input>& input,
-         const std::function<Maybe<Output>(Input)>& action)
-*/
 template <typename M1, typename M2, typename M3, typename M4>
 Maybe<M4> evalMaybes(const Maybe<M1>& m1, const MaybeActionStack<M1, M2, M3, M4, Identity, Identity>& stack)
 {
