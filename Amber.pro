@@ -2,4 +2,8 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     AmberUI \
-    Shadows
+    lens \
+    amber \
+    amber/amberTest \
+    ambercontrol \
+    monad

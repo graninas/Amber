@@ -384,6 +384,70 @@ Maybe<M4> evalMaybes(const Maybe<M1>& m1,
     return m4;
 }
 
+// Lenses
+
+struct Person {
+    int age;
+    std::string firstName;
+    std::string lastName;
+};
+
+struct Passport {
+    Person person;
+    std::string number;
+};
+
+struct DriverLicense
+{
+    Person person;
+    std::string number;
+};
+
+struct PersonalDocuments {
+    Passport passport;
+    DriverLicense driverLicense;
+};
+
+
+struct C {
+    int intC;
+    std::string stringC;
+};
+
+struct B {
+    C c;
+};
+
+struct A {
+    B b;
+};
+
+// The Law of Demeter violation!
+void Func()
+{
+    A a;
+    a.b.c.intC = 20;
+    a.b.c.stringC = "Hello, World!";
+
+}
+
+A func(const A& oldA)
+{
+
+    C newC = oldA.b.c;
+    newC.intC = 20;
+    newC.stringC = "Hello, world!";
+
+    B newB = oldA.b;
+    newB.c = newC;
+
+    A newA = oldA;
+    newA.b = newB;
+
+    return newA;
+}
+
+
 // Testing
 
 void Testing::changeElementTest() {

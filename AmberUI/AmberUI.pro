@@ -15,35 +15,15 @@ CONFIG += c++11
 
 SOURCES += main.cpp\
         shadowsview.cpp \
-    amber.cpp \
-    magic.cpp \
-    shadowmechanics.cpp \
-    amberpolearea.cpp \
-    ambermechanics.cpp \
-    qambersurroundingstablemodel.cpp \
-    naming.cpp \
-    storms.cpp \
-    strings.cpp
+    qambersurroundingstablemodel.cpp
 
-HEADERS  += shadowsview.h \
-    amber.h \
-    magic.h \
+HEADERS  += \
     common.h \
-    knownareas.h \
-    amberpolearea.h \
-    naming.h \
-    shadowmechanics.h \
-    ambermechanics.h \
     monads.h \
     maybemonad.h \
     functionalutils.h \
     qambersurroundingstablemodel.h \
-    amberstructure.h \
-    storms.h \
-    lenses.h \
-    strings.h \
     presentationsnippets.h \
-    identity.h \
     maybeactionstack.h
 
 FORMS    += shadowsview.ui

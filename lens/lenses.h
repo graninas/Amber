@@ -3,6 +3,13 @@
 
 #include "identity.h"
 
+
+#define GETTER(Type, field) [](const Type& a) { return a.field; }
+#define SETTER(Type1, Type2, field) [](const Type1& a, const Type2& newB) \
+     { Type1 newA = a; newA.field = newB; return newA; }
+
+
+
 namespace lenses
 {
 

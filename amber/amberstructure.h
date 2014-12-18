@@ -1,7 +1,12 @@
 #ifndef AMBERSTRUCTURE_H
 #define AMBERSTRUCTURE_H
 
-#include "common.h"
+#include <string>
+#include <map>
+#include <list>
+
+#include <functional>
+#include <algorithm>
 
 namespace amber
 {
@@ -94,6 +99,12 @@ struct Amber
     ShadowStructure playerShadowStructure;
 
     Log log;
+};
+
+struct Amber2
+{
+    NearestPlace nearestPlace;
+    ShadowStructure playerPos;
 };
 
 } // namespace amber
