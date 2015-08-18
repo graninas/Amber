@@ -1,10 +1,12 @@
 #ifndef LENS_H
 #define LENS_H
 
+#include <functional>
+
 namespace experimental
 {
 
-using namespace lenses;
+using namespace lens;
 
 struct InnerStruct
 {

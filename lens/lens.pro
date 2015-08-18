@@ -9,13 +9,16 @@ QT       -= core gui
 TARGET = lens
 TEMPLATE = lib
 CONFIG += staticlib
+CONFIG += c++14
 
-SOURCES += lens.cpp
+SOURCES +=
 
 HEADERS += \
     example.h \
+    identity.h \
     lenses.h \
-    identity.h
+    autolens.h \
+    combinators.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

@@ -1,0 +1,9 @@
+Materials
+
+
+1. Proxy trick to obtain infix `to` operator.
+2. Lens laws. Try also:
+    L1 to L2 to IdL
+
+Additional questions.
+a. Generic lambda / function<> problem.

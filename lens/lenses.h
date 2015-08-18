@@ -3,12 +3,7 @@
 
 #include "identity.h"
 
-
-#define GETTER(Type, field) [](const Type& a) { return a.field; }
-#define SETTER(Type1, Type2, field) [](const Type1& a, const Type2& newB) \
-     { Type1 newA = a; newA.field = newB; return newA; }
-
-
+#include <functional>
 
 namespace lenses
 {
@@ -117,6 +112,10 @@ Zoomed1 evalLens(const LensStack<Zoomed1, Zoomed2, Identity, Identity>& lensStac
     Zoomed2 z2 = lensStack.lens1.getter(z1);
     return lensStack.lens1.setter(z1, variator(z2));
 }
+
+
+
+
 
 } // namespace lenses
 

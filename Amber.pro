@@ -1,9 +1,9 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    AmberUI \
     lens \
-    amber \
-    amber/amberTest \
-    ambercontrol \
-    monad
+#    amber \
+#    amber/amberTest \
+#    ambercontrol \
+    monad \
+    lens/lensTest
