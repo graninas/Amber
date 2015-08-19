@@ -27,7 +27,10 @@ public:
 private Q_SLOTS:
 
     void toCombinatorTest();
-    void toVector1CombinatorTest();
+    void toVectorCombinatorTest();
+    void toListCombinatorTest();
+    void overCombinatorTest();
+    void setCombinatorTest();
 
     void setValueImplicitLensTest();
     void modifyValueOutlineLensTest();
@@ -70,7 +73,7 @@ void LensTest::toCombinatorTest()
     QVERIFY(newPerson.address.house == 100);
 }
 
-void LensTest::toVector1CombinatorTest()
+void LensTest::toVectorCombinatorTest()
 {
     Car car1 = {"x555xx", "Ford Focus", 0};
     Car car2 = {"y555yy", "Toyota Corolla", 10000};
@@ -82,11 +85,49 @@ void LensTest::toVector1CombinatorTest()
 
     auto zoomer = zoom_Fold_(fC, modelL());
     //FoldStack<std::vector<Car>, Car, std::string> zoomer2 = zoomer;
-    auto result = toVectorOf(zoomer, cars);
+    std::vector<std::string> result = toVectorOf(zoomer, cars);
 
     QVERIFY(result.size() == 2);
     QVERIFY(result[0] == "Ford Focus");
     QVERIFY(result[1] == "Toyota Corolla");
+}
+
+void LensTest::toListCombinatorTest()
+{
+    Car car1 = {"x555xx", "Ford Focus", 0};
+    Car car2 = {"y555yy", "Toyota Corolla", 10000};
+
+    std::vector<Car> cars;
+    cars = {car1, car2};
+
+    auto fC = foldedC<Car>();
+
+    auto zoomer = zoom_Fold_(fC, modelL());
+    std::list<std::string> result = toListOf(zoomer, cars);
+
+    QVERIFY(result.size() == 2);
+    QVERIFY(result.front() == "Ford Focus");
+    QVERIFY(result.back() == "Toyota Corolla");
+}
+
+void LensTest::overCombinatorTest()
+{
+    auto zoomer = zoom(addressL(), houseL());
+
+    std::function<int(int)> modifier = [](int old) { return old + 6; };
+
+    Person newPerson = over(zoomer, getPerson(), modifier);
+
+    QVERIFY(newPerson.address.house == 26);
+}
+
+void LensTest::setCombinatorTest()
+{
+    auto zoomer = zoom(addressL(), houseL());
+
+    Person newPerson = set(zoomer, getPerson(), 100);
+
+    QVERIFY(newPerson.address.house == 100);
 }
 
 void LensTest::setValueImplicitLensTest()

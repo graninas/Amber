@@ -87,31 +87,6 @@ template <typename Zoomed1> bool isFocus(const Lens<Zoomed1, Identity>& l)
     return true;
 }
 
-template <typename Zoomed1,
-          typename Zoomed2,
-          typename Zoomed3>
-Zoomed1 evalLens(const LensStack<Zoomed1, Zoomed2, Zoomed3, Identity>& lensStack,
-                 const Zoomed1& zoomed1,
-                 const std::function<Zoomed3(Zoomed3)>& variator)
-{
-    Zoomed1 z1 = zoomed1;
-    Zoomed2 z2 = lensStack.lens1.getter(z1);
-    Zoomed3 z3 = lensStack.lens2.getter(z2);
-    z2 = lensStack.lens2.setter(z2, variator(z3));
-    z1 = lensStack.lens1.setter(z1, z2);
-    return z1;
-}
-
-template <typename Zoomed1,
-          typename Zoomed2>
-Zoomed1 evalLens(const LensStack<Zoomed1, Zoomed2, Identity, Identity>& lensStack,
-                 const Zoomed1& zoomed1,
-                 const std::function<Zoomed2(Zoomed2)>& variator)
-{
-    Zoomed1 z1 = zoomed1;
-    Zoomed2 z2 = lensStack.lens1.getter(z1);
-    return lensStack.lens1.setter(z1, variator(z2));
-}
 
 
 
