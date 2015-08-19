@@ -14,11 +14,13 @@ CONFIG += c++14
 SOURCES +=
 
 HEADERS += \
-    example.h \
     identity.h \
     lenses.h \
     autolens.h \
-    combinators.h
+    combinators.h \
+    fold.h \
+    setter.h \
+    getter.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

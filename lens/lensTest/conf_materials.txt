@@ -4,6 +4,14 @@ Materials
 1. Proxy trick to obtain infix `to` operator.
 2. Lens laws. Try also:
     L1 to L2 to IdL
+3. template template
 
 Additional questions.
 a. Generic lambda / function<> problem.
+
+
+TODO
+- Associative `to` combinator.
+- Replace T parameters by const T& parameters.
+- Fold: Remove explicit containers `vector` etc.
+- Generalize Fold & Lens.

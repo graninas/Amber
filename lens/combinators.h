@@ -14,40 +14,6 @@ namespace lenses
 namespace // anonymous
 {
 
-} // namespace anonymous
-
-/*
-struct InStruct_ {} inStruct;
-
-template<typename A, typename B, typename C>
-struct InStructProxy
-{
-    Lens<A, B> l;
-    Lens<B, C> r;
-
-    InStructProxy(const Lens<A,B>& lhs)
-        : l(lhs)
-    {
-    }
-};
-
-template <typename A, typename B, typename C>
-InStructProxy<A, B, C>& operator+(const Lens<A, B>& l,
-                                  const InStructProxy<A, B, C>& proxy)
-{
-    proxy.l = l;
-    return proxy;
-}
-
-template <typename A, typename B, typename C> InStructProxy<A, B, C>&
-    operator+(const InStructProxy<A,B,C>& proxy,
-              const Lens<B, C>& r)
-{
-    proxy.r = r;
-    return proxy;
-}
-*/
-
 class ToProxy
 {
 public:
@@ -110,6 +76,7 @@ ToLProxy<A, B> mkLProxy(const Lens<A, B>& l)
     return ToLProxy<A, B>(l);
 }
 
+} // namespace anonymous
 
 
 

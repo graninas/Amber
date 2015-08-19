@@ -3,14 +3,10 @@
 
 #include "common.h"
 #include "address.h"
-
-#include "../lenses.h"
-#include "../autolens.h"
+#include "car.h"
 
 namespace sample
 {
-
-using namespace lenses;
 
 struct Person
 {
@@ -18,14 +14,9 @@ struct Person
     std::string surname;
     int age;
     Address address;
+
+    std::vector<Car> cars;
 };
-
-
-
-MK_LENS(Person, std::string, name)
-MK_LENS(Person, std::string, surname)
-MK_LENS(Person, int, age)
-MK_LENS(Person, Address, address)
 
 } // namespace sample
 

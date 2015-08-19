@@ -2,11 +2,15 @@
 #include <QtTest>
 
 #include "../identity.h"
+#include "../lenses.h"
+#include "../fold.h"
 #include "../combinators.h"
 
 #include "common.h"
 #include "address.h"
 #include "person.h"
+
+#include "struct_lenses.h"
 
 
 using namespace sample;
@@ -22,7 +26,8 @@ public:
 
 private Q_SLOTS:
 
-    void toTest();
+    void toCombinatorTest();
+    void toVector1CombinatorTest();
 
     void setValueImplicitLensTest();
     void modifyValueOutlineLensTest();
@@ -47,12 +52,15 @@ Person LensTest::getPerson() const
     person.age = 29;
     person.address = address;
 
+    Car car1 = {"x555xx", "Ford Focus", 0};
+    Car car2 = {"y555yy", "Toyota Corolla", 10000};
+
+    person.cars = {car1, car2};
+
     return person;
 }
 
-
-
-void LensTest::toTest()
+void LensTest::toCombinatorTest()
 {
     auto prx = addressL() to houseL();
 
@@ -60,6 +68,25 @@ void LensTest::toTest()
     Person newPerson = evalLens(prx(), getPerson(), set(100));
 
     QVERIFY(newPerson.address.house == 100);
+}
+
+void LensTest::toVector1CombinatorTest()
+{
+    Car car1 = {"x555xx", "Ford Focus", 0};
+    Car car2 = {"y555yy", "Toyota Corolla", 10000};
+
+    std::vector<Car> cars;
+    cars = {car1, car2};
+
+    auto fC = foldedC<Car>();
+
+    auto zoomer = zoom_Fold_(fC, modelL());
+    //FoldStack<std::vector<Car>, Car, std::string> zoomer2 = zoomer;
+    auto result = toVectorOf(zoomer, cars);
+
+    QVERIFY(result.size() == 2);
+    QVERIFY(result[0] == "Ford Focus");
+    QVERIFY(result[1] == "Toyota Corolla");
 }
 
 void LensTest::setValueImplicitLensTest()

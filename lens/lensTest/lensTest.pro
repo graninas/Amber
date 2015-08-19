@@ -23,7 +23,9 @@ DEFINES += SRCDIR=\\\"$$PWD/\\\"
 HEADERS += \
     person.h \
     address.h \
-    common.h
+    common.h \
+    struct_lenses.h \
+    car.h
 
 OTHER_FILES += \
     conf_materials.txt
