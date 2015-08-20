@@ -30,10 +30,6 @@ public:
 
 private Q_SLOTS:
 
-
-    void genSetCombinatorTest();
-
-
     void toCombinatorTest();
     void toVectorCombinatorTest();
     void toListCombinatorTest();
@@ -43,6 +39,9 @@ private Q_SLOTS:
     void setValueImplicitLensTest();
     void modifyValueOutlineLensTest();
     void modifyValueInlineLensTest();
+
+    void bindCombinatorTest();
+    void genericStackCombinatorTest();
 };
 
 LensTest::LensTest()
@@ -82,33 +81,24 @@ Account LensTest::getAccount() const
     return account;
 }
 
-void LensTest::genSetCombinatorTest()
+void LensTest::bindCombinatorTest()
 {
-    auto zoomer1 = LensStack2<Lens<Account, Person>>(personL());
+    auto zoomer3 = LS<Lens<Account, Person>, Lens<Person, Address>>(personL(), addressL());
+    auto zoomer4 = LS<Lens<Account, Person>, Lens<Person, Address>, Lens<Address, int>>(personL(), addressL(), houseL());
 
-    auto zoomer2 = LensStack3<Lens<Account, Person>>(personL());
-
-    //auto zoomerX = LensStack3(personL());  // No way... Poor type inference
-
-
-    auto zoomer3 = LensStack3<Lens<Account, Person>, Lens<Person, Address>>(personL(), addressL());
-    auto zoomer4 = LensStack3<Lens<Account, Person>, Lens<Person, Address>, Lens<Address, int>>(personL(), addressL(), houseL());
-
-
-    auto zoomer5_1 = bind<Account, Person, Address, int>(personL(), addressL(), houseL());
-    auto zoomer5_2 = bind<Account, Person, Address>(personL(), addressL());
-    auto zoomer5_3 = bind(personL(), addressL());
-    auto zoomer5_4 = bind(personL(), addressL(), houseL());
-
-
-    //auto zoomer = zoomV(personL(), addressL(), houseL());
-
-    //Person newPerson = set(zoomer, getPerson(), 100);
-
-    //QVERIFY(newPerson.address.house == 100);
+    auto zoomer5_1 = bindL<Account, Person, Address, int>(personL(), addressL(), houseL());
+    auto zoomer5_2 = bindL<Account, Person, Address>(personL(), addressL());
+    auto zoomer5_3 = bindL(personL(), addressL());
+    auto zoomer5_4 = bindL(personL(), addressL(), houseL());
 }
 
+void LensTest::genericStackCombinatorTest()
+{
+    auto zoomer = bindL(personL(), addressL(), houseL());
+    Account acc = evalLensSt(zoomer, getAccount(), set(100));
 
+    QVERIFY(acc.person.address.house == 100);
+}
 
 void LensTest::toCombinatorTest()
 {

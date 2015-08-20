@@ -41,8 +41,6 @@ Zoomed1 evalLens(const LensStack<Zoomed1, Zoomed2, Identity, Identity>& lensStac
     return lensStack.lens1.setter(z1, variator(z2));
 }
 
-
-
 template <typename Zoomed1,
           typename Zoomed2,
           typename Zoomed3>

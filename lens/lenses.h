@@ -15,82 +15,57 @@ struct Lens
     std::function<Zoomed1(Zoomed1&, Zoomed2)> setter;
 };
 
-
-template <typename... Args>
-struct LensStack2;
-
-template<typename Head, typename... Tail>
-struct LensStack2<Head, Tail...> : LensStack2<Tail...>
-{
-    LensStack2(Head h, Tail... tail)
-         : LensStack2<Tail...>(tail...), head_(h)
-    {}
-
-    typedef LensStack2<Tail...> base_type;
-    typedef Head                value_type;
-
-    //base_type& base = static_cast<base_type&>(*this);
-    Head       head_;
-};
-
-template <>
-struct LensStack2<>
-{};
-
-/*
-
 template <typename... Tail>
-struct LensStack3 {};
-
-
-template<typename H1, typename... Tail>
-struct LensStack3<H1, Tail...>
+struct LS
 {
-};
 
-
-template<typename H1, typename H2, typename... Tail>
-struct LensStack3<H1, H2, Tail...>
-    : LensStack3<H2, Tail...>
+template <typename Focus>
+    Focus apply(const Focus& val, const std::function<Focus(Focus)>& variator) const
 {
-    LensStack3(Lens<H1, H2> l, Tail... tail)
-        : LensStack3<H2, Tail...>(tail...)
-        , m_lens(l)
-    {}
+    return variator(val);
+}
 
-    Lens<H1, H2> m_lens;
 };
-
-
-template<typename H1, typename H2, typename H3, typename... Tail>
-struct LensStack3<H1, H2, H3, Tail...>
-    : LensStack3<H2, H3, Tail...>
-{
-    LensStack3(Lens<H1, H2> l1, Lens<H2, H3> l2, Tail... tail)
-        : LensStack3<H2, H3, Tail...>(l2, tail...)
-        , m_lens1(l1)
-    {}
-
-    Lens<H1, H2> m_lens1;
-};
-
-*/
-
-
-template <typename... Tail>
-struct LensStack3 {};
 
 template<typename L1, typename... Tail>
-struct LensStack3<L1, Tail...>
-    : LensStack3<Tail...>
+struct LS<L1, Tail...>
+    : LS<Tail...>
 {
-    LensStack3(L1 l1, Tail... tail)
-        : LensStack3<Tail...>(tail...)
+    LS(L1 l1, Tail... tail)
+        : LS<Tail...>(tail...)
         , m_lens(l1)
     {}
 
+    L1 get() const
+    {
+        return m_lens;
+    }
+
+    template <typename H1, typename Focus>
+        H1 apply(const H1& val, const std::function<Focus(Focus)>& variator) const
+    {
+        H1 z1 = val;
+        auto z2 = m_lens.getter(z1);
+        z2 = base.apply(z2, variator);
+        z1 = m_lens.setter(z1, z2);
+        return z1;
+    }
+
+    typedef LS<Tail...> base_type;
+    typedef L1          value_type;
+
+    base_type& base = static_cast<base_type&>(*this);
+
     L1 m_lens;
 };
+
+template <typename H1, typename H2, typename H3, typename H4>
+H1 evalLensSt(const LS<Lens<H1, H2>, Lens<H2, H3>, Lens<H3, H4>>& ls,
+                   const H1& zoomed1,
+                   const std::function<H4(H4)>& variator)
+{
+    return ls.apply(zoomed1, variator);
+}
 
 
 //////////////////
@@ -167,13 +142,6 @@ template <typename Zoomed1> bool isFocus(const Lens<Zoomed1, Identity>& l)
 {
     return true;
 }
-
-
-
-
-
-
-
 
 
 } // namespace lenses
