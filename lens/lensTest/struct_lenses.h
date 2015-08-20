@@ -6,13 +6,12 @@
 
 #include "address.h"
 #include "person.h"
+#include "account.h"
 
 namespace sample
 {
 
 using namespace lenses;
-
-
 
 
 MK_LENS(Car, std::string, number)
@@ -29,7 +28,9 @@ MK_LENS(Person, std::string, surname)
 MK_LENS(Person, int, age)
 MK_LENS(Person, Address, address)
 
-
+MK_LENS(Account, Person, person)
+MK_LENS(Account, std::string, login)
+MK_LENS(Account, std::string, password)
 
 
 } // namespace sample

@@ -25,7 +25,8 @@ HEADERS += \
     address.h \
     common.h \
     struct_lenses.h \
-    car.h
+    car.h \
+    account.h
 
 OTHER_FILES += \
     conf_materials.txt

@@ -20,7 +20,8 @@ HEADERS += \
     combinators.h \
     fold.h \
     setter.h \
-    getter.h
+    getter.h \
+    bind.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

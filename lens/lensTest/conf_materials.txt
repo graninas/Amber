@@ -8,10 +8,11 @@ Materials
 
 Additional questions.
 a. Generic lambda / function<> problem.
-
+b. Can lenses manage undefined variables?
 
 TODO
 - Associative `to` combinator.
 - Replace T parameters by const T& parameters.
 - Fold: Remove explicit containers `vector` etc.
 - Generalize Fold & Lens.
+- Remove brackets of lenses: addressL() -> addressl

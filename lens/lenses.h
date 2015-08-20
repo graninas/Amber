@@ -15,6 +15,87 @@ struct Lens
     std::function<Zoomed1(Zoomed1&, Zoomed2)> setter;
 };
 
+
+template <typename... Args>
+struct LensStack2;
+
+template<typename Head, typename... Tail>
+struct LensStack2<Head, Tail...> : LensStack2<Tail...>
+{
+    LensStack2(Head h, Tail... tail)
+         : LensStack2<Tail...>(tail...), head_(h)
+    {}
+
+    typedef LensStack2<Tail...> base_type;
+    typedef Head                value_type;
+
+    //base_type& base = static_cast<base_type&>(*this);
+    Head       head_;
+};
+
+template <>
+struct LensStack2<>
+{};
+
+/*
+
+template <typename... Tail>
+struct LensStack3 {};
+
+
+template<typename H1, typename... Tail>
+struct LensStack3<H1, Tail...>
+{
+};
+
+
+template<typename H1, typename H2, typename... Tail>
+struct LensStack3<H1, H2, Tail...>
+    : LensStack3<H2, Tail...>
+{
+    LensStack3(Lens<H1, H2> l, Tail... tail)
+        : LensStack3<H2, Tail...>(tail...)
+        , m_lens(l)
+    {}
+
+    Lens<H1, H2> m_lens;
+};
+
+
+template<typename H1, typename H2, typename H3, typename... Tail>
+struct LensStack3<H1, H2, H3, Tail...>
+    : LensStack3<H2, H3, Tail...>
+{
+    LensStack3(Lens<H1, H2> l1, Lens<H2, H3> l2, Tail... tail)
+        : LensStack3<H2, H3, Tail...>(l2, tail...)
+        , m_lens1(l1)
+    {}
+
+    Lens<H1, H2> m_lens1;
+};
+
+*/
+
+
+template <typename... Tail>
+struct LensStack3 {};
+
+template<typename L1, typename... Tail>
+struct LensStack3<L1, Tail...>
+    : LensStack3<Tail...>
+{
+    LensStack3(L1 l1, Tail... tail)
+        : LensStack3<Tail...>(tail...)
+        , m_lens(l1)
+    {}
+
+    L1 m_lens;
+};
+
+
+//////////////////
+
+
 template <typename Zoomed1, typename Zoomed2, typename Zoomed3 = Identity, typename Zoomed4 = Identity>
 struct LensStack
 {
