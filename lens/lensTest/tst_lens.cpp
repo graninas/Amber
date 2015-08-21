@@ -33,8 +33,10 @@ private Q_SLOTS:
     void bindLCombinatorTest();
     void genericStackCombinatorTest();
     void rerollStackTest();
-
     void toCombinatorTest();
+
+    void lensTest();
+
     void toVectorCombinatorTest();
     void toListCombinatorTest();
     void overCombinatorTest();
@@ -124,6 +126,24 @@ void LensTest::toCombinatorTest()
     QVERIFY(pers.address.house == 100);
     QVERIFY(acc1.person.address.house == 100);
     QVERIFY(acc2.person.address.house == 100);
+}
+
+void LensTest::lensTest()
+{
+    Account acc = getAccount();
+    QVERIFY(acc.person.address.house == 20);
+    QVERIFY(acc.person.address.street == "Brooklin");
+
+    auto houseLens = personL() to addressL() to houseL();
+    auto streetLens = personL() to addressL() to streetL();
+
+    std::function<int(int)> modifier = [](int old) { return old + 6; };
+
+    acc = set(streetLens, acc, std::string("Churchill's"));
+    acc = over(houseLens, acc, modifier);
+
+    QVERIFY(acc.person.address.house == 26);
+    QVERIFY(acc.person.address.street == "Churchill's");
 }
 
 void LensTest::toVectorCombinatorTest()
