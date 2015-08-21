@@ -112,29 +112,18 @@ void LensTest::rerollStackTest()
 
 void LensTest::toCombinatorTest()
 {
-    //auto prx = addressL() to houseL();
+    auto zoomer1 = addressL() to houseL();
 
-    //LS<Lens<Account, Person>, Lens<Person, Address>, Lens<Address, int>> p = (personL() to addressL()) to houseL();
+    LS<Lens<Account, Person>, Lens<Person, Address>, Lens<Address, int>> zoomer2 = (personL() to addressL()) to houseL();
+    LS<Lens<Account, Person>, Lens<Person, Address>, Lens<Address, int>> zoomer3 = personL() to addressL() to houseL();
 
-/*
-lenses::LS<
-    lenses::LS<
-        lenses::Lens<sample::Account, sample::Person>
-        , lenses::Lens<sample::Person, sample::Address>
-    >
-    , lenses::Lens<sample::Address, int>
->
+    Person pers  = set(zoomer1, getPerson(),  100);
+    Account acc1 = set(zoomer2, getAccount(), 100);
+    Account acc2 = set(zoomer3, getAccount(), 100);
 
-lenses::LS<
-    lenses::Lens<sample::Account, sample::Person>
-    , lenses::Lens<sample::Person, sample::Address>
-    , lenses::Lens<sample::Address, int>
->
-*/
-
-    //Person pers = evalLens(prx, getPerson(), set(100));
-
-    //QVERIFY(pers.address.house == 100);
+    QVERIFY(pers.address.house == 100);
+    QVERIFY(acc1.person.address.house == 100);
+    QVERIFY(acc2.person.address.house == 100);
 }
 
 void LensTest::toVectorCombinatorTest()

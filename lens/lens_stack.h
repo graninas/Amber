@@ -37,8 +37,18 @@ struct LS<L1, Tail...>
         , m_lens(l1)
     {}
 
+    // type alias declarations, C++11
     template <typename Lx>
-    LS<L1, Tail..., Lx> reroll(const Lx& lx)
+        using reroll_type = LS<L1, Tail..., Lx>;
+
+//    template <typename Lx>
+//    struct reroll_type
+//    {
+//        typedef LS<L1, Tail..., Lx> type;
+//    };
+
+    template <typename Lx>
+    LS<L1, Tail..., Lx> reroll(const Lx& lx) const
     {
         LS<L1, Tail..., Lx> rerolled;
         rerolled.m_lens = m_lens;
@@ -47,7 +57,7 @@ struct LS<L1, Tail...>
     }
 
     template <typename Reroll, typename Lx>
-    void reroll_(Reroll& rerolled, const Lx& lx)
+    void reroll_(Reroll& rerolled, const Lx& lx) const
     {
         rerolled.m_lens = m_lens;
         base.reroll_(rerolled.base, lx);

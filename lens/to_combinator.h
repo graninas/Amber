@@ -22,68 +22,16 @@ public:
     T operator () (T a) const { return a; }
 } toProxy;
 
-/*
-template<typename A, typename B>
-struct ToLProxy
+template <typename L1, typename L2>
+LS<Lens<L1, L2>> operator<(const Lens<L1, L2>& l, const ToProxy&)
 {
-    Lens<A, B> l;
-
-    ToLProxy(const Lens<A,B>& lhs)
-        : l(lhs)
-    {
-    }
-};
-
-template<typename A, typename B, typename C>
-struct ToRProxy
-{
-    ToLProxy<A, B> l;
-    Lens<B, C> r;
-
-    ToRProxy(const ToLProxy<A, B>& lProxy, const Lens<B, C>& rhs)
-        : l(lProxy)
-        , r(rhs)
-    {
-    }
-
-    LS<A, B, C> operator()()
-    {
-        return this->get();
-    }
-
-
-    LS<A, B, C> get() const
-    {
-        return zoom(l.l, r);
-    }
-};
-
-template <typename A, typename B>
-ToLProxy<A, B> operator<(const Lens<A, B>& l,
-                         const ToProxy&)
-{
-    return ToLProxy<A, B>(l);
+    return LS<Lens<L1, L2>>(l);
 }
 
-template <typename A, typename B, typename C>
-ToRProxy<A, B, C> operator>(const ToLProxy<A, B>& proxy,
-                            const Lens<B, C>& r)
+template <typename ST>
+ST operator<(const ST& st, const ToProxy&)
 {
-    return ToRProxy<A, B, C>(proxy, r);
-}
-
-template <typename A, typename B>
-ToLProxy<A, B> mkLProxy(const Lens<A, B>& l)
-{
-    return ToLProxy<A, B>(l);
-}
-*/
-
-template <typename L>
-LS<L> operator<(const L& l,
-                const ToProxy&)
-{
-    return LS<L>(l);
+    return st;
 }
 
 template <typename ST, typename L>
@@ -92,10 +40,9 @@ typename ST::template reroll_type<L> operator>(const ST& st, const L& l)
     return st.reroll(l);
 }
 
-
 } // namespace anonymous
 
-//#define to < toProxy >
+#define to < toProxy >
 
 
 } // namespace lenses
