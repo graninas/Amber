@@ -17,11 +17,13 @@ HEADERS += \
     identity.h \
     lenses.h \
     autolens.h \
-    combinators.h \
     fold.h \
     setter.h \
     getter.h \
-    bind.h
+    lens_stack.h \
+    lens.h \
+    bind_combinator.h \
+    to_combinator.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

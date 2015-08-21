@@ -1,5 +1,5 @@
-#ifndef TYPE_HELPER_H
-#define TYPE_HELPER_H
+#ifndef BIND_COMBINATOR_H
+#define BIND_COMBINATOR_H
 
 #include "lenses.h"
 
@@ -44,4 +44,4 @@ LS<Lens<H1, H2>, Lens<H2, H3>, Lens<H3, H4>, Lens<H4, H5>, Lens<H5, H6>>
 
 } // namespace lenses
 
-#endif // TYPE_HELPER_H
+#endif // BIND_COMBINATOR_H

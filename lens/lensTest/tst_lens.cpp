@@ -4,8 +4,8 @@
 #include "../identity.h"
 #include "../lenses.h"
 #include "../fold.h"
-#include "../combinators.h"
-#include "../bind.h"
+#include "../bind_combinator.h"
+#include "../to_combinator.h"
 
 #include "common.h"
 #include "address.h"
@@ -30,6 +30,10 @@ public:
 
 private Q_SLOTS:
 
+    void bindLCombinatorTest();
+    void genericStackCombinatorTest();
+    void rerollStackTest();
+
     void toCombinatorTest();
     void toVectorCombinatorTest();
     void toListCombinatorTest();
@@ -39,9 +43,6 @@ private Q_SLOTS:
     void setValueImplicitLensTest();
     void modifyValueOutlineLensTest();
     void modifyValueInlineLensTest();
-
-    void bindCombinatorTest();
-    void genericStackCombinatorTest();
 };
 
 LensTest::LensTest()
@@ -81,7 +82,7 @@ Account LensTest::getAccount() const
     return account;
 }
 
-void LensTest::bindCombinatorTest()
+void LensTest::bindLCombinatorTest()
 {
     auto zoomer3 = LS<Lens<Account, Person>, Lens<Person, Address>>(personL(), addressL());
     auto zoomer4 = LS<Lens<Account, Person>, Lens<Person, Address>, Lens<Address, int>>(personL(), addressL(), houseL());
@@ -95,19 +96,45 @@ void LensTest::bindCombinatorTest()
 void LensTest::genericStackCombinatorTest()
 {
     auto zoomer = bindL(personL(), addressL(), houseL());
-    Account acc = evalLensSt(zoomer, getAccount(), set(100));
+    Account acc = evalLens(zoomer, getAccount(), set(100));
 
+    QVERIFY(acc.person.address.house == 100);
+}
+
+void LensTest::rerollStackTest()
+{
+    LS<Lens<Account, Person>, Lens<Person, Address>> zoomer = bindL(personL(), addressL());
+    LS<Lens<Account, Person>, Lens<Person, Address>, Lens<Address, int>> newZoomer = zoomer.reroll<Lens<Address, int>>(houseL());
+
+    Account acc = evalLens(newZoomer, getAccount(), set(100));
     QVERIFY(acc.person.address.house == 100);
 }
 
 void LensTest::toCombinatorTest()
 {
-    auto prx = addressL() to houseL();
+    //auto prx = addressL() to houseL();
 
-    // TODO: add evalLens() for ToRProxy.
-    Person newPerson = evalLens(prx(), getPerson(), set(100));
+    //LS<Lens<Account, Person>, Lens<Person, Address>, Lens<Address, int>> p = (personL() to addressL()) to houseL();
 
-    QVERIFY(newPerson.address.house == 100);
+/*
+lenses::LS<
+    lenses::LS<
+        lenses::Lens<sample::Account, sample::Person>
+        , lenses::Lens<sample::Person, sample::Address>
+    >
+    , lenses::Lens<sample::Address, int>
+>
+
+lenses::LS<
+    lenses::Lens<sample::Account, sample::Person>
+    , lenses::Lens<sample::Person, sample::Address>
+    , lenses::Lens<sample::Address, int>
+>
+*/
+
+    //Person pers = evalLens(prx, getPerson(), set(100));
+
+    //QVERIFY(pers.address.house == 100);
 }
 
 void LensTest::toVectorCombinatorTest()

@@ -1,7 +1,8 @@
-#ifndef COMBINATORS_H
-#define COMBINATORS_H
+#ifndef TO_COMBINATOR_H
+#define TO_COMBINATOR_H
 
 #include "identity.h"
+#include "lens_stack.h"
 #include "lenses.h"
 
 #include <functional>
@@ -14,13 +15,14 @@ namespace lenses
 namespace // anonymous
 {
 
-class ToProxy
+struct ToProxy
 {
 public:
     template<typename T>
     T operator () (T a) const { return a; }
 } toProxy;
 
+/*
 template<typename A, typename B>
 struct ToLProxy
 {
@@ -44,13 +46,13 @@ struct ToRProxy
     {
     }
 
-    LensStack<A, B, C> operator()()
+    LS<A, B, C> operator()()
     {
         return this->get();
     }
 
 
-    LensStack<A, B, C> get() const
+    LS<A, B, C> get() const
     {
         return zoom(l.l, r);
     }
@@ -58,14 +60,14 @@ struct ToRProxy
 
 template <typename A, typename B>
 ToLProxy<A, B> operator<(const Lens<A, B>& l,
-                          const ToProxy&)
+                         const ToProxy&)
 {
     return ToLProxy<A, B>(l);
 }
 
 template <typename A, typename B, typename C>
 ToRProxy<A, B, C> operator>(const ToLProxy<A, B>& proxy,
-                             const Lens<B, C>& r)
+                            const Lens<B, C>& r)
 {
     return ToRProxy<A, B, C>(proxy, r);
 }
@@ -75,15 +77,27 @@ ToLProxy<A, B> mkLProxy(const Lens<A, B>& l)
 {
     return ToLProxy<A, B>(l);
 }
+*/
+
+template <typename L>
+LS<L> operator<(const L& l,
+                const ToProxy&)
+{
+    return LS<L>(l);
+}
+
+template <typename ST, typename L>
+typename ST::template reroll_type<L> operator>(const ST& st, const L& l)
+{
+    return st.reroll(l);
+}
+
 
 } // namespace anonymous
 
-
-
-
-#define to < toProxy >
+//#define to < toProxy >
 
 
 } // namespace lenses
 
-#endif // COMBINATORS_H
+#endif // TO_COMBINATOR_H
