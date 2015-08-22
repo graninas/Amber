@@ -2,19 +2,18 @@ Materials
 
 
 1. Proxy trick to obtain infix `to` operator.
-2. Lens laws. Try also:
-    L1 to L2 to IdL
+2. Lens laws. Try also: L1 to L2 to IdL.
 3. template template.
 4. Generic LensStack. bindL template  problem.
 5. Copy-paste problem of zoom which is bindL. Define will eliminate copy-paste.
+6. `to` combinator. Type alias declarations, C++11. Left-associativity
 
 Additional questions.
 a. Generic lambda / function<> problem.
 b. Can lenses manage undefined variables?
 
 TODO
-- Associative `to` combinator.
-- Replace T parameters by const T& parameters.
+- Replace T parameters by const T& parameters (getters, setters, variators).
 - Fold: Remove explicit containers `vector` etc.
 - Generalize Fold & Lens.
 - Remove brackets of lenses: addressL() -> addressl

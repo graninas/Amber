@@ -8,7 +8,7 @@
 namespace lenses
 {
 
-template <typename Value, typename Focus>
+template <typename Value, typename Focus, template <typename> class Container = Identity>
 struct Lens
 {
     std::function<Focus(Value)> getter;
@@ -33,15 +33,15 @@ template <typename Value, typename Focus>
 }
 
 template <typename Focus>
-    bool isFocus(const Lens<Focus, Identity>& l)
+    bool isFocus(const Lens<Focus, Id>& l)
 {
     return true;
 }
 
 template <typename Focus>
-Lens<Focus, Identity> idL()
+Lens<Focus, Id> idL()
 {
-    Lens<Focus, Identity> l;
+    Lens<Focus, Id> l;
     return l;
 }
 

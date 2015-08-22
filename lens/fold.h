@@ -5,10 +5,8 @@
 #include "lenses.h"
 
 #include <functional>
-#include <list>
-//#include <memory>
-
 #include <algorithm>
+#include <list>
 
 namespace lenses
 {
@@ -73,7 +71,6 @@ std::list<Zoomed1> toListOf(const FoldStack<Folded, Contained, Zoomed1>& stack,
 
     return zoomedItems;
 }
-
 
 }
 

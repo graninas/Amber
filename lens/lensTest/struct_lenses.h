@@ -27,6 +27,7 @@ MK_LENS(Person, std::string, name)
 MK_LENS(Person, std::string, surname)
 MK_LENS(Person, int, age)
 MK_LENS(Person, Address, address)
+MK_LENS(Person, std::vector<Car>, cars)
 
 MK_LENS(Account, Person, person)
 MK_LENS(Account, std::string, login)

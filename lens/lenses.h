@@ -5,6 +5,8 @@
 #include "lens.h"
 #include "lens_stack.h"
 #include "bind_combinator.h"
+#include "fold.h"
+#include "traversed.h"
 
 #include <functional>
 

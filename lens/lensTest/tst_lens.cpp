@@ -4,6 +4,7 @@
 #include "../identity.h"
 #include "../lenses.h"
 #include "../fold.h"
+#include "../traversed.h"
 #include "../bind_combinator.h"
 #include "../to_combinator.h"
 
@@ -24,20 +25,20 @@ class LensTest : public QObject
 public:
     LensTest();
 
-    Address getAddress() const;
-    Person getPerson() const;
-    Account getAccount() const;
+    static Address getAddress();
+    static Person getPerson();
+    static Account getAccount();
 
 private Q_SLOTS:
+
+    void lensTest();
 
     void bindLCombinatorTest();
     void genericStackCombinatorTest();
     void rerollStackTest();
     void toCombinatorTest();
+    void traversedLensTest();
 
-    void lensTest();
-
-    void toVectorCombinatorTest();
     void toListCombinatorTest();
     void overCombinatorTest();
     void setCombinatorTest();
@@ -51,7 +52,7 @@ LensTest::LensTest()
 {
 }
 
-Address LensTest::getAddress() const
+Address LensTest::getAddress()
 {
     Address address;
     address.city = "New York";
@@ -61,7 +62,7 @@ Address LensTest::getAddress() const
     return address;
 }
 
-Person LensTest::getPerson() const
+Person LensTest::getPerson()
 {
     Car car1 = {"x555xx", "Ford Focus", 0};
     Car car2 = {"y555yy", "Toyota Corolla", 10000};
@@ -75,7 +76,7 @@ Person LensTest::getPerson() const
     return person;
 }
 
-Account LensTest::getAccount() const
+Account LensTest::getAccount()
 {
     Account account;
     account.person = getPerson();
@@ -84,20 +85,39 @@ Account LensTest::getAccount() const
     return account;
 }
 
+void LensTest::lensTest()
+{
+    Account acc = getAccount();
+    QVERIFY(acc.person.address.house == 20);
+    QVERIFY(acc.person.address.street == "Brooklin");
+
+    auto houseLens = personL() to addressL() to houseL();
+    auto streetLens = personL() to addressL() to streetL();
+
+    std::function<int(int)> modifier = [](int old) { return old + 6; };
+
+    acc = set(streetLens, acc, std::string("Churchill's"));
+    acc = over(houseLens, acc, modifier);
+
+    QVERIFY(acc.person.address.house == 26);
+    QVERIFY(acc.person.address.street == "Churchill's");
+}
+
 void LensTest::bindLCombinatorTest()
 {
-    auto zoomer3 = LS<Lens<Account, Person>, Lens<Person, Address>>(personL(), addressL());
-    auto zoomer4 = LS<Lens<Account, Person>, Lens<Person, Address>, Lens<Address, int>>(personL(), addressL(), houseL());
+    auto zoomer1 = LS<Lens<Account, Person>, Lens<Person, Address>>(personL(), addressL());
+    auto zoomer2 = LS<Lens<Account, Person>, Lens<Person, Address>, Lens<Address, int>>(personL(), addressL(), houseL());
 
-    auto zoomer5_1 = bindL<Account, Person, Address, int>(personL(), addressL(), houseL());
-    auto zoomer5_2 = bindL<Account, Person, Address>(personL(), addressL());
-    auto zoomer5_3 = bindL(personL(), addressL());
-    auto zoomer5_4 = bindL(personL(), addressL(), houseL());
+    auto zoomer3_1 = bindL<Account, Person, Address, int>(personL(), addressL(), houseL());
+    auto zoomer3_2 = bindL<Account, Person, Address>(personL(), addressL());
+    auto zoomer3_3 = bindL(personL(), addressL());
+    auto zoomer3_4 = bindL(personL(), addressL(), houseL());
 }
 
 void LensTest::genericStackCombinatorTest()
 {
     auto zoomer = bindL(personL(), addressL(), houseL());
+
     Account acc = evalLens(zoomer, getAccount(), set(100));
 
     QVERIFY(acc.person.address.house == 100);
@@ -128,41 +148,16 @@ void LensTest::toCombinatorTest()
     QVERIFY(acc2.person.address.house == 100);
 }
 
-void LensTest::lensTest()
+void LensTest::traversedLensTest()
 {
-    Account acc = getAccount();
-    QVERIFY(acc.person.address.house == 20);
-    QVERIFY(acc.person.address.street == "Brooklin");
+    auto zoomer = zoom(personL(), carsL(), traversed<Car>(), modelL());
 
-    auto houseLens = personL() to addressL() to houseL();
-    auto streetLens = personL() to addressL() to streetL();
+    std::function<std::string(std::string)> variator = [](std::string) { return std::string("BMW x6"); };
+    Account acc = evalLens(zoomer, getAccount(), variator);
 
-    std::function<int(int)> modifier = [](int old) { return old + 6; };
-
-    acc = set(streetLens, acc, std::string("Churchill's"));
-    acc = over(houseLens, acc, modifier);
-
-    QVERIFY(acc.person.address.house == 26);
-    QVERIFY(acc.person.address.street == "Churchill's");
-}
-
-void LensTest::toVectorCombinatorTest()
-{
-    Car car1 = {"x555xx", "Ford Focus", 0};
-    Car car2 = {"y555yy", "Toyota Corolla", 10000};
-
-    std::vector<Car> cars;
-    cars = {car1, car2};
-
-    auto fC = foldedC<Car>();
-
-    auto zoomer = zoom_Fold_(fC, modelL());
-    //FoldStack<std::vector<Car>, Car, std::string> zoomer2 = zoomer;
-    std::vector<std::string> result = toVectorOf(zoomer, cars);
-
-    QVERIFY(result.size() == 2);
-    QVERIFY(result[0] == "Ford Focus");
-    QVERIFY(result[1] == "Toyota Corolla");
+    QVERIFY(acc.person.cars.size() == 2);
+    QVERIFY(acc.person.cars[0].model == "BMW x6");
+    QVERIFY(acc.person.cars[1].model == "BMW x6");
 }
 
 void LensTest::toListCombinatorTest()

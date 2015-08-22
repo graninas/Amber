@@ -41,12 +41,6 @@ struct LS<L1, Tail...>
     template <typename Lx>
         using reroll_type = LS<L1, Tail..., Lx>;
 
-//    template <typename Lx>
-//    struct reroll_type
-//    {
-//        typedef LS<L1, Tail..., Lx> type;
-//    };
-
     template <typename Lx>
     LS<L1, Tail..., Lx> reroll(const Lx& lx) const
     {
@@ -72,10 +66,31 @@ struct LS<L1, Tail...>
         H1 apply(const H1& val, const std::function<Focus(Focus)>& variator) const
     {
         H1 z1 = val;
-        auto z2 = m_lens.getter(z1);
+        auto z2 = m_lens.getter(val);
         z2 = base.apply(z2, variator);
-        z1 = m_lens.setter(z1, z2);
-        return z1;
+        return m_lens.setter(z1, z2);
+    }
+
+    template <typename Contained, typename Focus>
+        std::vector<Contained> apply(const std::vector<Contained>& val, const std::function<Focus(Focus)>& variator) const
+    {
+        auto container = val;
+        for (auto it = container.begin(); it != container.end(); ++it)
+        {
+            *it = base.apply(*it, variator);
+        }
+        return container;
+    }
+
+    template <typename Contained, typename Focus>
+        std::list<Contained> apply(const std::list<Contained>& val, const std::function<Focus(Focus)>& variator) const
+    {
+        auto container = val;
+        for (auto it = container.begin(); it != container.end(); ++it)
+        {
+            *it = base.apply(*it, variator);
+        }
+        return container;
     }
 
     base_type& base = static_cast<base_type&>(*this);

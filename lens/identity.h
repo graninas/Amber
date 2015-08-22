@@ -4,9 +4,12 @@
 namespace lenses
 {
 
+template <typename V>
 struct Identity
 {
 };
+
+typedef Identity<int> Id;
 
 } // namespace lens
 

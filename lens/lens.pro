@@ -23,7 +23,8 @@ HEADERS += \
     lens_stack.h \
     lens.h \
     bind_combinator.h \
-    to_combinator.h
+    to_combinator.h \
+    traversed.h
 unix {
     target.path = /usr/lib
     INSTALLS += target
