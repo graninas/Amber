@@ -14,6 +14,7 @@ struct Lens
     std::function<Focus(Value)> getter;
     std::function<Value(Value&, Focus)> setter;
 
+    // TODO: this seems a right way to generalize of different lenses applying.
     Value apply(const Value& value, const std::function<Focus(Focus)>& variator) const
     {
         Value z1 = value;

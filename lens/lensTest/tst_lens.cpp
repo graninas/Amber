@@ -210,9 +210,14 @@ void LensTest::traversed3LensTest()
 
 void LensTest::viewCombinatorTest()
 {
-    //Address address = view(personL() to addressL(), getAccount());
+    // TODO: remove type hint 'Address'.
+    Address address = view<Address>(personL() to addressL(), getAccount());
 
-
+    auto expectedAddr = getAddress();
+    QVERIFY(address.city == expectedAddr.city);
+    QVERIFY(address.flat == expectedAddr.flat);
+    QVERIFY(address.house == expectedAddr.house);
+    QVERIFY(address.street == expectedAddr.street);
 }
 
 void LensTest::toListCombinatorTest()

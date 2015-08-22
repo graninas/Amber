@@ -9,6 +9,13 @@ namespace lenses
 template <typename... Tail>
 struct LS
 {
+    // TODO: remove type hint 'Focus'.
+    template <typename Focus>
+        Focus get(const Focus& value) const
+    {
+        return value;
+    }
+
     template <typename Focus>
         Focus apply(const Focus& val, const std::function<Focus(Focus)>& variator) const
     {
@@ -57,16 +64,19 @@ struct LS<L1, Tail...>
         base.reroll_(rerolled.base, lx);
     }
 
-    L1 get() const
+    // TODO: remove type hint 'Focus'.
+    template <typename Focus, typename Value>
+        Focus get(const Value& value) const
     {
-        return m_lens;
+        auto z2 = m_lens.getter(value);
+        return base.get<Focus>(z2);
     }
 
     template <typename H1, typename Focus>
-        H1 apply(const H1& val, const std::function<Focus(Focus)>& variator) const
+        H1 apply(const H1& value, const std::function<Focus(Focus)>& variator) const
     {
-        H1 z1 = val;
-        auto z2 = m_lens.getter(val);
+        H1 z1 = value;
+        auto z2 = m_lens.getter(value);
         z2 = base.apply(z2, variator);
         return m_lens.setter(z1, z2);
     }

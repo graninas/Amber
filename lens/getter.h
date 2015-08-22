@@ -6,11 +6,11 @@ namespace lenses
 
 #define GETTER(A, b) [](const A& a) { return a.b; }
 
-
-template <typename ST, typename Value, typename Focus>
+// TODO: remove type hint 'Focus'.
+template <typename Focus, typename ST, typename Value>
 Focus view(const ST& st, const Value& value)
 {
-
+    return st.get<Focus>(value);
 }
 
 
