@@ -37,7 +37,9 @@ private Q_SLOTS:
     void genericStackCombinatorTest();
     void rerollStackTest();
     void toCombinatorTest();
-    void traversedLensTest();
+    void traversed1LensTest();
+    void traversed2LensTest();
+    void traversed3LensTest();
 
     void toListCombinatorTest();
     void overCombinatorTest();
@@ -64,8 +66,11 @@ Address LensTest::getAddress()
 
 Person LensTest::getPerson()
 {
-    Car car1 = {"x555xx", "Ford Focus", 0};
-    Car car2 = {"y555yy", "Toyota Corolla", 10000};
+    std::list<std::string> car1Accessories = {"Rug", "Tinting"};
+    std::list<std::string> car2Accessories = {"Tinting", "Tuning"};
+
+    Car car1 = {"x555xx", "Ford Focus", 0, car1Accessories};
+    Car car2 = {"y555yy", "Toyota Corolla", 10000, car2Accessories};
 
     Person person;
     person.name = "Paul";
@@ -148,25 +153,56 @@ void LensTest::toCombinatorTest()
     QVERIFY(acc2.person.address.house == 100);
 }
 
-void LensTest::traversedLensTest()
+void LensTest::traversed1LensTest()
 {
     auto zoomer = zoom(personL(), carsL(), traversed<Car>(), modelL());
 
     std::function<std::string(std::string)> variator = [](std::string) { return std::string("BMW x6"); };
-    Account acc = evalLens(zoomer, getAccount(), variator);
+    Account acc = over(zoomer, getAccount(), variator);
 
     QVERIFY(acc.person.cars.size() == 2);
     QVERIFY(acc.person.cars[0].model == "BMW x6");
     QVERIFY(acc.person.cars[1].model == "BMW x6");
 }
 
+void LensTest::traversed2LensTest()
+{
+    Car car1 = {"x555xx", "Ford Focus", 0, {}};
+    Car car2 = {"y555yy", "Toyota Corolla", 10000, {}};
+
+    std::vector<Car> cars = {car1, car2};
+
+    auto zoomer = traversed<Car>() to modelL();
+
+    std::function<std::string(std::string)> variator = [](std::string) { return std::string("BMW x6"); };
+    std::vector<Car> result = over(zoomer, cars, variator);
+
+    QVERIFY(result.size() == 2);
+    QVERIFY(result[0].model == "BMW x6");
+    QVERIFY(result[1].model == "BMW x6");
+}
+
+void LensTest::traversed3LensTest()
+{
+    auto zoomer = carsL() to traversed<Car>() to accessoriesL() to traversed<std::string>();
+
+    Person p = set(zoomer, getPerson(), std::string("none"));
+
+    QVERIFY(p.cars.size() == 2);
+    QVERIFY(p.cars[0].accessories.size() == 2);
+    QVERIFY(p.cars[0].accessories.front() == std::string("none"));
+    QVERIFY(p.cars[0].accessories.back() == std::string("none"));
+    QVERIFY(p.cars[1].accessories.size() == 2);
+    QVERIFY(p.cars[1].accessories.front() == std::string("none"));
+    QVERIFY(p.cars[1].accessories.back() == std::string("none"));
+}
+
 void LensTest::toListCombinatorTest()
 {
-    Car car1 = {"x555xx", "Ford Focus", 0};
-    Car car2 = {"y555yy", "Toyota Corolla", 10000};
+    Car car1 = {"x555xx", "Ford Focus", 0, {}};
+    Car car2 = {"y555yy", "Toyota Corolla", 10000, {}};
 
-    std::vector<Car> cars;
-    cars = {car1, car2};
+    std::vector<Car> cars = {car1, car2};
 
     auto fC = foldedC<Car>();
 

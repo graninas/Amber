@@ -11,6 +11,8 @@ struct Car
     std::string number;
     std::string model;
     int mileage;
+
+    std::list<std::string> accessories;
 };
 
 } // namespace sample

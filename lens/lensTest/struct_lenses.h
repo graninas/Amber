@@ -17,6 +17,7 @@ using namespace lenses;
 MK_LENS(Car, std::string, number)
 MK_LENS(Car, std::string, model)
 MK_LENS(Car, int, mileage)
+MK_LENS(Car, std::list<std::string>, accessories)
 
 MK_LENS(Address, std::string, city)
 MK_LENS(Address, std::string, street)
