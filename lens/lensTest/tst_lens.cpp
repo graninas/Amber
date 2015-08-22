@@ -34,12 +34,14 @@ private Q_SLOTS:
     void lensTest();
 
     void bindLCombinatorTest();
-    void genericStackCombinatorTest();
+    void genericStack1Test();
+    void genericStack2Test();
     void rerollStackTest();
     void toCombinatorTest();
     void traversed1LensTest();
     void traversed2LensTest();
     void traversed3LensTest();
+    void viewCombinatorTest();
 
     void toListCombinatorTest();
     void overCombinatorTest();
@@ -119,13 +121,22 @@ void LensTest::bindLCombinatorTest()
     auto zoomer3_4 = bindL(personL(), addressL(), houseL());
 }
 
-void LensTest::genericStackCombinatorTest()
+void LensTest::genericStack1Test()
 {
     auto zoomer = bindL(personL(), addressL(), houseL());
 
     Account acc = evalLens(zoomer, getAccount(), set(100));
 
     QVERIFY(acc.person.address.house == 100);
+}
+
+void LensTest::genericStack2Test()
+{
+    Person person = {"Name", "Surname", 10, Address(), {}};
+    Account account = set(personL(), getAccount(), person);
+
+    QVERIFY(account.person.name == "Name");
+    QVERIFY(account.person.surname == "Surname");
 }
 
 void LensTest::rerollStackTest()
@@ -195,6 +206,13 @@ void LensTest::traversed3LensTest()
     QVERIFY(p.cars[1].accessories.size() == 2);
     QVERIFY(p.cars[1].accessories.front() == std::string("none"));
     QVERIFY(p.cars[1].accessories.back() == std::string("none"));
+}
+
+void LensTest::viewCombinatorTest()
+{
+    //Address address = view(personL() to addressL(), getAccount());
+
+
 }
 
 void LensTest::toListCombinatorTest()

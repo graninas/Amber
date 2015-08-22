@@ -13,6 +13,14 @@ struct Lens
 {
     std::function<Focus(Value)> getter;
     std::function<Value(Value&, Focus)> setter;
+
+    Value apply(const Value& value, const std::function<Focus(Focus)>& variator) const
+    {
+        Value z1 = value;
+        auto z2 = getter(value);
+        z2 = variator(z2);
+        return setter(z1, z2);
+    }
 };
 
 template <typename Value, typename Focus>
