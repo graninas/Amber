@@ -6,7 +6,7 @@
 #include <QTimer>
 #include <mutex>
 
-#include <amber/amber.h>
+#include <amber.h>
 #include "qambersurroundingstablemodel.h"
 
 namespace Ui {

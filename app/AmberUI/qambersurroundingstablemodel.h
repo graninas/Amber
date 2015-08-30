@@ -3,7 +3,7 @@
 
 #include <QAbstractTableModel>
 
-#include <amber/amberstructure.h>
+#include <amberstructure.h>
 
 class QAmberSurroundingsTableModel : public QAbstractTableModel
 {
