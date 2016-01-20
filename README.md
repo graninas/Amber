@@ -10,3 +10,14 @@ The code contains:
 - Combinatorial eDSL built on lambdas;
 - Maybe-like code and also, naturally, a Maybe monad;
 - Lightweight Lenses prototype.
+
+Installation: put these libraries to ./lib:
+
+- cpp_functional_core (https://github.com/graninas/cpp_functional_core)
+- cpp_lenses (https://github.com/graninas/cpp_lenses)
+- cpp_monads  (https://github.com/graninas/cpp_monads)
+
+Then build with Qt.
+
+
+

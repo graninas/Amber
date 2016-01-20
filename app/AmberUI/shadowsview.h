@@ -39,7 +39,6 @@ public slots:
 private:
     Ui::ShadowsView *ui;
     QTimer *m_amberTimer;
-    QAmberSurroundingsTableModel *m_amberModel;
     QString m_amberLog;
 
     mutable std::mutex m_amberChangeGuard;

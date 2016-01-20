@@ -20,12 +20,10 @@ RESOURCES += \
 
 SOURCES += \
     main.cpp \
-    qambersurroundingstablemodel.cpp \
     shadowsview.cpp
 
 HEADERS += \
     presentationsnippets.h \
-    qambersurroundingstablemodel.h \
     shadowsview.h
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../lib/cpp_functional_core/release/ -lcpp_functional_core
