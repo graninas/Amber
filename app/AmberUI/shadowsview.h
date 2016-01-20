@@ -7,7 +7,6 @@
 #include <mutex>
 
 #include <amber.h>
-#include "qambersurroundingstablemodel.h"
 
 namespace Ui {
 class ShadowsView;
