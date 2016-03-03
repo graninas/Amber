@@ -1,23 +1,29 @@
 Amber
 =====
 
-This is a showcase project of the functional design on C++. The C++ User Group it is intended for will happen on November 29th, 2014.
+This is a showcase project of functional design and functional programming in C++.
+Simple sandbox game 'Amber' based on ideas of 'The Chronicles of Amber' by R. Zelazny.
 
-It is a simple sandbox game 'Amber' based on ideas of 'The Chronicles of Amber' by R. Zelazny.
-
-The code contains:
-- Design on functions and lambdas;
+Code contains:
+- Functional design using functions and lambdas;
+- Functions and composition.
 - Combinatorial eDSL built on lambdas;
-- Maybe-like code and also, naturally, a Maybe monad;
-- Lightweight Lenses prototype.
+- Maybe monad usage.
 
-Installation: put these libraries to ./lib:
+Installation
+------------
 
-- cpp_functional_core (https://github.com/graninas/cpp_functional_core)
-- cpp_lenses (https://github.com/graninas/cpp_lenses)
-- cpp_monads  (https://github.com/graninas/cpp_monads)
+Run in the project dir:
+
+git clone --branch v0.1_showcase git@github.com:graninas/cpp_functional_core.git ./lib/cpp_functional_core
+git clone --branch v0.1_showcase git@github.com:graninas/cpp_monads.git ./lib/cpp_monads
+git clone --branch v0.1_showcase git@github.com:graninas/cpp_lenses.git ./lib/cpp_lenses
 
 Then build with Qt.
 
+See also
+--------
 
-
+* CMLife - another showcase of functional declarative design in C++.
+Celullar automata with using of comonads.
+https://github.com/graninas/CMLife
