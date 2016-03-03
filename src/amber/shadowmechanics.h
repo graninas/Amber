@@ -1,13 +1,13 @@
 #ifndef SHADOWMECHANICS_H
 #define SHADOWMECHANICS_H
 
-#include "magic.h"
+#include "taskmechanics.h"
 
 namespace amber
 {
 
 // TODO: unify 'Safe' concept and Maybe monad.
-typedef magic::Value<ShadowStructure> SafeShadowStructure;
+typedef Value<ShadowStructure> SafeShadowStructure;
 typedef std::function<SafeShadowStructure(ShadowStructure)> SafeShadowStructureAction;
 
 typedef ShadowStructure ElementModifiers;
@@ -18,7 +18,6 @@ SafeShadowStructure safeWrap(const ShadowStructure& data);
 SafeShadowStructure safeBind(const SafeShadowStructure value, const SafeShadowStructureAction& action);
 SafeShadowStructure runSafe(const SafeShadowStructureAction& action, const ShadowStructure& data);
 
-// Presentation tip: monadic functions.
 SafeShadowStructure safeElementChange(const ShadowStructure& structure, Element::ElementType elem, int diff);
 SafeShadowStructure safeTimedElementChange(const ShadowStructure& structure,
                                            int time,

@@ -3,10 +3,7 @@
 
 #include <amber.h>
 #include <ambermechanics.h>
-
 #include <naming.h>
-
-
 
 ShadowsView::ShadowsView(QWidget *parent) :
     QMainWindow(parent),
@@ -28,8 +25,6 @@ ShadowsView::~ShadowsView()
 {
     delete ui;
 }
-
-// This boilerplace can be removed by a macro.
 
 void ShadowsView::goNorth()
 {
@@ -89,12 +84,10 @@ void ShadowsView::switchAmberTimeTicking(bool ticking)
 
 void ShadowsView::evalAmberTask(const amber::AmberTask& task)
 {
-    // TODO: do something like frp.
-    // Presentation tip: combinatorial pattern with a little combinatorial eDSL.
     amber::AmberTask combinedTask = [&task](const amber::Amber& amber)
     {
-        auto action1Res = magic::anyway(task, magic::wrap(amber));
-        auto action2Res = magic::anyway(amber::tickWorldTime, action1Res);
+        auto action1Res = anyway(task, pure(amber));
+        auto action2Res = anyway(amber::tickWorldTime, action1Res);
         return action2Res.amber;
     };
 
@@ -117,7 +110,6 @@ void ShadowsView::evaluateTasks(const std::list<amber::AmberTask>& tasks)
     m_amberChangeGuard.unlock();
 }
 
-// Presentation tip: C++ hasn't atomic methods.
 void ShadowsView::changeAmber(const amber::AmberTask& task)
 {
     m_amberChangeGuard.lock();
@@ -125,7 +117,6 @@ void ShadowsView::changeAmber(const amber::AmberTask& task)
     updateUI(m_amber);
     m_amberChangeGuard.unlock();
 }
-
 
 void ShadowsView::updateUI(const amber::Amber& amber)
 {

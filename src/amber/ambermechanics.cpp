@@ -33,7 +33,6 @@ MaybeArea lookupNearestArea(const Amber& amber)
 MaybeShadow lookupNearestShadow(const Amber& amber)
 {
     MaybeArea mbArea = lookupNearestArea(amber);
-    // Presentation tip: poor template types deducing for function bind(). It is requres an explicit types.
     return monad::maybe::bind<Area, Shadow>(mbArea, [&amber](const Area& area)
     {
         return lookupShadow(area, amber.nearestPlace.shadow);
@@ -112,8 +111,8 @@ Amber updateNearestPlace(const Amber& amber)
     return newAmber;
 }
 
-// TODO: this function too complex. Divide it into 2 functions: composeElementalInfluence() and composeVariator().
-// Refactor the same code at amberpolearea.cpp.
+// TODO: this function is too complex. Divide it into 2 functions: composeElementalInfluence() and composeVariator().
+// Refactor the same code in amberpolearea.cpp.
 ShadowVariator composeInfluenceVariator(const ShadowStructure& fromStructure, const ShadowStructure& toStructure)
 {
     // TODO: make it safe.
@@ -133,13 +132,13 @@ ShadowVariator composeInfluenceVariator(const ShadowStructure& fromStructure, co
         // TODO: refactor this boilerplate.
         SafeShadowStructureAction action = safeChangeElements(elementalInfluence);
         SafeShadowStructure value = runSafe(action, structure);
-        if (magic::isFail(value))
+        if (isFail(value))
         {
             // TODO - fail tolerance, error reporting
             return structure;
         }
 
-        return magic::valueData(value);
+        return valueData(value);
     };
 }
 
@@ -161,7 +160,7 @@ const std::function<MaybeShadowVariator(Shadow)> getShadowVariator =
 const MaybeAmberTask safeUpdateNearestPlace =
     [](const Amber& amber)
     {
-        // TODO: make it safe, but not now (presentation work is needed).
+        // TODO: make it safe.
         return mb::just(updateNearestPlace(amber));
     };
 
@@ -198,29 +197,6 @@ MaybeAmberTask safeMovePlayer(Direction::DirectionType dir)
 
 Amber goDirectionBinded(const Amber& amber, Direction::DirectionType dir)
 {
-   MaybeAmber mbAmber = mb::just(amber);
-   mbAmber = mb::bind(mbAmber, safeMovePlayer(dir));
-   mbAmber = mb::bind(mbAmber, safeUpdateNearestPlace);
-   return mb::maybe(mbAmber, amber);
-}
-
-// Presentation tip: too easy to mistake here. For example, miss mbAmber3:
-// auto m4 = mb::bind(mbAmber4, safeUpdateNearestPlace); // Recursion!
-// Use stack instead.
-Amber goDirectionBinded1(const Amber& amber, Direction::DirectionType dir)
-{
-   MaybeAmber mbAmber1            = mb::just(amber);
-   MaybeShadowVariator mbVariator = mb::bind(mbAmber1,   lookupShadowVariator);
-   MaybeAmber mbAmber2            = mb::bind(mbVariator, applyMovingVariator(amber, dir));
-   MaybeAmber mbAmber3            = mb::bind(mbAmber2,   safeUpdateNearestPlace);
-   return mb::maybe(mbAmber3, amber);
-}
-
-// Presentation tip: too easy to mistake here. For example, miss m3:
-// auto m4 = mb::bind(m4, safeUpdateNearestPlace); // Recursion!
-// Use stack instead.
-Amber goDirectionBinded2(const Amber& amber, Direction::DirectionType dir)
-{
    auto m1 = mb::just(amber);
    auto m2 = mb::bind(m1, lookupShadowVariator);
    auto m3 = mb::bind(m2, applyMovingVariator(amber, dir));
@@ -228,20 +204,9 @@ Amber goDirectionBinded2(const Amber& amber, Direction::DirectionType dir)
    return mb::maybe(m4, amber);
 }
 
-Amber goDirectionStacked(const Amber& amber, Direction::DirectionType dir)
-{
-    mb::MaybeActionStack<Amber, ShadowVariator, Amber, Amber>
-    stack = bindMany(lookupShadowVariator,
-                     applyMovingVariator(amber, dir),
-                     safeUpdateNearestPlace);
-
-    MaybeAmber mbAmber = mb::evalMaybes(mb::just(amber), stack);
-    return mb::maybe(mbAmber, amber);
-}
-
 Amber goDirection(const Amber& amber, Direction::DirectionType dir)
 {
-    return goDirectionBinded2(amber, dir);
+    return goDirectionBinded(amber, dir);
 }
 
 Amber tickHour(const Amber &amber)

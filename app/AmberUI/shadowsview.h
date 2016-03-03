@@ -22,7 +22,6 @@ public:
 
 public slots:
 
-    // This boilerplace can be removed by a macro.
     void goNorth();
     void goSouth();
     void goWest();

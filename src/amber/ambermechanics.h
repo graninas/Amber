@@ -2,7 +2,7 @@
 #define AMBERMECHANICS_H
 
 #include "amber.h"
-#include "magic.h"
+#include "taskmechanics.h"
 
 #include <monads.h>
 
@@ -75,7 +75,6 @@ const AmberTask tickWorldTime = [](const Amber& amber)
     return workers::tickHour(amber);
 };
 
-// Presentation tip: potential place to lift from one monad to another.
 const AmberTask shadowStabilization = [](const Amber& amber)
 {
     return monad::maybe::maybe(workers::stabilizeShadow(amber), amber);
@@ -99,16 +98,16 @@ const AmberTask affectShadowStorms = [](const Amber& amber)
 
 const AmberTask tickOneAmberHour = [](const amber::Amber& amber)
 {
-    auto action1Res = magic::anyway(inflateShadowStorms, magic::wrap(amber));
-    auto action2Res = magic::anyway(affectShadowStorms, action1Res);
-    auto action3Res = magic::onFail(shadowStabilization, action2Res);
-    auto action4Res = magic::anyway(tickWorldTime, action3Res);
-    return action4Res.amber;
+    auto a1 = anyway(inflateShadowStorms, pure(amber));
+    //auto a2 = anyway(affectShadowStorms, a1);
+    auto a3 = anyway(shadowStabilization, a1);
+    auto a4 = anyway(tickWorldTime, a3);
+    return a4.amber;
 };
 
 const AmberTask sleep8hours = [](const amber::Amber& amber)
 {
-    auto res = magic::times(8, tickOneAmberHour, magic::wrap(amber));
+    auto res = times(8, tickOneAmberHour, pure(amber));
     return res.amber;
 };
 

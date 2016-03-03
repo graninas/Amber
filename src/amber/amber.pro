@@ -15,11 +15,11 @@ QMAKE_CXXFLAGS += -std=c++11
 SOURCES += amber.cpp \
     ambermechanics.cpp \
     amberpolearea.cpp \
-    magic.cpp \
     shadowmechanics.cpp \
     naming.cpp \
     event_log.cpp \
-    storms.cpp
+    storms.cpp \
+    taskmechanics.cpp
 
 HEADERS += amber.h \
     ambermechanics.h \
@@ -27,11 +27,11 @@ HEADERS += amber.h \
     amberstructure.h \
     storms.h \
     amberfacade.h \
-    magic.h \
     shadowmechanics.h \
     knownareas.h \
     naming.h \
-    event_log.h
+    event_log.h \
+    taskmechanics.h
 
 OTHER_FILES += \
     amber.pri

@@ -23,7 +23,6 @@ SOURCES += \
     shadowsview.cpp
 
 HEADERS += \
-    presentationsnippets.h \
     shadowsview.h
 
 include($$PWD/../../lib/cpp_functional_core/cpp_functional_core.pri)

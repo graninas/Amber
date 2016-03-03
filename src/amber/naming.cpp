@@ -23,45 +23,45 @@ std::string elementName(Element::ElementType element)
 
 std::string areaName(const std::string& area)
 {
-    if (area == AmberPoleArea) return "Полюс Амбера";
-    if (area == ChaosPoleArea) return "Полюс Хаоса";
-    if (area == MiddleShadows) return "Средние тени";
+    if (area == AmberPoleArea) return "Amber Pole";
+    if (area == ChaosPoleArea) return "Chaos Pole";
+    if (area == MiddleShadows) return "Middle Shadows";
     return "unknown area";
 }
 
 std::string shadowName(const std::string& shadow)
 {
-    if (shadow == AmberShadow)  return "Амбер";
-    if (shadow == BergmaShadow) return "Бергма";
-    if (shadow == KashfaShadow) return "Кашфа";
-    if (shadow == AvalonShadow) return "Авалон";
+    if (shadow == AmberShadow)  return "Amber";
+    if (shadow == BergmaShadow) return "Begma";
+    if (shadow == KashfaShadow) return "Kashfa";
+    if (shadow == AvalonShadow) return "Avalon";
     return "unknown shadow";
 }
 
 std::string shadowNameForm1(const std::string& shadow)
 {
-    if (shadow == AmberShadow)  return "Амбера";
-    if (shadow == BergmaShadow) return "Бергмы";
-    if (shadow == KashfaShadow) return "Кашфы";
-    if (shadow == AvalonShadow) return "Авалона";
+    if (shadow == AmberShadow)  return "Amber";
+    if (shadow == BergmaShadow) return "Begma";
+    if (shadow == KashfaShadow) return "Kashfa";
+    if (shadow == AvalonShadow) return "Avalon";
     return "unknown shadow";
 }
 
 std::string shadowNameForm2(const std::string& shadow)
 {
-    if (shadow == AmberShadow)  return "Амберу";
-    if (shadow == BergmaShadow) return "Бергме";
-    if (shadow == KashfaShadow) return "Кашфу";
-    if (shadow == AvalonShadow) return "Авалону";
+    if (shadow == AmberShadow)  return "Amber";
+    if (shadow == BergmaShadow) return "Begma";
+    if (shadow == KashfaShadow) return "Kashfa";
+    if (shadow == AvalonShadow) return "Avalon";
     return "unknown shadow";
 }
 
 std::string shadowNameForm3(const std::string& shadow)
 {
-    if (shadow == AmberShadow)  return "Амбер";
-    if (shadow == BergmaShadow) return "Бергму";
-    if (shadow == KashfaShadow) return "Кашфу";
-    if (shadow == AvalonShadow) return "Авалон";
+    if (shadow == AmberShadow)  return "Amber";
+    if (shadow == BergmaShadow) return "Begma";
+    if (shadow == KashfaShadow) return "Kashfa";
+    if (shadow == AvalonShadow) return "Avalon";
     return "unknown shadow";
 }
 

@@ -75,7 +75,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Область</string>
+           <string>Area</string>
           </property>
          </widget>
         </item>
@@ -101,7 +101,7 @@
         <item row="1" column="0">
          <widget class="QLabel" name="l_shadowName">
           <property name="text">
-           <string>Тень</string>
+           <string>Shadow</string>
           </property>
          </widget>
         </item>
@@ -115,7 +115,7 @@
         <item row="2" column="0">
          <widget class="QLabel" name="label_9">
           <property name="text">
-           <string>Дата</string>
+           <string>Date</string>
           </property>
          </widget>
         </item>
@@ -129,7 +129,7 @@
         <item row="3" column="0">
          <widget class="QLabel" name="label_11">
           <property name="text">
-           <string>Время</string>
+           <string>Time</string>
           </property>
          </widget>
         </item>
@@ -172,7 +172,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Небо</string>
+           <string>Sky</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -285,7 +285,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Вода</string>
+           <string>Water</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -329,7 +329,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Земля</string>
+           <string>Ground</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -351,7 +351,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Воздух</string>
+           <string>Air</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -415,14 +415,14 @@
            </size>
           </property>
           <property name="text">
-           <string>Флора</string>
+           <string>Flora</string>
           </property>
          </widget>
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="l_faunaName">
           <property name="text">
-           <string>Фауна</string>
+           <string>Fauna</string>
           </property>
          </widget>
         </item>
@@ -454,14 +454,14 @@
         <item row="2" column="0">
          <widget class="QLabel" name="l_amberDistanceName">
           <property name="text">
-           <string>До Амбера</string>
+           <string>Amber dist</string>
           </property>
          </widget>
         </item>
         <item row="3" column="0">
          <widget class="QLabel" name="l_chaosDistanceName">
           <property name="text">
-           <string>До Хаоса</string>
+           <string>Chaos dist</string>
           </property>
          </widget>
         </item>
@@ -810,7 +810,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Воздух</string>
+           <string>Air</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -839,14 +839,14 @@
         <item row="3" column="5">
          <widget class="QLabel" name="l_skyName">
           <property name="text">
-           <string>Небо</string>
+           <string>Sky</string>
           </property>
          </widget>
         </item>
         <item row="0" column="2" colspan="3">
          <widget class="QLabel" name="l_groundName">
           <property name="text">
-           <string>Земля</string>
+           <string>Ground</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -856,7 +856,7 @@
         <item row="6" column="2" colspan="3">
          <widget class="QLabel" name="l_waterName">
           <property name="text">
-           <string>Вода</string>
+           <string>Water</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>

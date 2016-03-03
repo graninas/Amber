@@ -1,17 +1,14 @@
-#include "magic.h"
+#include "taskmechanics.h"
 
-namespace magic
+namespace amber
 {
 
-using namespace amber;
-
-Artifact wrap(const Amber& amber)
+Artifact pure(const Amber& amber)
 {
-    Artifact artifact { amber, true, {} };
-    return artifact;
+    return { amber, true, {} };
 }
 
-Amber unwrap(const Artifact& artifact)
+Amber extract(const Artifact& artifact)
 {
     return artifact.amber;
 }
@@ -60,5 +57,5 @@ Artifact times(uint n, const amber::AmberTask& task, const Artifact& artifact)
     return newArtifact;
 }
 
-} // namespace magic
+} // namespace amber
 

@@ -65,13 +65,13 @@ TimedShadowVariator circullarStormPathVariator(double factor1, double factor2)
             });
 
         SafeShadowStructure value = runSafe(action, structure);
-        if (magic::isFail(value))
+        if (isFail(value))
         {
             // TODO - fail tolerance, error reporting
             return structure;
         }
 
-        return magic::valueData(value);
+        return valueData(value);
     };
     return variator;
 }

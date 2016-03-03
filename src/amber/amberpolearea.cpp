@@ -6,14 +6,13 @@
 namespace amber
 {
 
-// Presentation tip: the map of Amber can be shown.
 ShadowStructure amberShadowStructure()
 {
     return {
         element::AmberDistance(0)
       , element::ChaosDistance(100)
-      , { Element::Ground, 90 }
-      , { Element::Water, 10 }
+      , element::Ground(90)
+      , element::Water(10)
       , element::Air(100)
       , element::Sky(70)
       , element::Flora(100)
@@ -91,8 +90,7 @@ SafeShadowStructureAction sideDirectionsElementChanger(Direction::DirectionType 
     default:
         return safeChangeElements({});
     }
-    // N.B., empty initialization list - like in Haskell.
-    // Presentation tip: show the similarity of C++ and Haskell.
+
     return safeChangeElements({});
 }
 
@@ -100,12 +98,6 @@ ShadowVariator amberPoleVariator(int multiplier)
 {
     ShadowVariator variator = [=](const ShadowStructure& structure, Direction::DirectionType direction)
     {
-        // N.B.! This can be wrapped into a small 'Changing DSL'.
-        // Invent a pairs of dependant elements, for example water-ground, sky-air, amber-chaos.
-        // Show it in presentation.
-        // N.B.: functions of the element namespace completely fit into this model.
-        // Presentation tip: this is a tiny eDSL.
-
         SafeShadowStructureAction action;
         switch (direction)
         {
@@ -131,13 +123,13 @@ ShadowVariator amberPoleVariator(int multiplier)
 
         SafeShadowStructure value = safeWrap(structure);
         value = runSafe(action, structure);
-        if (magic::isFail(value))
+        if (isFail(value))
         {
             // TODO - fail tolerance, error reporting
             return structure;
         }
 
-        return magic::valueData(value);
+        return valueData(value);
     };
     return variator;
 }
@@ -165,8 +157,6 @@ ShadowVariator avalonShadowVariator()
 Shadows amberPoleShadows()
 {
     return {
-        // Presentation tip: lambdas and functions are highly coupled conceptions.
-        // Lambdas can be used directly or can be created by function call.
         { AmberShadow,  Shadow { AmberShadow,  amberShadowVariator(),  amberShadowStructure(),  40.0 } }
       , { BergmaShadow, Shadow { BergmaShadow, bergmaShadowVariator(), bergmaShadowStructure(), 5.0  } }
       , { KashfaShadow, Shadow { KashfaShadow, kashfaShadowVariator(), kashfaShadowStructure(), 5.0  } }

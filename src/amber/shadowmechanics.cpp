@@ -5,12 +5,12 @@ namespace amber
 
 SafeShadowStructure safeWrap(const ShadowStructure& data)
 {
-    return magic::success(data);
+    return success(data);
 }
 
 SafeShadowStructure safeBind(const SafeShadowStructure value, const SafeShadowStructureAction& action)
 {
-    if (value.result == magic::Result::Success)
+    if (value.result == Result::Success)
         return action(value.data);
     return value;
 }
@@ -26,10 +26,10 @@ SafeShadowStructure safeElementChange(const ShadowStructure& structure, Element:
     ShadowStructure::iterator it = newStructure.find(elem);
 
     if (it == newStructure.end())
-        return magic::fail(structure);
+        return fail(structure);
 
     it->second += diff;
-    return magic::success(newStructure);
+    return success(newStructure);
 }
 
 SafeShadowStructure safeTimedElementChange(const ShadowStructure& structure,
@@ -41,10 +41,10 @@ SafeShadowStructure safeTimedElementChange(const ShadowStructure& structure,
     ShadowStructure::iterator it = newStructure.find(elem);
 
     if (it == newStructure.end())
-        return magic::fail(structure);
+        return fail(structure);
 
     it->second = variator(time, it->second, 1);
-    return magic::success(newStructure);
+    return success(newStructure);
 }
 
 SafeShadowStructureAction safeChangeElements(const ElementModifiers& modifiers)
