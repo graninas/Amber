@@ -57,19 +57,6 @@ monad::MaybeDouble maybeShadowStructureDistance(const ShadowStructure& shadowStr
         });
 }
 
-Amber updatePlayerShadowStructure(const Amber& amber, Direction::DirectionType dir)
-{
-    // TODO: make it safe.
-    // TODO: replace by monadic function something like that:
-    // MonadicValue<Maybe> area = mbCurrentArea(amber);
-    const Area& area = amber.areas.at(amber.nearestPlace.area);
-    const Shadow& shadow = area.shadows.at(amber.nearestPlace.shadow);
-
-    Amber newAmber = amber;
-    newAmber.playerShadowStructure = shadow.variator(amber.playerShadowStructure, dir);
-    return newAmber;
-}
-
 Amber updateNearestPlace(const Amber& amber)
 {
     // TODO: make it safe.
