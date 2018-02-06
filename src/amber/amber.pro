@@ -10,7 +10,7 @@ TARGET = amber
 TEMPLATE = lib
 CONFIG += staticlib
 
-QMAKE_CXXFLAGS += -std=c++11
+CONFIG += c++14
 
 SOURCES += amber.cpp \
     ambermechanics.cpp \

@@ -10,7 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = AmberUI
 TEMPLATE = app
 
-QMAKE_CXXFLAGS += -std=c++11
+CONFIG += c++14
 
 FORMS    += shadowsview.ui
 
