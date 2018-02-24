@@ -1,5 +1,7 @@
 #include "storms.h"
 
+#include <cmath>
+
 #include "amberpolearea.h"
 #include "shadowmechanics.h"
 
@@ -10,12 +12,12 @@ namespace variators
 {
 const TimedElementVariator SinElementVariator = [](int time, int value, double factor)
 {
-    return int(sin(time) * value * factor) + value;
+    return int(std::sin(time) * value * factor) + value;
 };
 
 const TimedElementVariator CosElementVariator = [](int time, int value, double factor)
 {
-    return int(cos(time) * value * factor) + value;
+    return int(std::cos(time) * value * factor) + value;
 };
 } // namespace variators
 

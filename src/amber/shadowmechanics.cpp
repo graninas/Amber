@@ -1,5 +1,7 @@
 #include "shadowmechanics.h"
 
+#include <cmath>
+
 namespace amber
 {
 
@@ -102,8 +104,8 @@ double shadowDistance(const ShadowStructure& shadow1, const ShadowStructure& sha
     int d7 = shadow1.at(Element::Fauna)         - shadow2.at(Element::Fauna);
     int d8 = shadow1.at(Element::Flora)         - shadow2.at(Element::Flora);
 
-    return sqrt(d1*d1 + d2*d2 + d3*d3 + d4*d4 +
-                d5*d5 + d6*d6 + d7*d7 + d8*d8);
+    return std::sqrt(d1*d1 + d2*d2 + d3*d3 + d4*d4 +
+                     d5*d5 + d6*d6 + d7*d7 + d8*d8);
 }
 
 double elementalDistance(const ShadowStructure& shadow1, const ShadowStructure& shadow2)
