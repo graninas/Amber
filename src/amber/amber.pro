@@ -35,7 +35,8 @@ HEADERS += amber.h \
     knownareas.h \
     naming.h \
     event_log.h \
-    taskmechanics.h
+    taskmechanics.h \
+    model/world_component.h
 
 OTHER_FILES += \
     amber.pri
@@ -47,3 +48,4 @@ unix {
 
 include($$PWD/../../lib/cpp_functional_core/cpp_functional_core.pri)
 include($$PWD/../../lib/cpp_monads/cpp_monads.pri)
+include($$PWD/../../lib/cpp_stm/cpp_stm.pri)

@@ -6,5 +6,6 @@ SUBDIRS += \
     lib/cpp_lenses \
     lib/cpp_stm \
     src/amber \
+    src/amberTest \
     app/AmberUI
 

@@ -1,6 +1,10 @@
 #include <QString>
 #include <QtTest>
 
+#include <stm.h>
+
+#include "../amber/model/world_component.h"
+
 class AmberTest : public QObject
 {
     Q_OBJECT
@@ -9,16 +13,20 @@ public:
     AmberTest();
 
 private Q_SLOTS:
-    void testCase1();
+    void compositeTest();
 };
 
 AmberTest::AmberTest()
 {
 }
 
-void AmberTest::testCase1()
+void AmberTest::compositeTest()
 {
-    QVERIFY2(true, "Failure");
+    stm::Context ctx;
+    amber::model::Composite composite;
+
+    amber::model::Components cs;
+    composite.components = stm::newTVarIO(ctx, cs);
 }
 
 QTEST_APPLESS_MAIN(AmberTest)
