@@ -9,24 +9,45 @@ namespace model {
 
 // forward declaration
 struct Composite;
+struct Percentage;
 
 template <typename T>
 struct Scalar
 {
 //    stm::ReadOnlyTVar<uint32_t> nameIndex;
+    stm::TVar<std::string> name;
+
+
     stm::TVar<T> value;
 };
 
-using FScalar = Scalar<double>;
-using IScalar = Scalar<int64_t>;
+using FScalarT = double;
+using IScalarT = int64_t;
 
-using Component = std::variant<Composite, IScalar, FScalar>;
-using Components = std::vector<Component>;
+using FScalar = Scalar<FScalarT>;
+using IScalar = Scalar<IScalarT>;
+
+using Component = std::variant<Composite, Percentage, IScalar, FScalar>;
+
+using CompositeComponents  = std::vector<Component>;
+using PercentageComponents = std::vector<IScalar>;
+
+struct Percentage
+{
+    //    stm::ReadOnlyTVar<uint32_t> nameIndex;
+    stm::TVar<std::string> name;
+
+    // Number of components may vary
+    stm::TVar<PercentageComponents> components;
+};
 
 struct Composite
 {
 //    stm::ReadOnlyTVar<uint32_t> nameIndex;
-    stm::TVar<Components> components;
+    stm::TVar<std::string> name;
+
+    // Number of components may vary
+    stm::TVar<CompositeComponents> components;
 };
 
 //world1 :: World
@@ -77,8 +98,44 @@ struct Composite
 //    }
 //};
 
+template <typename T>
+Scalar<T> mkScalar(stm::Context& ctx, const std::string& name, const T& val)
+{
+    Scalar<T> scalar;
+    scalar.name  = stm::newTVarIO(ctx, name);
+    scalar.value = stm::newTVarIO(ctx, val);
+    return scalar;
+}
 
+IScalar mkIScalar(stm::Context& ctx, const std::string& name, const IScalarT& val)
+{
+    return mkScalar<IScalarT>(ctx, name, val);
+}
 
+FScalar mkFScalar(stm::Context& ctx, const std::string& name, const FScalarT& val)
+{
+    return mkScalar<FScalarT>(ctx, name, val);
+}
+
+Percentage mkPercentage(stm::Context& ctx,
+                        const std::string& name,
+                        const PercentageComponents& components)
+{
+    Percentage percentage;
+    percentage.name       = stm::newTVarIO(ctx, name);
+    percentage.components = stm::newTVarIO(ctx, components);
+    return percentage;
+}
+
+Composite mkComposite(stm::Context& ctx,
+                      const std::string& name,
+                      const CompositeComponents& components)
+{
+    Composite composite;
+    composite.name       = stm::newTVarIO(ctx, name);
+    composite.components = stm::newTVarIO(ctx, components);
+    return composite;
+}
 
 } // namespace model
 } // namespace amber
