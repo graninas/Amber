@@ -129,6 +129,16 @@ Composite mkStructuralComposite(
     return mkComposite(ctx, name, composite);
 }
 
+const auto isColorScalarType = [](ScalarType scalarType)
+{
+    return ScalarType::Color == scalarType;
+};
+
+const auto isValidColor = [](ValueT value)
+{
+    return (value <= 0xffffffff) && (value >= 0);
+};
+
 } // namespace model
 } // namespace amber
 

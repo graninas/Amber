@@ -20,13 +20,30 @@ AmberTest::AmberTest()
 {
 }
 
+stm::STML<stm::Unit> increaseColor(const amber::model::Scalar& scalar)
+{
+    using namespace amber::model;
+
+    stm::STML<stm::Unit> increase
+            = stm::modifyTVar<ValueT>(
+                scalar.value,
+                [](ValueT value) { return value + 0x100; });
+
+    stm::STML<stm::Unit> tryIncrease
+            = stm::whenTVar<ValueT, stm::Unit>(scalar.value, isValidColor, increase);
+
+    return stm::whenTVar<ScalarType, stm::Unit>(scalar.subtype, isColorScalarType, tryIncrease);
+}
+
 void AmberTest::compositeTest()
 {
     using namespace amber::model;
 
     stm::Context ctx;
 
-    Scalar sky      = mkColorScalar(ctx, "sky", 0x66ffff00);
+    const ValueT initialColor = 0x00;
+
+    Scalar sky      = mkColorScalar(ctx, "sky", initialColor);
 
     Scalar oxygen   = mkItemScalar(ctx, "oxygen");
     Scalar nitrogen = mkItemScalar(ctx, "nitrogen");
@@ -47,6 +64,14 @@ void AmberTest::compositeTest()
                   mkPercent(grass,  5) });
 
     Composite world = mkStructuralComposite(ctx, "World 1", { sky, air, ground });
+
+    for (int i = 0; i < 100; i++)
+    {
+        stm::atomically(ctx, increaseColor(sky));
+    }
+
+    ValueT result = stm::readTVarIO(ctx, sky.value);
+    QCOMPARE(result, initialColor);
 }
 
 //world1 :: World
