@@ -22,16 +22,31 @@ AmberTest::AmberTest()
 
 void AmberTest::compositeTest()
 {
+    using namespace amber::model;
+
     stm::Context ctx;
 
-    amber::model::IScalar sky      = amber::model::mkIScalar(ctx, "sky", 0x66ffff00);
-    amber::model::IScalar oxygen   = amber::model::mkIScalar(ctx, "oxygen", 24);
-    amber::model::IScalar nitrogen = amber::model::mkIScalar(ctx, "nitrogen", 72);
-    amber::model::IScalar water    = amber::model::mkIScalar(ctx, "water", 4);
+    Scalar sky      = mkColorScalar(ctx, "sky", 0x66ffff00);
 
-    amber::model::Percentage air = amber::model::mkPercentage(ctx, "air", { oxygen, nitrogen, water });
+    Scalar oxygen   = mkItemScalar(ctx, "oxygen");
+    Scalar nitrogen = mkItemScalar(ctx, "nitrogen");
+    Scalar water    = mkItemScalar(ctx, "water");
 
-    amber::model::Composite world = amber::model::mkComposite(ctx, "World 1", { sky, air });
+    Scalar soil     = mkColorScalar(ctx, "soil", 0x66ffff00);
+    Scalar stones   = mkColorScalar(ctx, "stones", 0x66ffff00);
+    Scalar grass    = mkColorScalar(ctx, "grass", 0x66ffff00);
+
+    Composite air = mkPercentageComposite(ctx, "air",
+                { mkPercent(oxygen,   24),
+                  mkPercent(nitrogen, 72),
+                  mkPercent(water,    4) });
+
+    Composite ground = mkPercentageComposite(ctx, "ground",
+                { mkPercent(soil,   60),
+                  mkPercent(stones, 35),
+                  mkPercent(grass,  5) });
+
+    Composite world = mkStructuralComposite(ctx, "World 1", { sky, air, ground });
 }
 
 //world1 :: World

@@ -2,139 +2,131 @@
 #define WORLD_COMPONENT_H
 
 #include <functional>
+#include <list>
 #include <stm.h>
 
 namespace amber {
 namespace model {
 
+using ValueT = int64_t;
+
 // forward declaration
 struct Composite;
-struct Percentage;
 
-template <typename T>
+enum class ScalarType
+{
+    Value,
+    Color,
+    Item
+};
+
 struct Scalar
 {
-//    stm::ReadOnlyTVar<uint32_t> nameIndex;
     stm::TVar<std::string> name;
-
-
-    stm::TVar<T> value;
+    stm::TVar<ValueT> value;
+    stm::TVar<ScalarType> subtype;
 };
 
-using FScalarT = double;
-using IScalarT = int64_t;
+template <typename T>
+using ContainerType = std::list<T>;
 
-using FScalar = Scalar<FScalarT>;
-using IScalar = Scalar<IScalarT>;
+using Component = std::variant<Composite, Scalar>;
+using Components = ContainerType<Component>;
+using Percents = ContainerType<ValueT>;
 
-using Component = std::variant<Composite, Percentage, IScalar, FScalar>;
-
-using CompositeComponents  = std::vector<Component>;
-using PercentageComponents = std::vector<IScalar>;
-
-struct Percentage
+struct PercentageComposite
 {
-    //    stm::ReadOnlyTVar<uint32_t> nameIndex;
-    stm::TVar<std::string> name;
-
-    // Number of components may vary
-    stm::TVar<PercentageComponents> components;
+    stm::TVar<Percents> percents;
+    stm::TVar<Components> components;
 };
+
+struct StructuralComposite
+{
+    stm::TVar<Components> components;
+};
+
+using CompositeF = std::variant<StructuralComposite, PercentageComposite>;
 
 struct Composite
 {
-//    stm::ReadOnlyTVar<uint32_t> nameIndex;
     stm::TVar<std::string> name;
-
-    // Number of components may vary
-    stm::TVar<CompositeComponents> components;
+    CompositeF composite;
 };
 
-//world1 :: World
-//{
-//    gravity = 2;
-//    dayLen = 24;
-//}
-
-//world1_voxel_1_1 :: Composite
-//{
-//    localTime = 12;
-//    sky = Composite { color = 1; };
-//    air = Composite
-//        {
-//            Percentage
-//            {
-//                oxygen = 24;
-//                nitrogen = 72;
-//                water = 4;
-//            }
-//        };
-//    ground = Composite
-//        {
-//            Percentage
-//            {
-//                soil = 60;
-//                stones = 35;
-//            }
-//            Percentage
-//            {
-//                grass = 30;
-//            }
-//        }
-//};
-
-//struct World
-//{
-//    static:
-//    gravity :: Scalar
-//    dayLen :: Scalar
-
-//    voxel :: CompositeF 3
-//    {
-//        localTime :: Scalar (depends on dayLen)
-//        level2 sky :: CompositeF N1
-//        level1 air :: CompositeF N2
-//        level0 ground :: CompositeF N3
-//    }
-//};
-
-template <typename T>
-Scalar<T> mkScalar(stm::Context& ctx, const std::string& name, const T& val)
+Scalar mkScalar(stm::Context& ctx,
+                const std::string& name,
+                const ValueT& value,
+                const ScalarType& subtype = ScalarType::Value)
 {
-    Scalar<T> scalar;
-    scalar.name  = stm::newTVarIO(ctx, name);
-    scalar.value = stm::newTVarIO(ctx, val);
+    Scalar scalar;
+    scalar.name    = stm::newTVarIO(ctx, name);
+    scalar.value   = stm::newTVarIO(ctx, value);
+    scalar.subtype = stm::newTVarIO(ctx, subtype);
     return scalar;
 }
 
-IScalar mkIScalar(stm::Context& ctx, const std::string& name, const IScalarT& val)
+Scalar mkItemScalar(stm::Context& ctx,
+                    const std::string& name)
 {
-    return mkScalar<IScalarT>(ctx, name, val);
+    return mkScalar(ctx, name, 0, ScalarType::Item);
 }
 
-FScalar mkFScalar(stm::Context& ctx, const std::string& name, const FScalarT& val)
+Scalar mkColorScalar(stm::Context& ctx,
+                     const std::string& name,
+                     const ValueT& value)
 {
-    return mkScalar<FScalarT>(ctx, name, val);
+    return mkScalar(ctx, name, value, ScalarType::Color);
 }
 
-Percentage mkPercentage(stm::Context& ctx,
-                        const std::string& name,
-                        const PercentageComponents& components)
+struct PercentHelper
 {
-    Percentage percentage;
-    percentage.name       = stm::newTVarIO(ctx, name);
-    percentage.components = stm::newTVarIO(ctx, components);
-    return percentage;
+    Component component;
+    ValueT percent;
+};
+
+PercentHelper mkPercent(const Component& component, const ValueT& percent)
+{
+    return PercentHelper { component, percent };
 }
 
-Composite mkComposite(stm::Context& ctx,
-                      const std::string& name,
-                      const CompositeComponents& components)
+Composite mkComposite(
+        stm::Context& ctx,
+        const std::string& name,
+        const CompositeF& compositeF)
 {
     Composite composite;
     composite.name       = stm::newTVarIO(ctx, name);
-    composite.components = stm::newTVarIO(ctx, components);
+    composite.composite  = compositeF;
     return composite;
+}
+
+Composite mkPercentageComposite(
+        stm::Context& ctx,
+        const std::string& name,
+        const std::vector<PercentHelper>& percentHelpers)
+{
+    Components components;
+    Percents percents;
+    for (const PercentHelper& percentHelper : percentHelpers)
+    {
+        components.push_back(percentHelper.component);
+        percents.push_back(percentHelper.percent);
+    }
+
+    PercentageComposite composite;
+    composite.components = stm::newTVarIO(ctx, components);
+    composite.percents = stm::newTVarIO(ctx, percents);
+    return mkComposite(ctx, name, composite);
+}
+
+Composite mkStructuralComposite(
+        stm::Context& ctx,
+        const std::string& name,
+        const Components& components)
+{
+    StructuralComposite composite;
+    composite.components = stm::newTVarIO(ctx, components);
+    return mkComposite(ctx, name, composite);
 }
 
 } // namespace model
