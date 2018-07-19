@@ -13,8 +13,11 @@ public:
     AmberTest();
 
 private Q_SLOTS:
-    void compositeTest();
+    void rawTransactionBenchmarkTest();
+    void precreatedTransactionBenchmarkTest();
 };
+
+const amber::model::ValueT colorIncreaseStep = 0x100;
 
 AmberTest::AmberTest()
 {
@@ -27,7 +30,7 @@ stm::STML<stm::Unit> increaseColor(const amber::model::Scalar& scalar)
     stm::STML<stm::Unit> increase
             = stm::modifyTVar<ValueT>(
                 scalar.value,
-                [](ValueT value) { return value + 0x100; });
+                [](ValueT value) { return value + colorIncreaseStep; });
 
     stm::STML<stm::Unit> tryIncrease
             = stm::whenTVar<ValueT, stm::Unit>(scalar.value, isValidColor, increase);
@@ -35,43 +38,104 @@ stm::STML<stm::Unit> increaseColor(const amber::model::Scalar& scalar)
     return stm::whenTVar<ScalarType, stm::Unit>(scalar.subtype, isColorScalarType, tryIncrease);
 }
 
-void AmberTest::compositeTest()
+//void AmberTest::compositeTest()
+//{
+//    using namespace amber::model;
+
+//    stm::Context ctx;
+
+//    const ValueT initialColor = 0x00;
+//    const ValueT maxColor = 0x0000ff00;
+
+//    Scalar sky      = mkColorScalar(ctx, "sky", initialColor);
+
+//    Scalar oxygen   = mkItemScalar(ctx, "oxygen");
+//    Scalar nitrogen = mkItemScalar(ctx, "nitrogen");
+//    Scalar water    = mkItemScalar(ctx, "water");
+
+//    Scalar soil     = mkColorScalar(ctx, "soil", 0x66ffff00);
+//    Scalar stones   = mkColorScalar(ctx, "stones", 0x66ffff00);
+//    Scalar grass    = mkColorScalar(ctx, "grass", 0x66ffff00);
+
+//    Composite air = mkPercentageComposite(ctx, "air",
+//                { mkPercent(oxygen,   24),
+//                  mkPercent(nitrogen, 72),
+//                  mkPercent(water,    4) });
+
+//    Composite ground = mkPercentageComposite(ctx, "ground",
+//                { mkPercent(soil,   60),
+//                  mkPercent(stones, 35),
+//                  mkPercent(grass,  5) });
+
+//    Composite world = mkStructuralComposite(ctx, "World 1", { sky, air, ground });
+
+//    bool maxColorReached = false;
+//    while (!maxColorReached)
+//    {
+//        stm::atomically(ctx, increaseColor(sky));
+//        ValueT color = stm::readTVarIO(ctx, sky.value);
+//        maxColorReached = color >= maxColor;
+//    }
+
+//    ValueT result = stm::readTVarIO(ctx, sky.value);
+//    QCOMPARE(result, maxColor);
+//}
+
+void AmberTest::rawTransactionBenchmarkTest()
 {
     using namespace amber::model;
 
+    const ValueT initialColor = 0x00;
+    const ValueT maxColor = 0x0000ff00;
+
     stm::Context ctx;
 
-    const ValueT initialColor = 0x00;
+    Scalar sky = mkColorScalar(ctx, "sky", initialColor);
 
-    Scalar sky      = mkColorScalar(ctx, "sky", initialColor);
+    // Result: 74.0 msecs
+    QBENCHMARK {
+        stm::atomically(ctx, stm::writeTVar(sky.value, initialColor));
 
-    Scalar oxygen   = mkItemScalar(ctx, "oxygen");
-    Scalar nitrogen = mkItemScalar(ctx, "nitrogen");
-    Scalar water    = mkItemScalar(ctx, "water");
-
-    Scalar soil     = mkColorScalar(ctx, "soil", 0x66ffff00);
-    Scalar stones   = mkColorScalar(ctx, "stones", 0x66ffff00);
-    Scalar grass    = mkColorScalar(ctx, "grass", 0x66ffff00);
-
-    Composite air = mkPercentageComposite(ctx, "air",
-                { mkPercent(oxygen,   24),
-                  mkPercent(nitrogen, 72),
-                  mkPercent(water,    4) });
-
-    Composite ground = mkPercentageComposite(ctx, "ground",
-                { mkPercent(soil,   60),
-                  mkPercent(stones, 35),
-                  mkPercent(grass,  5) });
-
-    Composite world = mkStructuralComposite(ctx, "World 1", { sky, air, ground });
-
-    for (int i = 0; i < 100; i++)
-    {
-        stm::atomically(ctx, increaseColor(sky));
+        bool maxColorReached = false;
+        while (!maxColorReached)
+        {
+            stm::atomically(ctx, increaseColor(sky));
+            ValueT color = stm::readTVarIO(ctx, sky.value);
+            maxColorReached = color >= maxColor;
+        }
     }
 
     ValueT result = stm::readTVarIO(ctx, sky.value);
-    QCOMPARE(result, initialColor);
+    QCOMPARE(result, maxColor);
+}
+
+void AmberTest::precreatedTransactionBenchmarkTest()
+{
+    using namespace amber::model;
+
+    const ValueT initialColor = 0x00;
+    const ValueT maxColor = 0x0000ff00;
+
+    stm::Context ctx;
+
+    Scalar sky = mkColorScalar(ctx, "sky", initialColor);
+    auto increaseColorTrans = increaseColor(sky);
+
+    // Result: 53.7 msecs
+    QBENCHMARK {
+        stm::atomically(ctx, stm::writeTVar(sky.value, initialColor));
+
+        bool maxColorReached = false;
+        while (!maxColorReached)
+        {
+            stm::atomically(ctx, increaseColorTrans);
+            ValueT color = stm::readTVarIO(ctx, sky.value);
+            maxColorReached = color >= maxColor;
+        }
+    }
+
+    ValueT result = stm::readTVarIO(ctx, sky.value);
+    QCOMPARE(result, maxColor);
 }
 
 //world1 :: World
