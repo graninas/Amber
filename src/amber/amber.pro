@@ -23,7 +23,9 @@ SOURCES += amber.cpp \
     naming.cpp \
     event_log.cpp \
     storms.cpp \
-    taskmechanics.cpp
+    taskmechanics.cpp \
+    model/helpers.cpp \
+    model/transactions.cpp
 
 HEADERS += amber.h \
     ambermechanics.h \
@@ -36,7 +38,9 @@ HEADERS += amber.h \
     naming.h \
     event_log.h \
     taskmechanics.h \
-    model/world_component.h
+    model/helpers.h \
+    model/model.h \
+    model/transactions.h
 
 OTHER_FILES += \
     amber.pri

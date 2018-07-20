@@ -29,3 +29,4 @@ unix {
 include($$PWD/../../lib/cpp_functional_core/cpp_functional_core.pri)
 include($$PWD/../../lib/cpp_monads/cpp_monads.pri)
 include($$PWD/../../lib/cpp_stm/cpp_stm.pri)
+include($$PWD/../../src/amber/amber.pri)
