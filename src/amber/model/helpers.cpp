@@ -9,9 +9,9 @@ Scalar mkScalar(stm::Context& ctx,
                 const ScalarType& subtype)
 {
     Scalar scalar;
-    scalar.name    = stm::newTVarIO(ctx, name);
-    scalar.value   = stm::newTVarIO(ctx, value);
-    scalar.subtype = stm::newTVarIO(ctx, subtype);
+    scalar.name    = stm::newTVarIO(ctx, name, name);
+    scalar.value   = stm::newTVarIO(ctx, value, "value of " + name);
+    scalar.subtype = stm::newTVarIO(ctx, subtype, "subtype of " + name);
     return scalar;
 }
 
