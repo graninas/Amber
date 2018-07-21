@@ -21,11 +21,23 @@ private Q_SLOTS:
     void precreatedTransactionBenchmarkTest();
 
     void worldInteractionBenchmarkTest();
+
+    void rawLongSTMLBindBenchmarkTest();
+    void precreatedLongSTMLBindBenchmarkTest();
+
+    void rawLongScalarSTMLBindBenchmarkTest();
+    void precreatedLongScalarSTMLBindBenchmarkTest();
 };
 
 const amber::model::Value colorIncreaseStep = 0x100;
 const amber::model::Value initialColor = 0x00;
 const amber::model::Value maxColor = 0x0000ff00;
+
+const int maxBindChainLength = 30;
+const int maxScalarBindChainLength = 30;
+
+using ScalarTVar = stm::TVar<amber::model::Scalar>;
+
 
 AmberTest::AmberTest()
 {
@@ -48,7 +60,7 @@ tryIncreaseColor(const amber::model::Scalar& scalar)
 }
 
 stm::STML<amber::model::MaybeValue>
-increaseColorIfColorScalar(const amber::model::Scalar& scalar)
+tryIncreaseColorIfColorScalar(const amber::model::Scalar& scalar)
 {
     using namespace amber::model;
 
@@ -105,7 +117,7 @@ void skyColorWorker(stm::Context& ctx, const amber::model::Scalar& sky)
 {
     using namespace amber::model;
 
-    auto trans = increaseColorIfColorScalar(sky);
+    auto trans = tryIncreaseColorIfColorScalar(sky);
     bool success = true;
     while (success)
     {
@@ -154,7 +166,7 @@ void AmberTest::rawTransactionBenchmarkTest()
     QBENCHMARK {
         while (success)
         {
-            auto mbNewColor = stm::atomically(ctx, increaseColorIfColorScalar(sky));
+            auto mbNewColor = stm::atomically(ctx, tryIncreaseColorIfColorScalar(sky));
             success = mbNewColor.has_value();
         }
     }
@@ -171,7 +183,7 @@ void AmberTest::precreatedTransactionBenchmarkTest()
 
     Scalar sky = mkColorScalar(ctx, "sky", initialColor);
 
-    auto trans = increaseColorIfColorScalar(sky);
+    auto trans = tryIncreaseColorIfColorScalar(sky);
     bool success = true;
 
     // Result: 12.0 msecs
@@ -214,6 +226,115 @@ void AmberTest::worldInteractionBenchmarkTest()
         airPercentageThread.join();
         airColorThread.join();
     }
+}
+
+stm::STML<int> increaseTimes(const stm::TVar<int>& tvar, int times)
+{
+    if (times > 0)
+    {
+        return stm::sequence<stm::Unit, int>(
+                    stm::modifyTVar<int>(tvar, [](int val) { return val + 1; }),
+                    increaseTimes(tvar, times - 1));
+    }
+    else
+    {
+        return stm::readTVar(tvar);
+    }
+}
+
+stm::STML<amber::model::Value>
+increaseScalarTimes(const ScalarTVar& tvar, int times)
+{
+    using namespace amber::model;
+
+    if (times > 0)
+    {
+        return stm::sequence<stm::Unit, Value>(
+                    stm::withTVar<Scalar, stm::Unit>(
+                        tvar,
+                        [](const Scalar& scalar)
+                        {
+                            return stm::modifyTVar<Value>(scalar.value, [](Value val) { return val + 1; });
+                        }),
+                    increaseScalarTimes(tvar, times - 1));
+    }
+    else
+    {
+        return stm::withTVar<Scalar, Value>(
+                    tvar,
+                    [](const Scalar& scalar)
+                    {
+                        return stm::readTVar<Value>(scalar.value);
+                    });
+    }
+}
+
+void AmberTest::rawLongSTMLBindBenchmarkTest()
+{
+    stm::Context ctx;
+
+    stm::TVar<int> tvar = stm::newTVarIO(ctx, 0);
+    int result = 0;
+
+    QBENCHMARK {
+        result = stm::atomically(ctx, increaseTimes(tvar, maxBindChainLength));
+    }
+
+    QVERIFY(result == maxBindChainLength);
+}
+
+void AmberTest::precreatedLongSTMLBindBenchmarkTest()
+{
+    stm::Context ctx;
+
+    stm::TVar<int> tvar = stm::newTVarIO(ctx, 0);
+    auto trans = increaseTimes(tvar, maxBindChainLength);
+    int result = 0;
+
+    QBENCHMARK {
+        result = stm::atomically(ctx, trans);
+    }
+
+    QVERIFY(result == maxBindChainLength);
+}
+
+
+
+void AmberTest::rawLongScalarSTMLBindBenchmarkTest()
+{
+    using namespace amber::model;
+
+    stm::Context ctx;
+
+    Scalar scalar = mkScalar(ctx, "Some Scalar", 0, ScalarType::Value);
+    ScalarTVar scalarTVar = stm::newTVarIO(ctx, scalar);
+
+    int result = 0;
+
+    QBENCHMARK {
+        result = stm::atomically(ctx, increaseScalarTimes(scalarTVar, maxScalarBindChainLength));
+    }
+
+    QVERIFY(result == maxScalarBindChainLength);
+}
+
+void AmberTest::precreatedLongScalarSTMLBindBenchmarkTest()
+{
+    using namespace amber::model;
+
+    stm::Context ctx;
+
+    Scalar scalar = mkScalar(ctx, "Some Scalar", 0, ScalarType::Value);
+    ScalarTVar scalarTVar = stm::newTVarIO(ctx, scalar);
+
+    auto trans = increaseScalarTimes(scalarTVar, maxScalarBindChainLength);
+    int result = 0;
+
+    QBENCHMARK {
+        result = stm::atomically(ctx, trans);
+    }
+
+    QVERIFY(result == maxScalarBindChainLength);
 }
 
 //world1 :: World
