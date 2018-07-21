@@ -33,6 +33,7 @@ using ContainerType = std::list<T>;
 
 using Component = std::variant<Composite, Scalar>;
 using Components = ContainerType<Component>;
+//using Components = std::map<Name, Component>;
 
 struct PercentComponent
 {

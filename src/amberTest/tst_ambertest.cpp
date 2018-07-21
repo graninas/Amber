@@ -31,35 +31,53 @@ AmberTest::AmberTest()
 {
 }
 
-stm::STML<stm::Unit> increaseColor(const amber::model::Scalar& scalar)
+stm::STML<amber::model::MaybeValue>
+tryIncreaseColor(const amber::model::Scalar& scalar)
 {
     using namespace amber::model;
 
-    stm::STML<stm::Unit> increase
-            = stm::modifyTVar<Value>(
+    return stm::tryModifyTVar<Value>(
                 scalar.value,
-                [](Value value) { return value + colorIncreaseStep; });
-
-    stm::STML<stm::Unit> tryIncrease
-            = stm::whenTVar<Value, stm::Unit>(scalar.value, isValidColor, increase);
-
-    return stm::whenTVar<ScalarType, stm::Unit>(scalar.subtype, isColorScalarType, tryIncrease);
+                [](Value value)
+                {
+                    Value newColor = value + colorIncreaseStep;
+                    return isValidColor(newColor) && newColor <= maxColor
+                            ? std::make_optional<Value>(newColor)
+                            : std::nullopt;
+                });
 }
 
-//stm::STML<stm::Unit> increaseColor(const amber::model::Scalar& scalar)
-//{
-//    using namespace amber::model;
+stm::STML<amber::model::MaybeValue>
+increaseColorIfColorScalar(const amber::model::Scalar& scalar)
+{
+    using namespace amber::model;
 
-//    stm::STML<stm::Unit> increase
-//            = stm::modifyTVar<Value>(
-//                scalar.value,
-//                [](Value value) { return value + colorIncreaseStep; });
+    stm::STML<MaybeValue> tryIncreaseColorTrans = tryIncreaseColor(scalar);
+    return stm::tryTVar<ScalarType, Value>(
+                scalar.subtype,
+                [](ScalarType subtype) { return subtype == ScalarType::Color; },
+                tryIncreaseColorTrans);
+}
 
-//    stm::STML<stm::Unit> tryIncrease
-//            = stm::whenTVar<Value, stm::Unit>(scalar.value, isValidColor, increase);
+stm::STML<amber::model::MaybeValue> tryIncreaseComponentColor(
+        const std::string& name,
+        const amber::model::Composite& composite)
+{
+    using namespace amber::model;
 
-//    return stm::whenTVar<ScalarType, stm::Unit>(scalar.subtype, isColorScalarType, tryIncrease);
-//}
+    return stm::bindOptional<Component, Value>(
+        findComponent(name, composite),
+        [](const Component& component)
+        {
+            return stm::bindOptional<Scalar, Value>(
+                findScalar(ScalarType::Color, component),
+                [](const Scalar& scalar)
+                {
+                    return tryIncreaseColor(scalar);
+                });
+        }
+    );
+}
 
 stm::STML<amber::model::MaybeValue> tryDecreaseComponentPercent(
         const std::string& name,
@@ -67,9 +85,8 @@ stm::STML<amber::model::MaybeValue> tryDecreaseComponentPercent(
 {
     using namespace amber::model;
 
-    return stm::withOptional<PercentComponent, MaybeValue>(
+    return stm::bindOptional<PercentComponent, Value>(
         findPercentComponent(name, composite),
-        stm::pure<MaybeValue>(std::nullopt),
         [](const PercentComponent& component)
         {
             return stm::tryModifyTVar<Value>(
@@ -86,13 +103,14 @@ stm::STML<amber::model::MaybeValue> tryDecreaseComponentPercent(
 
 void skyColorWorker(stm::Context& ctx, const amber::model::Scalar& sky)
 {
-    auto increaseColorTrans = increaseColor(sky);
-    bool maxColorReached = false;
-    while (!maxColorReached)
+    using namespace amber::model;
+
+    auto trans = increaseColorIfColorScalar(sky);
+    bool success = true;
+    while (success)
     {
-        stm::atomically(ctx, increaseColorTrans);
-        amber::model::Value color = stm::readTVarIO(ctx, sky.value);
-        maxColorReached = color >= maxColor;
+        MaybeValue skyColor = stm::atomically(ctx, trans);
+        success = skyColor.has_value();
     }
 }
 
@@ -100,57 +118,27 @@ void airPercentageWorker(stm::Context& ctx, const amber::model::Composite& air)
 {
     using namespace amber::model;
 
-    stm::STML<MaybeValue> tryDecreaseNitrogenPercentTrans = tryDecreaseComponentPercent("nitrogen", air);
-    bool minNitrogenReached = false;
-    while (!minNitrogenReached)
+    stm::STML<MaybeValue> trans = tryDecreaseComponentPercent("nitrogen", air);
+    bool success = true;
+    while (success)
     {
-        MaybeValue nitrogenPercent = stm::atomically(ctx, tryDecreaseNitrogenPercentTrans);
-        minNitrogenReached = !nitrogenPercent.has_value() || nitrogenPercent.value() <= 0;
+        MaybeValue nitrogenPercent = stm::atomically(ctx, trans);
+        success = nitrogenPercent.has_value() && nitrogenPercent.value() <= 0;
     }
 }
 
 void airColorWorker(stm::Context& ctx, const amber::model::Composite& air)
 {
-//    auto increaseColorTrans = increaseColor(sky);
-//    bool maxColorReached = false;
-//    while (!maxColorReached)
-//    {
-//        stm::atomically(ctx, increaseColorTrans);
-//        amber::model::Value color = stm::readTVarIO(ctx, sky.value);
-//        maxColorReached = color >= maxColor;
-//    }
+    using namespace amber::model;
+
+    stm::STML<MaybeValue> trans = tryIncreaseComponentColor("nitrogen", air);
+    bool success = true;
+    while (success)
+    {
+        MaybeValue nitrogenColor = stm::atomically(ctx, trans);
+        success = nitrogenColor.has_value();
+    }
 }
-
-
-//void AmberTest::compositeTest()
-//{
-//    using namespace amber::model;
-
-//    stm::Context ctx;
-
-//    Scalar sky      = mkColorScalar(ctx, "sky", initialColor);
-
-//    Scalar oxygen   = mkItemScalar(ctx, "oxygen");
-//    Scalar nitrogen = mkItemScalar(ctx, "nitrogen");
-//    Scalar water    = mkItemScalar(ctx, "water");
-
-//    Scalar soil     = mkColorScalar(ctx, "soil", 0x66ffff00);
-//    Scalar stones   = mkColorScalar(ctx, "stones", 0x66ffff00);
-//    Scalar grass    = mkColorScalar(ctx, "grass", 0x66ffff00);
-
-//    Composite air = mkPercentageComposite(ctx, "air",
-//                { mkPercent(oxygen,   24),
-//                  mkPercent(nitrogen, 72),
-//                  mkPercent(water,    4) });
-
-//    Composite ground = mkPercentageComposite(ctx, "ground",
-//                { mkPercent(soil,   60),
-//                  mkPercent(stones, 35),
-//                  mkPercent(grass,  5) });
-
-//    Composite world = mkStructuralComposite(ctx, "World 1", { sky, air, ground });
-
-//}
 
 void AmberTest::rawTransactionBenchmarkTest()
 {
@@ -160,14 +148,14 @@ void AmberTest::rawTransactionBenchmarkTest()
 
     Scalar sky = mkColorScalar(ctx, "sky", initialColor);
 
-    // Result: 75.0 msecs
+    bool success = true;
+
+    // Result: 23.0 msecs
     QBENCHMARK {
-        bool maxColorReached = false;
-        while (!maxColorReached)
+        while (success)
         {
-            stm::atomically(ctx, increaseColor(sky));
-            Value color = stm::readTVarIO(ctx, sky.value);
-            maxColorReached = color >= maxColor;
+            auto mbNewColor = stm::atomically(ctx, increaseColorIfColorScalar(sky));
+            success = mbNewColor.has_value();
         }
     }
 
@@ -182,16 +170,16 @@ void AmberTest::precreatedTransactionBenchmarkTest()
     stm::Context ctx;
 
     Scalar sky = mkColorScalar(ctx, "sky", initialColor);
-    auto increaseColorTrans = increaseColor(sky);
 
-    // Result: 50.0 msecs
+    auto trans = increaseColorIfColorScalar(sky);
+    bool success = true;
+
+    // Result: 12.0 msecs
     QBENCHMARK {
-        bool maxColorReached = false;
-        while (!maxColorReached)
+        while (success)
         {
-            stm::atomically(ctx, increaseColorTrans);
-            Value color = stm::readTVarIO(ctx, sky.value);
-            maxColorReached = color >= maxColor;
+            auto mbNewColor = stm::atomically(ctx, trans);
+            success = mbNewColor.has_value();
         }
     }
 
@@ -216,6 +204,7 @@ void AmberTest::worldInteractionBenchmarkTest()
                   {"nitrogen", {nitrogen, 72}},
                   {"water",    {water,    4 }} });
 
+    // Result: 110.0 msecs
     QBENCHMARK {
         std::thread skyColorThread(skyColorWorker, std::ref(ctx), sky);
         std::thread airPercentageThread(airPercentageWorker, std::ref(ctx), air);
