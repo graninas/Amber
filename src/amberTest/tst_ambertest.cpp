@@ -1,8 +1,7 @@
 #include <QString>
 #include <QtTest>
 
-#include <stm.h>
-#include <stm_optional.h>
+#include <stm/stm.h>
 #include <thread>
 
 #include "../amber/model/transactions.h"
@@ -17,6 +16,9 @@ public:
     AmberTest();
 
 private Q_SLOTS:
+    void singleRawTransactionBenchmarkTest();
+    void singlePrecreatedTransactionBenchmarkTest();
+
     void rawTransactionBenchmarkTest();
     void precreatedTransactionBenchmarkTest();
 
@@ -152,31 +154,70 @@ void airColorWorker(stm::Context& ctx, const amber::model::Composite& air)
     }
 }
 
+void AmberTest::singleRawTransactionBenchmarkTest()
+{
+    stm::Context ctx;
+    auto tvar = stm::newTVarIO<int>(ctx, 10);
+    int result = 0;
+
+    // 0.016 msecs / Church
+    // 0.0074 msecs / Church + int ID
+    QBENCHMARK {
+        result = stm::atomically(ctx, stm::readTVar(tvar));
+    }
+    QVERIFY(result == 10);
+}
+
+void AmberTest::singlePrecreatedTransactionBenchmarkTest()
+{
+    stm::Context ctx;
+    auto tvar = stm::newTVarIO<int>(ctx, 10);
+    auto trans = stm::readTVar(tvar);
+    int result = 0;
+
+    // 0.012 msecs / Church
+    // 0.0060 msecs / Church + in ID
+    QBENCHMARK {
+        result = stm::atomically(ctx, trans);
+    }
+    QVERIFY(result == 10);
+}
+
 void AmberTest::rawTransactionBenchmarkTest()
 {
     using namespace amber::model;
 
     stm::Context ctx;
 
+#ifdef STM_DEBUG
     std::cout << ">>> Creating color scalar. " << std::endl;
+#endif
 
     Scalar sky = mkColorScalar(ctx, "sky", initialColor);
 
+#ifdef STM_DEBUG
     std::cout << ">>> Running benchmark. " << std::endl;
+#endif
 
     bool success = true;
 
-    // Result: 23.0 msecs
+    // 26.0 msecs / Free
+    // 24.0 msecs / Church
+    // 16.0 msecs / Church + int ID
     QBENCHMARK {
         while (success)
         {
+#ifdef STM_DEBUG
             std::cout << ">>> Running benchmark: next cycle. " << std::endl;
+#endif
             auto mbNewColor = stm::atomically(ctx, tryIncreaseColorIfColorScalar(sky));
             success = mbNewColor.has_value();
         }
     }
 
+#ifdef STM_DEBUG
     std::cout << ">>> Reading the result. " << std::endl;
+#endif
 
     Value result = stm::readTVarIO(ctx, sky.value);
     QCOMPARE(result, maxColor);
@@ -193,7 +234,9 @@ void AmberTest::precreatedTransactionBenchmarkTest()
     auto trans = tryIncreaseColorIfColorScalar(sky);
     bool success = true;
 
-    // Result: 12.0 msecs
+    // 12.0 msecs / Free
+    // 19.0 msecs / Church
+    // 13.0 msecs / Church + int ID
     QBENCHMARK {
         while (success)
         {
@@ -223,7 +266,9 @@ void AmberTest::worldInteractionBenchmarkTest()
                   {"nitrogen", {nitrogen, 72}},
                   {"water",    {water,    4 }} });
 
-    // Result: 110.0 msecs
+    // 124.0 msecs / Free
+    // 131.0 msecs / Church
+    // 76.0 msecs / Church + int ID
     QBENCHMARK {
         std::thread skyColorThread(skyColorWorker, std::ref(ctx), sky);
         std::thread airPercentageThread(airPercentageWorker, std::ref(ctx), air);
@@ -283,7 +328,9 @@ void AmberTest::rawLongSTMLBindBenchmarkTest()
     stm::TVar<int> tvar = stm::newTVarIO(ctx, 0);
     int result = 0;
 
-    // Result: 215.0
+    // 259.0 / Free
+    // 25.0 msecs / Church
+    // 21.0 msecs / Church + int ID
     QBENCHMARK {
         result = stm::atomically(ctx, increaseTimes(tvar, maxBindChainLength));
     }
@@ -299,15 +346,15 @@ void AmberTest::precreatedLongSTMLBindBenchmarkTest()
     auto trans = increaseTimes(tvar, maxBindChainLength);
     int result = 0;
 
-    // Result: 198.0
+    // 235.0 / Free
+    // 22.0 msecs / Church
+    // 16.0 msecs / Church + int ID
     QBENCHMARK {
         result = stm::atomically(ctx, trans);
     }
 
     QVERIFY(result == maxBindChainLength);
 }
-
-
 
 void AmberTest::rawLongScalarSTMLBindBenchmarkTest()
 {
@@ -320,7 +367,9 @@ void AmberTest::rawLongScalarSTMLBindBenchmarkTest()
 
     int result = 0;
 
-    // Result: 312.0
+    // 347.0 / Free
+    // 30.0 msecs / Church
+    // 25.0 msecs / Church + int ID
     QBENCHMARK {
         result = stm::atomically(ctx, increaseScalarTimes(scalarTVar, maxScalarBindChainLength));
     }
@@ -340,7 +389,9 @@ void AmberTest::precreatedLongScalarSTMLBindBenchmarkTest()
     auto trans = increaseScalarTimes(scalarTVar, maxScalarBindChainLength);
     int result = 0;
 
-    // Result: 281.0
+    // 335.0 / Free
+    // 28.0 msecs / Church
+    // 22.0 msecs / Church + int ID
     QBENCHMARK {
         result = stm::atomically(ctx, trans);
     }
