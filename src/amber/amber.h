@@ -1,16 +1,12 @@
 #ifndef AMBER_H
 #define AMBER_H
 
-#include "amberstructure.h"
-
-#include <functional>
+#include <model/model.h>
+#include <model/helpers.h>
+#include <model/transactions.h>
 
 namespace amber
 {
-
-typedef std::function<Amber (const Amber&)> AmberTask;
-
-Amber defaultAmber();
 
 } // namespace amber
 

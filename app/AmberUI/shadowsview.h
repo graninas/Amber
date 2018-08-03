@@ -2,11 +2,9 @@
 #define SHADOWSVIEW_H
 
 #include <QMainWindow>
-#include <QStringListModel>
-#include <QTimer>
-#include <mutex>
 
 #include <amber.h>
+#include <stm/stm.h>
 
 namespace Ui {
 class ShadowsView;
@@ -22,33 +20,14 @@ public:
 
 public slots:
 
-    void goNorth();
-    void goSouth();
-    void goWest();
-    void goEast();
-    void goNorthEast();
-    void goNorthWest();
-    void goSouthEast();
-    void goSouthWest();
-    void tickOneAmberHour();
-
-    void switchAmberTimeTicking(bool ticking);
+private slots:
+    void on_CreateItem_clicked();
 
 private:
     Ui::ShadowsView *ui;
-    QTimer *m_amberTimer;
-    QString m_amberLog;
 
-    mutable std::mutex m_amberChangeGuard;
-    amber::Amber m_amber;
-
-    void evalAmberTask(const amber::AmberTask& task);
-    void evaluateTasks(const std::list<amber::AmberTask>& tasks);
-
-    void changeAmber(const amber::AmberTask& task);
-
-    void updateUI(const amber::Amber &amber);
-    void appendAmberLog(const amber::Log& log);
+    stm::Context _ctx;
+    amber::model::Composite _universe;
 };
 
 #endif // SHADOWSVIEW_H
