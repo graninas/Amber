@@ -1,8 +1,7 @@
 #include <QString>
 #include <QtTest>
 
-#include <stm.h>
-#include <stm_optional.h>
+#include <stm/stm.h>
 #include <thread>
 
 #include "../amber/model/transactions.h"

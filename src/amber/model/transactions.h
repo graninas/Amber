@@ -3,7 +3,7 @@
 
 #include <functional>
 #include <list>
-#include <stm.h>
+#include <stm/stm.h>
 
 #include "model.h"
 
