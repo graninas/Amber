@@ -21,11 +21,12 @@ RESOURCES += \
 
 SOURCES += \
     main.cpp \
-    amberview.cpp
+    amberview.cpp \
+    ui_model.cpp
 
 HEADERS += \
     amberview.h \
-    ui_helpers.h
+    ui_model.h
 
 include($$PWD/../../lib/cpp_stm/cpp_stm.pri)
 include($$PWD/../../src/amber/amber.pri)

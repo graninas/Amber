@@ -33,6 +33,7 @@ using ContainerType = std::list<T>;
 
 using Component = std::variant<Composite, Scalar>;
 using Components = ContainerType<Component>;
+using ComponentsTVar = stm::TVar<amber::model::Components>;
 //using Components = std::map<Name, Component>;
 
 struct PercentComponent
@@ -61,19 +62,20 @@ struct Composite
     CompositeF composite;
 };
 
-const auto isColorScalarType = [](ScalarType scalarType)
+enum class TVarType
 {
-    return ScalarType::Color == scalarType;
+    String = 0,
+    Components = 1,
+    PercentComponents = 2,
+    Component = 3,
+    Value = 4,
+    ScalarType = 5
 };
 
-const auto isValidColor = [](Value value)
+enum class ComponentType
 {
-    return (value <= 0xffffffff) && (value >= 0);
-};
-
-const auto isPercentageComposite = [](const Composite& composite)
-{
-    return std::holds_alternative<PercentageComposite>(composite.composite);
+    Scalar = 0,
+    Composite = 1,
 };
 
 } // namespace model

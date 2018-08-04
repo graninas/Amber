@@ -11,6 +11,21 @@
 namespace amber {
 namespace model {
 
+const auto isColorScalarType = [](ScalarType scalarType)
+{
+    return ScalarType::Color == scalarType;
+};
+
+const auto isValidColor = [](Value value)
+{
+    return (value <= 0xffffffff) && (value >= 0);
+};
+
+const auto isPercentageComposite = [](const Composite& composite)
+{
+    return std::holds_alternative<PercentageComposite>(composite.composite);
+};
+
 Scalar mkScalar(stm::Context& ctx,
                 const std::string& name,
                 const Value& value,

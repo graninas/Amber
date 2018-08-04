@@ -1,6 +1,10 @@
 #include "amberview.h"
 #include "ui_amberview.h"
 
+#include "ui_model.h"
+
+using namespace amber::model;
+
 AmberView::AmberView(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::AmberView),
@@ -22,30 +26,38 @@ AmberView::~AmberView()
     delete ui;
 }
 
+void AmberView::adjustItemCreationControls(int componentTypeInt)
+{
+    switch (static_cast<ComponentType>(componentTypeInt)) {
+    case ComponentType::Scalar:
+
+        break;
+    case ComponentType::Composite:
+        break;
+    }
+}
+
 void AmberView::on_CreateItem_clicked()
 {
     auto current = ui->universeTree->currentItem();
     if (current == nullptr)
         return;
 
-//    bool ok;
-//    TVarType::TVarType t = current->data(0, Qt::UserRole).toInt(&ok);
-//    Q_ASSERT(ok);
+    bool ok;
+    auto t = static_cast<TVarType>(current->data(0, Qt::UserRole).toInt(&ok));
+    Q_ASSERT(ok);
 
-//    switch (t) {
-//        case TVarType::Components:
-//            ComponentsTVar tvar;
-//            tvar.id = current->data(0, Qt::ToolTipRole).toInt(&ok);
-//            Q_ASSERT(ok);
+    switch (t) {
+        case TVarType::Components:
+            ComponentsTVar tvar;
+            tvar.id = staic_cast<stm::TVarId>(current->data(0, Qt::ToolTipRole).toInt(&ok));
+            Q_ASSERT(ok);
 
-//            auto child = addComponent(tvar,
-//                         ui->itemName->text(),
-//                         ui->itemType->currentText(),
-//                         ui->itemSubtype->currentText());
-//    case value:
-
-//        break;
-//    default:
-//        break;
-//    }
+            auto child = addComponent(tvar,
+                         ui->itemName->text(),
+                         ui->itemType->currentIndex(),
+                         ui->itemSubtype->currentIndex());
+    default:
+        break;
+    }
 }

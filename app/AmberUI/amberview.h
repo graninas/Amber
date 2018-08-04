@@ -6,20 +6,6 @@
 #include <amber.h>
 #include <stm/stm.h>
 
-namespace TVarType {
-enum TVarType
-{
-    String,
-    Components,
-    PercentComponents,
-    Component,
-    Value,
-    ScalarType
-};
-} // namespace TVarType
-
-using ComponentsTVar = stm::TVar<amber::model::Components>;
-
 namespace Ui {
 class AmberView;
 }
@@ -35,6 +21,8 @@ public:
 public slots:
 
 private slots:
+    void adjustItemCreationControls(int componentTypeInt);
+
     void on_CreateItem_clicked();
 
 private:
