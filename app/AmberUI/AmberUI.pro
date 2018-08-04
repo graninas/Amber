@@ -16,7 +16,8 @@ QMAKE_CXXFLAGS += -nostdinc++
 INCLUDEPATH += /usr/include/x86_64-linux-gnu/c++/7
 INCLUDEPATH += /usr/include/c++/7
 
-FORMS    += shadowsview.ui
+FORMS    += \
+    amberview.ui
 
 RESOURCES += \
     Icons.qrc
@@ -24,10 +25,11 @@ RESOURCES += \
 
 SOURCES += \
     main.cpp \
-    shadowsview.cpp
+    amberview.cpp
 
 HEADERS += \
-    shadowsview.h
+    amberview.h \
+    ui_helpers.h
 
 include($$PWD/../../lib/cpp_stm/cpp_stm.pri)
 include($$PWD/../../src/amber/amber.pri)

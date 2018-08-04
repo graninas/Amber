@@ -1,4 +1,4 @@
-#include "shadowsview.h"
+#include "amberview.h"
 #include <QApplication>
 
 

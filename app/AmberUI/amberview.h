@@ -6,6 +6,20 @@
 #include <amber.h>
 #include <stm/stm.h>
 
+namespace TVarType {
+enum TVarType
+{
+    String,
+    Components,
+    PercentComponents,
+    Component,
+    Value,
+    ScalarType
+};
+} // namespace TVarType
+
+using ComponentsTVar = stm::TVar<amber::model::Components>;
+
 namespace Ui {
 class ShadowsView;
 }
