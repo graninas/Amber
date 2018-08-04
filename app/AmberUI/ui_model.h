@@ -7,7 +7,7 @@
 #include <stm/stm.h>
 
 
-addComponent(amber::model::ComponentsTVar tvar,
+void addComponent(amber::model::ComponentsTVar tvar,
              QString itemName,
              int itemType,
              int itemSubtype);
