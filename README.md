@@ -18,10 +18,7 @@ Installation
 Run in the project dir:
 
 ```bash
-git clone --branch stm git@github.com:graninas/cpp_functional_core.git ./lib/cpp_functional_core
-git clone --branch stm git@github.com:graninas/cpp_monads.git ./lib/cpp_monads
-git clone --branch stm git@github.com:graninas/cpp_lenses.git ./lib/cpp_lenses
-git clone --branch stm git@github.com:graninas/cpp_stm.git ./lib/cpp_stm
+git clone --branch v0.5.5 git@github.com:graninas/cpp_stm_free.git ./lib/cpp_stm
 ```
 
 Then build with Qt.

@@ -1,9 +1,9 @@
 #include "amberview.h"
-#include "ui_shadowsview.h"
+#include "ui_amberview.h"
 
-ShadowsView::ShadowsView(QWidget *parent) :
+AmberView::AmberView(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::ShadowsView),
+    ui(new Ui::AmberView),
     _ctx()
 {
     ui->setupUi(this);
@@ -17,35 +17,35 @@ ShadowsView::ShadowsView(QWidget *parent) :
     topItem->setData(0, Qt::UserRole, TVarType::Components);
 }
 
-ShadowsView::~ShadowsView()
+AmberView::~AmberView()
 {
     delete ui;
 }
 
-void ShadowsView::on_CreateItem_clicked()
+void AmberView::on_CreateItem_clicked()
 {
     auto current = ui->universeTree->currentItem();
     if (current == nullptr)
         return;
 
-    bool ok;
-    TVarType::TVarType t = current->data(0, Qt::UserRole).toInt(&ok);
-    Q_ASSERT(ok);
+//    bool ok;
+//    TVarType::TVarType t = current->data(0, Qt::UserRole).toInt(&ok);
+//    Q_ASSERT(ok);
 
-    switch (t) {
-        case TVarType::Components:
-            ComponentsTVar tvar;
-            tvar.id = current->data(0, Qt::ToolTipRole).toInt(&ok);
-            Q_ASSERT(ok);
+//    switch (t) {
+//        case TVarType::Components:
+//            ComponentsTVar tvar;
+//            tvar.id = current->data(0, Qt::ToolTipRole).toInt(&ok);
+//            Q_ASSERT(ok);
 
-            auto child = addComponent(tvar,
-                         ui->itemName->text(),
-                         ui->itemType->currentText(),
-                         ui->itemSubtype->currentText());
-    case value:
+//            auto child = addComponent(tvar,
+//                         ui->itemName->text(),
+//                         ui->itemType->currentText(),
+//                         ui->itemSubtype->currentText());
+//    case value:
 
-        break;
-    default:
-        break;
-    }
+//        break;
+//    default:
+//        break;
+//    }
 }

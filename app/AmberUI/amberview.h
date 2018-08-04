@@ -1,5 +1,5 @@
-#ifndef SHADOWSVIEW_H
-#define SHADOWSVIEW_H
+#ifndef AMBERVIEW_H
+#define AMBERVIEW_H
 
 #include <QMainWindow>
 
@@ -21,16 +21,16 @@ enum TVarType
 using ComponentsTVar = stm::TVar<amber::model::Components>;
 
 namespace Ui {
-class ShadowsView;
+class AmberView;
 }
 
-class ShadowsView : public QMainWindow
+class AmberView : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit ShadowsView(QWidget *parent = 0);
-    ~ShadowsView();
+    explicit AmberView(QWidget *parent = 0);
+    ~AmberView();
 
 public slots:
 
@@ -38,10 +38,10 @@ private slots:
     void on_CreateItem_clicked();
 
 private:
-    Ui::ShadowsView *ui;
+    Ui::AmberView *ui;
 
     stm::Context _ctx;
     amber::model::Composite _universe;
 };
 
-#endif // SHADOWSVIEW_H
+#endif // AMBERVIEW_H

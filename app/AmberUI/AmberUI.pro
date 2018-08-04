@@ -11,10 +11,6 @@ TARGET = AmberUI
 TEMPLATE = app
 
 CONFIG += c++1z
-QMAKE_CXXFLAGS += -nostdinc++
-
-INCLUDEPATH += /usr/include/x86_64-linux-gnu/c++/7
-INCLUDEPATH += /usr/include/c++/7
 
 FORMS    += \
     amberview.ui
