@@ -11,71 +11,68 @@ namespace model {
 using Value = int64_t;
 using Name = std::string;
 
-// forward declaration
-struct Composite;
+// Forward declaration
 
-enum class ScalarType
-{
-    Value,
-    Color,
-    Item
-};
+struct Scalar;
+struct Component;
+
+// Model
+
+using Components = std::list<Component>;
+
+using TVarString = stm::TVar<std::string>;
+using TVarValue = stm::TVar<Value>;
+using TVarComponents = stm::TVar<Components>;
 
 struct Scalar
 {
-    stm::TVar<std::string> name;
-    stm::TVar<Value> value;
-    stm::TVar<ScalarType> subtype;
+    TVarString tName;
+    TVarValue tValue;
 };
-
-template <typename T>
-using ContainerType = std::list<T>;
-
-using Component = std::variant<Composite, Scalar>;
-using Components = ContainerType<Component>;
-using ComponentsTVar = stm::TVar<amber::model::Components>;
-//using Components = std::map<Name, Component>;
-
-struct PercentComponent
-{
-    stm::TVar<Component> component;
-    stm::TVar<Value> percent;
-};
-
-using PercentComponents = std::map<Name, PercentComponent>;
-
-struct PercentageComposite
-{
-    stm::TVar<PercentComponents> components;
-};
-
-struct StructuralComposite
-{
-    stm::TVar<Components> components;
-};
-
-using CompositeF = std::variant<StructuralComposite, PercentageComposite>;
 
 struct Composite
 {
-    stm::TVar<std::string> name;
-    CompositeF composite;
+    TVarString tName;
+    TVarComponents tComponents;
+};
+
+struct Component
+{
+    std::variant<Composite, Scalar> component;
+};
+
+enum class RoleType
+{
+    Percentage = 0,
+};
+
+using TVarRoleType = stm::TVar<RoleType>;
+using TVarValues = stm::TVar<std::list<TVarValue>>;
+
+struct Role
+{
+    TVarRoleType tRole;
+    TVarValues tValues;
+};
+
+using Roles = std::list<Role>;
+using TVarRoles = stm::TVar<Roles>;
+
+struct World
+{
+    std::string name;
+    Composite structure;
+    TVarRoles tRoles;
 };
 
 enum class TVarType
 {
     String = 0,
-    Components = 1,
-    PercentComponents = 2,
-    Component = 3,
-    Value = 4,
-    ScalarType = 5
-};
-
-enum class ComponentType
-{
-    Scalar = 0,
-    Composite = 1,
+    Value = 1,
+    Values = 2,
+    Components = 3,
+    RoleType = 4,
+    Roles = 5,
 };
 
 } // namespace model

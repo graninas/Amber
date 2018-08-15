@@ -3,69 +3,42 @@
 namespace amber {
 namespace model {
 
-Scalar mkScalar(stm::Context& ctx,
+Component mkScalar(stm::Context& ctx,
                 const std::string& name,
-                const Value& value,
-                const ScalarType& subtype)
+                const Value& value)
 {
     Scalar scalar;
-    scalar.name    = stm::newTVarIO(ctx, name);
-    scalar.value   = stm::newTVarIO(ctx, value);
-    scalar.subtype = stm::newTVarIO(ctx, subtype);
-    return scalar;
+    scalar.tName    = stm::newTVarIO(ctx, name);
+    scalar.tValue   = stm::newTVarIO(ctx, value);
+    return { scalar };
 }
 
-Scalar mkItemScalar(stm::Context& ctx,
-                    const std::string& name)
-{
-    return mkScalar(ctx, name, 0, ScalarType::Item);
-}
-
-Scalar mkColorScalar(stm::Context& ctx,
-                     const std::string& name,
-                     const Value& value)
-{
-    return mkScalar(ctx, name, value, ScalarType::Color);
-}
-
-Composite mkComposite(
-        stm::Context& ctx,
-        const std::string& name,
-        const CompositeF& compositeF)
-{
-    Composite composite;
-    composite.name       = stm::newTVarIO(ctx, name);
-    composite.composite  = compositeF;
-    return composite;
-}
-
-Composite mkPercentageComposite(
-        stm::Context& ctx,
-        const std::string& name,
-        const std::map<Name, std::pair<Component, Value>>& percents)
-{
-    PercentComponents components;
-    for (std::pair<Name, std::pair<Component, Value>> p : percents)
-    {
-        PercentComponent component;
-        component.component = stm::newTVarIO(ctx, p.second.first);
-        component.percent = stm::newTVarIO(ctx, p.second.second);
-        components[p.first] = component;
-    }
-
-    PercentageComposite composite;
-    composite.components = stm::newTVarIO(ctx, components);
-    return mkComposite(ctx, name, composite);
-}
-
-Composite mkStructuralComposite(
+Component mkComposite(
         stm::Context& ctx,
         const std::string& name,
         const Components& components)
 {
-    StructuralComposite composite;
-    composite.components = stm::newTVarIO(ctx, components);
-    return mkComposite(ctx, name, composite);
+    Composite composite;
+    composite.tName       = stm::newTVarIO(ctx, name);
+    composite.tComponents = stm::newTVarIO(ctx, components);
+    return { composite };
+}
+
+World mkWorld(
+        stm::Context& ctx,
+        const std::string& name,
+        const Components& components)
+{
+    Composite worldStructure;
+    worldStructure.tComponents = stm::newTVarIO(ctx, components);
+    worldStructure.tName       = stm::newTVarIO(ctx, std::string("Structure"));
+
+    World world;
+    world.name = name;
+    world.tRoles = stm::newTVarIO(ctx, Roles {});
+    world.structure = worldStructure;
+
+    return world;
 }
 
 } // namespace model

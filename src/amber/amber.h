@@ -5,6 +5,8 @@
 #include <model/helpers.h>
 #include <model/transactions.h>
 
+#include <assets/world1.h>
+
 namespace amber
 {
 

@@ -3,6 +3,7 @@
 
 #include "ui_model.h"
 
+
 using namespace amber::model;
 
 AmberView::AmberView(QWidget *parent) :
@@ -12,18 +13,9 @@ AmberView::AmberView(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->colorScalarGB->hide();
-    ui->itemScalarGB->hide();
-    ui->percentageCompositeGB->hide();
-    ui->structuralCompositeGB->hide();
+    _world = amber::assets::world1(_ctx);
 
-    _universe = amber::model::mkStructuralComposite(_ctx, "Universe", {});
-    auto composite = std::get<amber::model::StructuralComposite>(_universe.composite);
-    QTreeWidgetItem *topItem = ui->universeTree->topLevelItem(0);
-    Q_ASSERT(topItem != nullptr);
-    Q_ASSERT(topItem->text(0) == "World");
-    topItem->setData(0, Qt::ToolTipRole, composite.components.id);
-    topItem->setData(0, Qt::UserRole, static_cast<int>(TVarType::Components));
+    updateUI(_world);
 }
 
 AmberView::~AmberView()
@@ -31,37 +23,20 @@ AmberView::~AmberView()
     delete ui;
 }
 
-void AmberView::adjustItemCreationControls(int componentTypeInt)
-{
-    switch (static_cast<ComponentType>(componentTypeInt)) {
-    case ComponentType::Scalar:
-
-        break;
-    case ComponentType::Composite:
-        break;
-    }
-}
-
 void AmberView::on_CreateItem_clicked()
 {
     auto current = ui->universeTree->currentItem();
     if (current == nullptr)
         return;
+}
 
-    bool ok;
-    auto t = static_cast<TVarType>(current->data(0, Qt::UserRole).toInt(&ok));
-    Q_ASSERT(ok);
+void AmberView::updateUI(const amber::model::World& world)
+{
+    QTreeWidgetItem *root = new QTreeWidgetItem();
+    root->setText(0, QString::fromStdString(world.name));
+    ui->universeTree->addTopLevelItem(root);
 
-//    switch (t) {
-//        case TVarType::Components:
-//            ComponentsTVar tvar;
-//            tvar.id = static_cast<stm::TVarId>(current->data(0, Qt::ToolTipRole).toInt(&ok));
-//            Q_ASSERT(ok);
+//    topItem->setData(0, TVarIdRole, componentsTVar.id);
+//    topItem->setData(0, TVarTypeRole, static_cast<int>(TVarType::Components));
 
-////            auto child = addComponent(tvar,
-////                         ui->itemName->text(),
-////                         ui->itemType->currentIndex(),
-////                         ui->itemSubtype->currentIndex());
-
-//    }
 }

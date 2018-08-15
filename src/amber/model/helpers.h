@@ -11,43 +11,16 @@
 namespace amber {
 namespace model {
 
-const auto isColorScalarType = [](ScalarType scalarType)
-{
-    return ScalarType::Color == scalarType;
-};
-
-const auto isValidColor = [](Value value)
-{
-    return (value <= 0xffffffff) && (value >= 0);
-};
-
-const auto isPercentageComposite = [](const Composite& composite)
-{
-    return std::holds_alternative<PercentageComposite>(composite.composite);
-};
-
-Scalar mkScalar(stm::Context& ctx,
+Component mkScalar(stm::Context& ctx,
                 const std::string& name,
-                const Value& value,
-                const ScalarType& subtype = ScalarType::Value);
+                const Value& value);
 
-Scalar mkItemScalar(stm::Context& ctx,
-                    const std::string& name);
-
-Scalar mkColorScalar(stm::Context& ctx,
-                     const std::string& name,
-                     const Value& value);
-
-Composite mkComposite(
+Component mkComposite(
         stm::Context& ctx,
         const std::string& name,
-        const CompositeF& compositeF);
+        const Components& components);
 
-Composite mkPercentageComposite(stm::Context& ctx,
-        const std::string& name,
-        const std::map<Name, std::pair<Component, Value> > &percents);
-
-Composite mkStructuralComposite(
+World mkWorld(
         stm::Context& ctx,
         const std::string& name,
         const Components& components);

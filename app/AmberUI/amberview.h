@@ -21,15 +21,15 @@ public:
 public slots:
 
 private slots:
-    void adjustItemCreationControls(int componentTypeInt);
-
     void on_CreateItem_clicked();
 
 private:
     Ui::AmberView *ui;
 
     stm::Context _ctx;
-    amber::model::Composite _universe;
+    amber::model::World _world;
+
+    void updateUI(const amber::model::World& world);
 };
 
 #endif // AMBERVIEW_H

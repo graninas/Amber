@@ -2,11 +2,11 @@
 
 using namespace amber::model;
 
-void addComponent(ComponentsTVar tvar,
-             QString itemName,
-             int itemType,
-             int itemSubtype)
-{
+//void addComponent(ComponentsTVar tvar,
+//             QString itemName,
+//             int itemType,
+//             int itemSubtype)
+//{
 //    switch (static_cast<ComponentType>(itemType))
 //    {
 //        case ComponentType::Scalar:
@@ -16,4 +16,4 @@ void addComponent(ComponentsTVar tvar,
 //            auto res = addComposite(itemName);
 //            return;
 //    }
-}
+//}

@@ -14,12 +14,14 @@ CONFIG += c++1z
 
 SOURCES += amber.cpp \
     model/helpers.cpp \
-    model/transactions.cpp
+    model/transactions.cpp \
+    assets/world1.cpp
 
 HEADERS += amber.h \
     model/helpers.h \
     model/model.h \
-    model/transactions.h
+    model/transactions.h \
+    assets/world1.h
 
 OTHER_FILES += \
     amber.pri
